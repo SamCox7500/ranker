@@ -2,6 +2,15 @@ package com.samcox.ranker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,8 +37,20 @@ public class RankerApplication {
     return user;
   }
 
+  @Configuration
+  public class SecurityConfig {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+      http
+        .authorizeHttpRequests((authorize) -> authorize
+          .requestMatchers("/index.html", "/", "/home,", "/login").permitAll()
+          .anyRequest().authenticated()
+        );
+      return http.build();
+    }
+  }
 
-
+  //Todo httpbasic?
 
 	public static void main(String[] args) {
 		SpringApplication.run(RankerApplication.class, args);
