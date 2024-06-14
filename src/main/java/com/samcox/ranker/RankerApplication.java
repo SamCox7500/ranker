@@ -1,5 +1,6 @@
 package com.samcox.ranker;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 @RestController
 @SpringBootApplication
@@ -32,11 +35,8 @@ public class RankerApplication {
     return model;
   }
 */
-  @RequestMapping("/user")
-  public Principal user(Principal user) {
-    return user;
-  }
 
+  /*
   @Configuration
   public class SecurityConfig {
     @Bean
@@ -49,11 +49,23 @@ public class RankerApplication {
       return http.build();
     }
   }
+   */
 
   //Todo httpbasic?
 
 	public static void main(String[] args) {
 		SpringApplication.run(RankerApplication.class, args);
 	}
+
+  @Bean
+  CommandLineRunner init(UserRepository userRepository) {
+    return args -> {
+      Stream.of("John", "Julie", "Jennifer", "Helen", "Rachel").forEach(name -> {
+        User user = new User(name, name.toLowerCase() + "@domain.com");
+        userRepository.save(user);
+      });
+      userRepository.findAll().forEach(System.out::println);
+    };
+  }
 
 }

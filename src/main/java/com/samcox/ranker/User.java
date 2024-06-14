@@ -1,11 +1,9 @@
 package com.samcox.ranker;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "\"user\"")
 public class User {
 
   @Id
@@ -14,6 +12,11 @@ public class User {
   private final String name;
   private final String email;
 
+
+  public User(){
+    this.name = null;
+    this.email = null;
+  }
   public User(String name, String email) {
     this.name = name;
     this.email = email;
