@@ -13,20 +13,14 @@ import {finalize} from 'rxjs';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, RouterLinkActive],
+  imports: [],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  constructor(private app: AppService, private http: HttpClient, private router: Router) {
-    this.app.authenticate(undefined, undefined);
-  }
-  logout() {
-    this.http.post('logout', {}).pipe(
-      finalize(() => {
-        this.app.authenticated = false;
-        this.router.navigateByUrl('login');
-    })
-    ).subscribe();
+  title: string;
+
+  constructor() {
+    this.title = 'Spring Boot - Angular Application'
   }
 }
