@@ -9,10 +9,12 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let user of users">
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+      <tr>
+        @for (user of users; track user.id) {
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+        }
       </tr>
       </tbody>
     </table>

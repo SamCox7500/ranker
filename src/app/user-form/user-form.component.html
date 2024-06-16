@@ -1,27 +1,27 @@
 <div class="card my-5">
   <div class="card-body">
-    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" [(ngModel)]="user.name"
+        <label for="username">Name</label>
+        <input type="text"
                class="form-control"
-               id="name"
+               id="username"
                name="name"
                placeholder="Enter your name"
-               required #name="ngModel">
+               formControlName="username">
       </div>
-      <div [hidden]="!name.pristine" class="alert alert-danger">Name is required</div>
+      <div @if (usernameControl.invalid && usernameControl.touched) class="alert alert-danger">Name is required</div>
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="text" [(ngModel)]="user.email"
+        <input type="text"
                class="form-control"
                id="email"
                name="email"
                placeholder="Enter your email address"
-               required #email="ngModel">
-        <div [hidden]="!email.pristine" class="alert alert-danger">Email is required</div>
+               formControlName="email">
+        <div @if (emailControl.invalid && emailControl.touched) class="alert alert-danger">Email is required</div>
       </div>
-      <button type="submit" [disabled]="!userForm.form.valid"
+      <button type="submit" [disabled]="!userForm.valid"
               class="btn btn-info">Submit</button>
     </form>
   </div>

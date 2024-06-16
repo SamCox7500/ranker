@@ -11,10 +11,10 @@ import { UserService } from '../user.service';
 })
 export class UserListComponent {
 
-  users: User[];
+  users: User[] = [];
 
   constructor(private userService: UserService) {
-    userService.findAll().subscribe(data => {
+    userService.findAll().subscribe((data: User[]) => {
       this.users = data;
     });
   }
