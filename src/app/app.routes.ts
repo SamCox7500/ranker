@@ -4,8 +4,6 @@ import { UserFormComponent } from './user-form/user-form.component';
 
 
 export const routes: Routes = [
-/*
   { path: 'users', component: UserListComponent },
   { path: 'adduser', component: UserFormComponent }
- */
 ];
