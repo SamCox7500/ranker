@@ -1,10 +1,10 @@
 export class User {
-  id: string;
+  id: number;
   username: string;
   email: string;
 
   constructor() {
-    this.id = '';
+    this.id = 0;
     this.username = '';
     this.email = '';
   }
@@ -18,8 +18,4 @@ export class User {
   getEmail() {
     return this.email;
   }
-
-
-
-
 }

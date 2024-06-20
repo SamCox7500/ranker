@@ -9,21 +9,24 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
-  private final String name;
+  private final String username;
   private final String email;
 
 
   public User(){
-    this.name = null;
+    this.username = null;
     this.email = null;
   }
-  public User(String name, String email) {
-    this.name = name;
+  public User(String username, String email) {
+    this.username = username;
     this.email = email;
   }
 
-  public String getName() {
-    return name;
+  public long getId() {
+    return id;
+  }
+  public String getUsername() {
+    return username;
   }
   public String getEmail() {
     return email;
@@ -32,7 +35,7 @@ public class User {
   public String toString() {
     return "User{" +
       "id=" + id +
-      ", name='" + name + '\'' +
+      ", username='" + username + '\'' +
       ", email='" + email + '\'' +
       '}';
   }
