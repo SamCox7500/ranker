@@ -10,16 +10,17 @@ public class User {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
   private final String username;
-  private final String email;
+
+  private String password;
 
 
   public User(){
     this.username = null;
-    this.email = null;
+    this.password = null;
   }
-  public User(String username, String email) {
+  public User(String username, String password) {
     this.username = username;
-    this.email = email;
+    this.password = password;
   }
 
   public long getId() {
@@ -28,15 +29,17 @@ public class User {
   public String getUsername() {
     return username;
   }
-  public String getEmail() {
-    return email;
+  public String getPassword() {
+    return password;
+  }
+  public void setPassword(String password) {
+    this.password = password;
   }
   @Override
   public String toString() {
     return "User{" +
       "id=" + id +
       ", username='" + username + '\'' +
-      ", email='" + email + '\'' +
       '}';
   }
 }
