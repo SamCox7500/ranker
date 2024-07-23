@@ -1,5 +1,6 @@
 package com.samcox.ranker;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,9 +23,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-@RestController
 @SpringBootApplication
-public class RankerApplication {
+public class RankerApplication implements CommandLineRunner {
+
+  @Autowired
+  private CustomUserDetailsService customUserDetailsService;
 
   /*
   @RequestMapping("/resource")
@@ -36,34 +39,43 @@ public class RankerApplication {
   }
 */
 
-  /*
-  @Configuration
-  public class SecurityConfig {
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-      http
-        .authorizeHttpRequests((authorize) -> authorize
-          .requestMatchers("/index.html", "/", "/home,", "/login").permitAll()
-          .anyRequest().authenticated()
-        );
-      return http.build();
-    }
-  }
-   */
-
 	public static void main(String[] args) {
 		SpringApplication.run(RankerApplication.class, args);
 	}
 
+  /*
   @Bean
-  CommandLineRunner init(UserRepository userRepository) {
+  CommandLineRunner init() {
+
+
+    RegistrationRequest regRequestTest = new RegistrationRequest();
+    regRequestTest.setUsername("steve");
+    regRequestTest.setPassword("steve");
+
+
+
+    //CustomUserDetailsService customUserDetailsService = new CustomUserDetailsService();
+    //customUserDetailsService.registerUser("steve", "steve");
+
+
     return args -> {
       Stream.of("John", "Julie", "Jennifer", "Helen", "Rachel").forEach(username -> {
-        User user = new User(username, username, "USER");
-        userRepository.save(user);
+        //User user = new User(username, username, "USER");
+        //userRepository.save(user);
       });
-      userRepository.findAll().forEach(System.out::println);
+      //userRepository.findAll().forEach(System.out::println);
     };
+
+
+  }
+  */
+
+  @Override
+  public void run(String... args) throws Exception {
+    // Register a default user at startup
+    customUserDetailsService.registerUser("steve", "steve");
+    customUserDetailsService.registerUser("dave", "dave");
+    System.out.println("Default user registered successfully");
   }
 
 }

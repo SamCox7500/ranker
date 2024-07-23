@@ -1,5 +1,7 @@
 package com.samcox.ranker;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,8 +32,8 @@ public class SecurityConfig {
         .requestMatchers("/login").permitAll()
         .anyRequest().authenticated()
       )
-      //.httpBasic(Customizer.withDefaults())
-      //.formLogin(Customizer.withDefaults())
+      .httpBasic(Customizer.withDefaults())
+      .formLogin(Customizer.withDefaults())
       .csrf((csrf) -> csrf.disable());
 
     return http.build();
