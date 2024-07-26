@@ -24,6 +24,4 @@ public class UserController {
     System.out.println(user);
     userRepository.save(user);
   }
-
-
 }

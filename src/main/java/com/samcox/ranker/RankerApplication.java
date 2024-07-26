@@ -29,46 +29,9 @@ public class RankerApplication implements CommandLineRunner {
   @Autowired
   private CustomUserDetailsService customUserDetailsService;
 
-  /*
-  @RequestMapping("/resource")
-  public Map<String,Object> home() {
-    Map<String,Object> model = new HashMap<String,Object>();
-    model.put("id", UUID.randomUUID().toString());
-    model.put("content", "Hello World");
-    return model;
-  }
-*/
-
 	public static void main(String[] args) {
 		SpringApplication.run(RankerApplication.class, args);
 	}
-
-  /*
-  @Bean
-  CommandLineRunner init() {
-
-
-    RegistrationRequest regRequestTest = new RegistrationRequest();
-    regRequestTest.setUsername("steve");
-    regRequestTest.setPassword("steve");
-
-
-
-    //CustomUserDetailsService customUserDetailsService = new CustomUserDetailsService();
-    //customUserDetailsService.registerUser("steve", "steve");
-
-
-    return args -> {
-      Stream.of("John", "Julie", "Jennifer", "Helen", "Rachel").forEach(username -> {
-        //User user = new User(username, username, "USER");
-        //userRepository.save(user);
-      });
-      //userRepository.findAll().forEach(System.out::println);
-    };
-
-
-  }
-  */
 
   @Override
   public void run(String... args) throws Exception {
@@ -77,5 +40,4 @@ public class RankerApplication implements CommandLineRunner {
     customUserDetailsService.registerUser("dave", "dave");
     System.out.println("Default user registered successfully");
   }
-
 }
