@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -25,7 +27,7 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
+    http.csrf((csrf) -> csrf.disable())
       .authorizeHttpRequests((authorize) -> authorize
         //.requestMatchers(HttpMethod.POST, "/users").permitAll()
         .requestMatchers("/login", "/resources/**", "/static/**", "/templates/**", "/logout").permitAll()
@@ -34,9 +36,8 @@ public class SecurityConfig {
       .httpBasic(Customizer.withDefaults())
       .formLogin(form -> form
         .loginPage("/login")
-        .permitAll())
+        .permitAll());
       //.formLogin(Customizer.withDefaults())
-      .csrf((csrf) -> csrf.disable());
 
     return http.build();
   }
@@ -64,5 +65,19 @@ public class SecurityConfig {
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public WebMvcConfigurer corsConfigurer() {
+    return new WebMvcConfigurer() {
+      @Override
+      public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+          .allowedOrigins("http://localhost:4200")
+          .allowedMethods("*")
+          .allowedHeaders("*")
+          .allowCredentials(true);
+      }
+    };
   }
 }
