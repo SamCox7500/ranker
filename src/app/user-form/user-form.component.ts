@@ -16,9 +16,7 @@ export class UserFormComponent {
 
   userForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
   });
-
 
   user: User
 
@@ -28,7 +26,6 @@ export class UserFormComponent {
 
   onSubmit() {
     this.user.username = this.userForm.value.username || '';
-    this.user.email = this.userForm.value.email || '';
     this.userService.save(this.user).subscribe(result => this.goToUserList());
   }
 
