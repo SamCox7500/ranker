@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class LoginController {
 
-
+  /*
   @GetMapping("/login")
   String login() {
     return "login";
@@ -23,6 +23,8 @@ public class LoginController {
   String logout() {
     return "test";
   }
+   */
+
   //private final AuthenticationManager authenticationManager;
 
   /*
