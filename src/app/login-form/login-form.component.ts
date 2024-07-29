@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoginService } from '../login.service';
 import { UserCredentials } from '../user-credentials';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular/forms';
 
@@ -27,7 +29,7 @@ export class LoginFormComponent {
     this.userCredentials.password = this.loginForm.value.password || '';
 
     this.loginService.login(this.userCredentials).subscribe({
-      next: () => goToHome(),
+      next: () => this.goToHome(),
       error: err => console.error('Login failed', err)
     });
   }
