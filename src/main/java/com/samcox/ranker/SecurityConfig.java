@@ -30,7 +30,7 @@ public class SecurityConfig {
     http.csrf((csrf) -> csrf.disable())
       .authorizeHttpRequests((authorize) -> authorize
         //.requestMatchers(HttpMethod.POST, "/users").permitAll()
-        .requestMatchers("/login", "/resources/**", "/static/**", "/templates/**", "/logout").permitAll()
+        .requestMatchers("/**","/login", "/resources/**", "/static/**", "/templates/**", "/logout").permitAll()
         .anyRequest().authenticated()
       )
       .httpBasic(Customizer.withDefaults())

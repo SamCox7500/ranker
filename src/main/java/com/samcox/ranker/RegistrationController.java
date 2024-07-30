@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RegistrationController {
   private CustomUserDetailsService customUserDetailsService;
   @PostMapping("/register")
-  public String register(@RequestBody RegistrationRequest request) {
+  public String register(@RequestBody UserCredentials request) {
     customUserDetailsService.registerUser(request.getUsername(), request.getPassword());
     return "User registered successfully";
   }

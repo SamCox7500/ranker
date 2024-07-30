@@ -1,6 +1,6 @@
 package com.samcox.ranker;
 
-public class RegistrationRequest {
+public class UserCredentials {
   private String username;
   private String password;
 
