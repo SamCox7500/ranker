@@ -37,7 +37,10 @@ public class SecurityConfig {
         .anyRequest().authenticated()
       )
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-      .httpBasic(Customizer.withDefaults());
+      .httpBasic(Customizer.withDefaults())
+      .logout((logout) -> logout.logoutUrl("/logout")
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID"));
       //.formLogin(form -> form
         //.loginPage("/login")
         //.permitAll());

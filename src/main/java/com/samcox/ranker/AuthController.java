@@ -48,6 +48,8 @@ public class AuthController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginResponse);
     }
   }
+  //@PostMapping("/logout")
+  //public ResponseEntity
   @PostMapping("/testdata")
   public String testLogin(@RequestBody UserCredentials userCredentials) {
     return userCredentials.getUsername() + " " + userCredentials.getPassword();
