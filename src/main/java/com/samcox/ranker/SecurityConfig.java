@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -30,13 +33,14 @@ public class SecurityConfig {
     http.csrf((csrf) -> csrf.disable())
       .authorizeHttpRequests((authorize) -> authorize
         //.requestMatchers(HttpMethod.POST, "/users").permitAll()
-        .requestMatchers("/**","/login", "/resources/**", "/static/**", "/templates/**", "/logout").permitAll()
+        .requestMatchers("/login", "/resources/**", "/static/**", "/templates/**", "/logout").permitAll()
         .anyRequest().authenticated()
       )
-      .httpBasic(Customizer.withDefaults())
-      .formLogin(form -> form
-        .loginPage("/login")
-        .permitAll());
+      .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+      .httpBasic(Customizer.withDefaults());
+      //.formLogin(form -> form
+        //.loginPage("/login")
+        //.permitAll());
       //.formLogin(Customizer.withDefaults())
 
     return http.build();
