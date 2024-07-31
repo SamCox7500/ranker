@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../login.service';
+import { CurrentUserService } from '../current-user.service';
 import { UserCredentials } from '../user-credentials';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular/forms';
+import { User } from '../user';
 
 @Component({
   selector: 'app-login-form',
@@ -20,7 +22,7 @@ export class LoginFormComponent {
 
   userCredentials: UserCredentials
 
-  constructor(private route: ActivatedRoute, private router: Router, private loginService: LoginService) {
+  constructor(private route: ActivatedRoute, private router: Router, private loginService: LoginService, private currentUserService: CurrentUserService) {
     this.userCredentials = new UserCredentials();
   }
 
@@ -34,6 +36,6 @@ export class LoginFormComponent {
     });
   }
   goToHome() {
-      this.router.navigate(['/home']);
-   }
+     this.router.navigate(['/home']);
+  }
 }

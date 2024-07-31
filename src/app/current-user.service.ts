@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
-import { User } from 'user';
-import { Observable } from 'rxjs/Observable';
+import { User } from './user';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +15,6 @@ export class CurrentUserService {
   }
 
   public getCurrentUser(): Observable<User> {
-    return this.http.get<User>(this.currentUserURL);
+    return this.http.get<User>(this.currentUserURL, { withCredentials: true });
   }
 }
