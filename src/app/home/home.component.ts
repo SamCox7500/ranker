@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CurrentUserService } from '../current-user.service';
+import { CurrentUserService } from '../services/current-user.service';
 import { User } from '../user';
 
 @Component({
