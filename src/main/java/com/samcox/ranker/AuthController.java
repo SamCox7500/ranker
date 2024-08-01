@@ -24,10 +24,12 @@ import java.util.Map;
 @RestController
 public class AuthController {
 
-  private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+  //private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
   private final AuthenticationManager authenticationManager;
-  public AuthController(AuthenticationManager authenticationManager) {
+  private final SecurityContextRepository securityContextRepository;
+  public AuthController(AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository) {
     this.authenticationManager = authenticationManager;
+    this.securityContextRepository = securityContextRepository;
   }
   @PostMapping("/login")
   public ResponseEntity<Map<String, String>> login(@RequestBody UserCredentials userCredentials, HttpServletRequest request, HttpServletResponse response) {
