@@ -11,9 +11,7 @@ export class LoginService {
   private loginUrl: string = 'http://localhost:8080/login';
   private logoutUrl: string = 'http://localhost:8080/logout';
 
-  constructor(private http: HttpClient) {
-    this.loginUrl = 'http://localhost:8080/login'
-  }
+  constructor(private http: HttpClient) {}
 
   public login(userCredentials: UserCredentials): Observable<any> {
     return this.http.post(this.loginUrl, userCredentials, { withCredentials: true});

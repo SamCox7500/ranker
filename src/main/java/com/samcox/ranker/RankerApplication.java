@@ -36,6 +36,7 @@ public class RankerApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     // Register a default user at startup
+    customUserDetailsService.registerUser("john", "john");
     customUserDetailsService.registerUser("steve", "steve");
     customUserDetailsService.registerUser("dave", "dave");
     System.out.println("Default user registered successfully");

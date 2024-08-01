@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -33,18 +34,17 @@ public class SecurityConfig {
     http.csrf((csrf) -> csrf.disable())
       .authorizeHttpRequests((authorize) -> authorize
         //.requestMatchers(HttpMethod.POST, "/users").permitAll()
-        .requestMatchers("/login", "/resources/**", "/static/**", "/templates/**", "/logout").permitAll()
+        .requestMatchers("/login", "/resources/**", "/static/**", "/templates/**", "/logout", "/authuser").permitAll()
         .anyRequest().authenticated()
       )
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-      .httpBasic(Customizer.withDefaults())
+      //.httpBasic(Customizer.withDefaults())
       .logout((logout) -> logout.logoutUrl("/logout")
-        .invalidateHttpSession(true));
-        //.deleteCookies("JSESSIONID"));
-      //.formLogin(form -> form
-        //.loginPage("/login")
-        //.permitAll());
-      //.formLogin(Customizer.withDefaults())
+        .invalidateHttpSession(true)
+        .clearAuthentication(true)
+        .deleteCookies("JSESSIONID")
+        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+        .permitAll());
 
     return http.build();
   }

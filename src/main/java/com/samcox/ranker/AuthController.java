@@ -31,11 +31,13 @@ public class AuthController {
   @PostMapping("/login")
   public ResponseEntity<Map<String, String>> login(@RequestBody UserCredentials userCredentials, HttpServletRequest request, HttpServletResponse response) {
     Map<String, String> loginResponse = new HashMap<>();
+    SecurityContextHolder.clearContext();
     try {
       UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
         userCredentials.getUsername(), userCredentials.getPassword());
       Authentication authentication = authenticationManager.authenticate(authToken);
       SecurityContext context = SecurityContextHolder.createEmptyContext();
+      context.setAuthentication(authentication);
       SecurityContextHolder.setContext(context);
       securityContextRepository.saveContext(context, request, response);
 
