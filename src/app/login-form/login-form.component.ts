@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from '../services/login.service';
-import { CurrentUserService } from '../services/current-user.service';
 import { UserCredentials } from '../user-credentials';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular/forms';
 import { User } from '../user';
@@ -20,9 +19,9 @@ export class LoginFormComponent {
     password: new FormControl('', [Validators.required]),
   });
 
-  userCredentials: UserCredentials
+  userCredentials: UserCredentials;
 
-  constructor(private route: ActivatedRoute, private router: Router, private loginService: LoginService, private currentUserService: CurrentUserService) {
+  constructor(private route: ActivatedRoute, private router: Router, private loginService: LoginService) {
     this.userCredentials = new UserCredentials();
   }
 
