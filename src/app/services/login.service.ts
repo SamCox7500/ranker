@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
 })
 export class LoginService {
 
-  private loginUrl: string;
+  private loginUrl: string = 'http://localhost:8080/login';
+  private logoutUrl: string = 'http://localhost:8080/logout';
 
   constructor(private http: HttpClient) {
     this.loginUrl = 'http://localhost:8080/login'
@@ -19,6 +20,6 @@ export class LoginService {
   }
 
   public logout(): Observable<any> {
-    return this.http.post('http://localhost:8080/logout', {}, { withCredentials: true});
+    return this.http.post(this.logoutUrl, {}, { withCredentials: true});
   }
 }
