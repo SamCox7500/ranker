@@ -24,10 +24,11 @@ import java.util.Map;
 @RestController
 public class AuthController {
 
-  @Autowired
-  AuthenticationManager authenticationManager;
-
-  private SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+  private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+  private final AuthenticationManager authenticationManager;
+  public AuthController(AuthenticationManager authenticationManager) {
+    this.authenticationManager = authenticationManager;
+  }
   @PostMapping("/login")
   public ResponseEntity<Map<String, String>> login(@RequestBody UserCredentials userCredentials, HttpServletRequest request, HttpServletResponse response) {
     Map<String, String> loginResponse = new HashMap<>();
