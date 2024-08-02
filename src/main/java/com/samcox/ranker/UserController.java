@@ -13,11 +13,11 @@ public class UserController {
     this.userService = userService;
   }
   @GetMapping("/users")
-  public List<User> getUsers() {
+  public List<UserDTO> getUsers() {
     return userService.getAllUsers();
   }
   @GetMapping("/users/{id}")
-  public User getUser(@PathVariable("id") Long id) {
+  public UserDTO getUser(@PathVariable("id") Long id) {
     return userService.getUserByID(id);
   }
   @PostMapping("/users")

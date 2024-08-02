@@ -1,10 +1,12 @@
 package com.samcox.ranker;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class UserService {
 
   private final UserRepository userRepository;
@@ -14,14 +16,16 @@ public class UserService {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
   }
-  public List<User> getAllUsers() {
-    return userRepository.findAll();
+  public List<UserDTO> getAllUsers() {
+    return UserDTOMapper.toUserDTOs(userRepository.findAll());
   }
-  public User getUserByID(Long id) {
-    return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+  public UserDTO getUserByID(Long id) {
+    User user = getUserFromRepoById(id);
+    return UserDTOMapper.toUserDTO(user);
   }
-  public User getUserByUsername(String username) {
-    return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+  public UserDTO getUserByUsername(String username) {
+    User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+    return UserDTOMapper.toUserDTO(user);
   }
   public void createUser(UserCredentials userCredentials) {
     if (userRepository.findByUsername(userCredentials.getUsername()).isPresent()) {
@@ -34,12 +38,15 @@ public class UserService {
     userRepository.save(user);
   }
   public void changePassword(Long id, String password) {
-    User user = getUserByID(id);
+    User user = getUserFromRepoById(id);
     user.setPassword(passwordEncoder.encode(password));
     userRepository.save(user);
   }
   public void deleteUser(Long id) {
-    User user = getUserByID(id);
+    User user = getUserFromRepoById(id);
     userRepository.delete(user);
+  }
+  private User getUserFromRepoById(Long id) {
+    return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
   }
 }

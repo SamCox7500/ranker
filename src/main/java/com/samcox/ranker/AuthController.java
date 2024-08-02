@@ -2,17 +2,13 @@ package com.samcox.ranker;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextHolderStrategy;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +24,11 @@ public class AuthController {
   //private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
   private final AuthenticationManager authenticationManager;
   private final SecurityContextRepository securityContextRepository;
-  public AuthController(AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository) {
+  private final UserService userService;
+  public AuthController(AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository, UserService userService) {
     this.authenticationManager = authenticationManager;
     this.securityContextRepository = securityContextRepository;
+    this.userService = userService;
   }
   @PostMapping("/login")
   public ResponseEntity<Map<String, String>> login(@RequestBody UserCredentials userCredentials, HttpServletRequest request, HttpServletResponse response) {
@@ -55,8 +53,9 @@ public class AuthController {
     }
   }
   @GetMapping("/authuser")
-  public UserInfo getAuthUser() {
+  public UserDTO getAuthUser() {
     Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
-    return new UserInfo(currentAuth.getName());
+    String username = currentAuth.getName();
+    return userService.getUserByUsername(username);
   }
 }

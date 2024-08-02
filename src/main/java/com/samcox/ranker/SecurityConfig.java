@@ -92,8 +92,4 @@ public class SecurityConfig {
       }
     };
   }
-  @Bean
-  public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-    return new UserService(userRepository, passwordEncoder);
-  }
 }

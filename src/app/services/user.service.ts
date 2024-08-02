@@ -14,11 +14,11 @@ export class UserService {
     this.usersUrl = 'http://localhost:8080/users';
   }
 
-  public findAll(): Observable<User[]> {
+  public getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.usersUrl);
   }
-
-  public save(user: User) {
-    return this.http.post<User>(this.usersUrl, user);
+  public getUserById(id: number):
+  public createUser(userCredentials: UserCredentials) {
+    return this.http.post<UserCredentials>(this.usersUrl, userCredentials);
   }
 }
