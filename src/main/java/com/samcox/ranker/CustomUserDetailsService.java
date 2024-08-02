@@ -10,17 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-  private UserRepository userRepository;
-  private PasswordEncoder passwordEncoder;
+  private UserService userService;
 
-  public CustomUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
+  public CustomUserDetailsService(UserService userService) {
+    this.userService = userService;
   }
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findByUsername(username);
+    User user = userService.getUserByUsername(username);
     if (user == null) {
       throw new UsernameNotFoundException("User not found");
     }
@@ -32,11 +30,5 @@ public class CustomUserDetailsService implements UserDetailsService {
       .build();
 
     return userDetails;
-  }
-  public void registerUser(String username, String password) {
-    User user = new User();
-    user.setUsername(username);
-    user.setPassword(passwordEncoder.encode(password));
-    userRepository.save(user);
   }
 }

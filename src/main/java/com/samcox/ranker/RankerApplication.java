@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ import java.util.stream.Stream;
 public class RankerApplication implements CommandLineRunner {
 
   @Autowired
-  private CustomUserDetailsService customUserDetailsService;
+  private UserService userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(RankerApplication.class, args);
@@ -36,9 +37,18 @@ public class RankerApplication implements CommandLineRunner {
   @Override
   public void run(String... args) throws Exception {
     // Register a default user at startup
-    customUserDetailsService.registerUser("john", "john");
-    customUserDetailsService.registerUser("steve", "steve");
-    customUserDetailsService.registerUser("dave", "dave");
-    System.out.println("Default user registered successfully");
+    UserCredentials userCredentials = new UserCredentials();
+    userCredentials.setUsername("steve");
+    userCredentials.setPassword("steve");
+    userService.createUser(userCredentials);
+    UserCredentials userCredentials2 = new UserCredentials();
+    userCredentials2.setUsername("dave");
+    userCredentials2.setPassword("dave");
+    userService.createUser(userCredentials2);
+    UserCredentials userCredentials3 = new UserCredentials();
+    userCredentials3.setUsername("john");
+    userCredentials3.setPassword("john");
+    userService.createUser(userCredentials3);
+    System.out.println("Default users registered successfully");
   }
 }

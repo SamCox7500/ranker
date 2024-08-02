@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RegistrationController {
+  /*
   private final CustomUserDetailsService customUserDetailsService;
 
   public RegistrationController(CustomUserDetailsService customUserDetailsService) {
@@ -16,4 +17,5 @@ public class RegistrationController {
     customUserDetailsService.registerUser(request.getUsername(), request.getPassword());
     return "User registered successfully";
   }
+  */
 }
