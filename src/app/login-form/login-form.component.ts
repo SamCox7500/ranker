@@ -37,4 +37,11 @@ export class LoginFormComponent {
   goToHome() {
      this.router.navigate(['/home']);
   }
+
+  get username() {
+    return this.loginForm.controls['username'];
+  }
+  get password() {
+    return this.loginForm.controls['password'];
+  }
 }
