@@ -11,6 +11,7 @@ import { UserService } from '../services/user.service';
 })
 export class UserListComponent {
 
+/*
   users: User[] = [];
 
   constructor(private userService: UserService) {
@@ -19,8 +20,5 @@ export class UserListComponent {
     });
   }
 
-
-
-
-
+*/
 }

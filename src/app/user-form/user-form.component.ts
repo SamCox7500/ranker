@@ -14,7 +14,7 @@ import { ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular
 })
 export class UserFormComponent {
 
-  userForm = new FormGroup({
+  /*userForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
   });
 
@@ -32,5 +32,5 @@ export class UserFormComponent {
   goToUserList() {
     this.router.navigate(['/users']);
   }
-
+*/
 }

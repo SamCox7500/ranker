@@ -2,22 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../user';
 import { Observable } from 'rxjs';
+import { UserCredentials } from '../user-credentials';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private usersUrl: string;
+  private usersUrl: string = 'http://localhost:8080/users';
 
   constructor(private http: HttpClient) {
-    this.usersUrl = 'http://localhost:8080/users';
   }
 
   public getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.usersUrl);
   }
-  public getUserById(id: number):
+  public getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.usersUrl}/${id}`)
+  }
   public createUser(userCredentials: UserCredentials) {
     return this.http.post<UserCredentials>(this.usersUrl, userCredentials);
   }
