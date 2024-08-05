@@ -26,12 +26,13 @@ public class UserService {
     return UserDTOMapper.toUserDTO(user);
   }
   public UserDTO getUserByUsername(String username) {
-    User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+    User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username "
+      + username + " not found"));
     return UserDTOMapper.toUserDTO(user);
   }
   public void createUser(@Valid UserCredentials userCredentials) {
     if (userRepository.findByUsername(userCredentials.getUsername()).isPresent()) {
-      throw new RuntimeException("Username has been taken");
+      throw new UsernameExistsException("Username is already taken");
     }
     User user = new User();
     user.setUsername(userCredentials.getUsername());
@@ -52,6 +53,7 @@ public class UserService {
     userRepository.delete(user);
   }
   private User getUserFromRepoById(Long id) {
-    return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with ID "
+      + id + " not found"));
   }
 }
