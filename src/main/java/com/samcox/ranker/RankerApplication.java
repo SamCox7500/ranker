@@ -39,15 +39,15 @@ public class RankerApplication implements CommandLineRunner {
     // Register a default user at startup
     UserCredentials userCredentials = new UserCredentials();
     userCredentials.setUsername("steve");
-    userCredentials.setPassword("steve");
+    userCredentials.setPassword("Stevesteve1!");
     userService.createUser(userCredentials);
     UserCredentials userCredentials2 = new UserCredentials();
     userCredentials2.setUsername("dave");
-    userCredentials2.setPassword("dave");
+    userCredentials2.setPassword("Davedave1!");
     userService.createUser(userCredentials2);
     UserCredentials userCredentials3 = new UserCredentials();
     userCredentials3.setUsername("john");
-    userCredentials3.setPassword("john");
+    userCredentials3.setPassword("Johnjohn1!");
     userService.createUser(userCredentials3);
     System.out.println("Default users registered successfully");
   }

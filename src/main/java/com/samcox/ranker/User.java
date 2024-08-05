@@ -7,12 +7,6 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "\"user\"")
 public class User {
-
-  public enum Role {
-    USER,
-    ADMIN
-  }
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private long id;
@@ -24,7 +18,6 @@ public class User {
   @Size(min = 8, message = "Password must be at least 8 characters")
   private String password;
   @NotBlank(message = "User must have a role")
-  @Enumerated(EnumType.STRING)
   private String role;
 
   public User(){
