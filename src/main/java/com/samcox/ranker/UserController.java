@@ -1,5 +1,6 @@
 package com.samcox.ranker;
 
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +22,14 @@ public class UserController {
     return userService.getUserByID(id);
   }
   @PostMapping("/users")
-  public void createUser(@RequestBody UserCredentials userCredentials) {
+  public void createUser(@Valid @RequestBody UserCredentials userCredentials) {
     userService.createUser(userCredentials);
   }
   //todo move password changing logic somewhere else
   //todo have update other fields by here
   @PutMapping("/users/{id}")
-  public void updateUser(@PathVariable("id") Long id, @RequestBody UserCredentials userCredentials) {
-    userService.changePassword(id, userCredentials.getPassword());
+  public void updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserCredentials userCredentials) {
+    userService.changePassword(id, userCredentials);
   }
   @DeleteMapping("/users/{id}")
   public void deleteUser(@PathVariable("id") Long id) {

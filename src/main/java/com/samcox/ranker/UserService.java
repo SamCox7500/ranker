@@ -1,7 +1,9 @@
 package com.samcox.ranker;
 
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,19 +29,22 @@ public class UserService {
     User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
     return UserDTOMapper.toUserDTO(user);
   }
-  public void createUser(UserCredentials userCredentials) {
+  public void createUser(@Valid UserCredentials userCredentials) {
     if (userRepository.findByUsername(userCredentials.getUsername()).isPresent()) {
       throw new RuntimeException("Username has been taken");
     }
     User user = new User();
     user.setUsername(userCredentials.getUsername());
     user.setPassword(passwordEncoder.encode(userCredentials.getPassword()));
-    user.setRole("USER");
+    user.setRole("USER"); //todo
     userRepository.save(user);
   }
-  public void changePassword(Long id, String password) {
+  public void changePassword(Long id, @Valid UserCredentials userCredentials) {
     User user = getUserFromRepoById(id);
-    user.setPassword(passwordEncoder.encode(password));
+    if (!user.getUsername().equals(userCredentials.getUsername())) {
+      throw new RuntimeException("ID provided does not belong to that user");
+    }
+    user.setPassword(passwordEncoder.encode(userCredentials.getPassword()));
     userRepository.save(user);
   }
   public void deleteUser(Long id) {

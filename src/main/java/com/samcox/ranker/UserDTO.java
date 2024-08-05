@@ -1,5 +1,7 @@
 package com.samcox.ranker;
 
+import jakarta.validation.constraints.NotNull;
+
 public class UserDTO {
   private Long id;
   private String username;
