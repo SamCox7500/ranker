@@ -1,6 +1,7 @@
 package com.samcox.ranker;
 
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Validated
 @Service
@@ -17,8 +19,6 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
-  private Validator validator;
-
 
   public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
@@ -62,4 +62,16 @@ public class UserService {
     return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with ID "
       + id + " not found"));
   }
+  /*
+  private void validate(UserCredentials userCredentials) {
+    Set<ConstraintViolation<UserCredentials>> violations = validator.validate(userCredentials);
+    if (!violations.isEmpty()) {
+      StringBuilder sb = new StringBuilder();
+      for (ConstraintViolation<UserCredentials> constraintViolation: violations) {
+        sb.append(constraintViolation.getMessage());
+      }
+      throw new ConstraintViolationException("Error occured: " + sb, violations);
+    }
+  }
+   */
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "\"user\"")
 public class User {
@@ -58,5 +60,16 @@ public class User {
       ", password='" + password + '\'' +
       ", role='" + role + '\'' +
       '}';
+  }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    User user = (User) o;
+    return id == user.id && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(role, user.role);
+  }
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, username, password, role);
   }
 }

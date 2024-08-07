@@ -4,8 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.util.Objects;
+
 public class UserCredentials {
   @NotBlank(message = "User must have username")
+  @Size(max = 30, message = "Max size of username is 30 chars")
   private String username;
   @NotBlank(message = "User must have password")
   @Size(min = 8, max = 64, message = "Password must be between 8 and 64 characters")
@@ -25,5 +28,24 @@ public class UserCredentials {
   }
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  @Override
+  public String toString() {
+    return "UserCredentials{" +
+      "username='" + username + '\'' +
+      ", password='" + password + '\'' +
+      '}';
+  }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    UserCredentials that = (UserCredentials) o;
+    return Objects.equals(username, that.username) && Objects.equals(password, that.password);
+  }
+  @Override
+  public int hashCode() {
+    return Objects.hash(username, password);
   }
 }
