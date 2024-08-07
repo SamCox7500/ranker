@@ -1,8 +1,11 @@
 package com.samcox.ranker;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class UserController {
   }
   @GetMapping("/users/{id}")
   public UserDTO getUser(@PathVariable("id") Long id) {
-    return userService.getUserByID(id);
+     return userService.getUserByID(id);
   }
   @PostMapping("/users")
   public void createUser(@Valid @RequestBody UserCredentials userCredentials) {
