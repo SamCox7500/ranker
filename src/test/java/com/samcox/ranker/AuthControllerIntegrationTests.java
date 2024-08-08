@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,4 +75,17 @@ public class AuthControllerIntegrationTests {
       .andReturn();
   }
   //todo How to test that logout process works correctly.
+  @Test
+  @WithMockUser(username = "testuser")
+  public void testLogout_ClearsSecurityContext() throws Exception {
+    MockHttpSession session = new MockHttpSession();
+
+    mockMvc.perform(post("/logout").session(session))
+      .andExpect(status().is2xxSuccessful())
+      .andReturn();
+
+    mockMvc.perform(get("/testforbidden").session(session))
+      .andExpect(status().isForbidden());
+    //todo should be unauthorized
+  }
 }
