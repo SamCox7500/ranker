@@ -32,4 +32,9 @@ public class TestConfig {
   public ObjectMapper objectMapper() {
     return new ObjectMapper();
   }
+
+  @Bean
+  public CustomUserDetailsService customUserDetailsService(UserRepository userRepository) {
+    return new CustomUserDetailsService(userRepository);
+  }
 }
