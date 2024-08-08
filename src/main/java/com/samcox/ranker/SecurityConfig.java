@@ -36,6 +36,7 @@ public class SecurityConfig {
       .authorizeHttpRequests((authorize) -> authorize
         .requestMatchers(HttpMethod.POST, "/users").permitAll()
         .requestMatchers("/login", "/resources/**", "/static/**", "/templates/**", "/logout").permitAll()
+        .requestMatchers("/users", "/users/*").permitAll()
         .anyRequest().authenticated()
       )
       .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
