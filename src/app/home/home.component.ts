@@ -13,20 +13,22 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class HomeComponent {
 
-  user: User = { id: 0, username: ''}
+  user: User | null = null;
 
   constructor(private currentUserService: CurrentUserService, private router: Router, private loginService: LoginService) {
-    this.getCurrentUser();
+  }
+  ngOnInit(): void {
+    this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
+      this.user = user;
+      if (!user) {
+        this.currentUserService.fetchCurrentUser().subscribe();
+      }
+    });
   }
   logout() {
     this.loginService.logout().subscribe({
       next: () => this.goToLoginForm(),
       error: err => console.error('Logout failed', err)
-    });
-  }
-  getCurrentUser() {
-    this.currentUserService.getCurrentUser().subscribe((user: User) => {
-      this.user = user;
     });
   }
   goToLoginForm() {

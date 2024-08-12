@@ -1,7 +1,7 @@
 <div class="card my-5">
   <div class="card-body">
-    <h2> {{ user.id }} </h2>
-    <h2> {{ user.username }} </h2>
+    <h2> {{ user?.id }} </h2>
+    <h2> {{ user?.username }} </h2>
     <div class="list-inline-item">
       <a class="btn btn-info" (click)="logout()">Logout</a>
     </div>

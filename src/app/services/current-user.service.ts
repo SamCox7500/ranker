@@ -1,20 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { User } from '../user';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CurrentUserService {
 
-  private currentUserURL: string = 'http://localhost:8080/authuser';
-  private usersURL: string = 'http://localhost:8080/users';
+  private userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+  private user$: Observable<User | null> = this.userSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  public getCurrentUser() : Observable<User> {
-    return this.http.get<User>(this.currentUserURL, { withCredentials: true });
+  fetchCurrentUser(): Observable<User> {
+    return this.http.get<User>('http://localhost:8080/authuser', {withCredentials: true}).pipe(
+      tap(user => this.userSubject.next(user))
+    );
+  }
+
+  getCurrentUser(): Observable<User | null> {
+    return this.user$;
+  }
+  getCurrentUserValue(): User | null {
+    return this.userSubject.value;
+  }
+  clearUser() {
+    this.userSubject.next(null);
   }
 }
