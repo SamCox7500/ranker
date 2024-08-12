@@ -18,7 +18,10 @@ export class UserService {
     return this.http.get<User[]>(this.usersUrl);
   }
   public getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.usersUrl}/${id}`)
+    return this.http.get<User>(`${this.usersUrl}/${id}`);
+  }
+  public getUserByUsername(username: string): Observable<User> {
+    return this.http.get<User>(`${this.usersUrl}/${'?username='}/${username}`);
   }
   public createUser(userCredentials: UserCredentials) {
     return this.http.post<UserCredentials>(this.usersUrl, userCredentials);

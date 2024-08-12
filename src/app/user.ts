@@ -6,10 +6,4 @@ export class User {
     this.id = id;
     this.username = username;
   }
-  getId() {
-    return this.id;
-  }
-  getUsername() {
-    return this.username;
-  }
 }
