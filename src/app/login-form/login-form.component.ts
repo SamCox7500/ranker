@@ -20,6 +20,7 @@ export class LoginFormComponent {
   });
 
   userCredentials: UserCredentials;
+  loginFailed: boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private loginService: LoginService) {
     this.userCredentials = new UserCredentials();
@@ -31,7 +32,7 @@ export class LoginFormComponent {
 
     this.loginService.login(this.userCredentials).subscribe({
       next: () => this.goToHome(),
-      error: err => console.error('Login failed', err)
+      error: err => this.loginFailed = true,
     });
   }
   goToHome() {

@@ -8,7 +8,8 @@
                id="username"
                name="username"
                placeholder="Enter your username"
-               formControlName="username">
+               formControlName="username"
+               (click)="loginFailed=false">
       </div>
       @if (username.invalid && username.touched) {
       <div class="alert alert-danger">Username is required</div>
@@ -20,13 +21,17 @@
                id="password"
                name="password"
                placeholder="Enter your password"
-               formControlName="password">
+               formControlName="password"
+               (click)="loginFailed=false">
       </div>
       @if (password.invalid && password.touched) {
       <div class="alert alert-danger">Password is required</div>
       }
       <button type="submit" [disabled]="!loginForm.valid"
               class="btn btn-info">Submit</button>
+      @if (loginFailed) {
+      <div class="alert alert-danger">Incorrect username or password</div>
+      }
     </form>
   </div>
 </div>
