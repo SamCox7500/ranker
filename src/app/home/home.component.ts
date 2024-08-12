@@ -34,4 +34,7 @@ export class HomeComponent {
   goToLoginForm() {
     this.router.navigate(['/login']);
   }
+  goToManageAccount() {
+    this.router.navigate(['/manageuser']);
+  }
 }
