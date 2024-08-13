@@ -8,7 +8,8 @@
                id="username"
                name="username"
                placeholder="Enter your username"
-               formControlName="username">
+               formControlName="username"
+               click="usernameTaken=false">
       </div>
       @if (username.touched && username.hasError('required')) {
       <div class="alert alert-danger">Username is required</div>
@@ -24,7 +25,8 @@
                id="password"
                name="password"
                placeholder="Enter your password"
-               formControlName="password">
+               formControlName="password"
+               click="usernameTaken=false">
       </div>
       @if (password.invalid && password.touched) {
       <div class="alert alert-danger">
@@ -35,6 +37,9 @@
       }
       <button type="submit" [disabled]="!registerForm.valid"
               class="btn btn-info">Submit</button>
+      @if (usernameTaken) {
+        <div class="alert alert-danger">Username is already taken</div>
+      }
     </form>
   </div>
 </div>

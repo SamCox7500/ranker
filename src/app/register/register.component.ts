@@ -25,6 +25,7 @@ export class RegisterComponent {
   });
 
   userCredentials: UserCredentials;
+  usernameTaken: boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {
       this.userCredentials = new UserCredentials();
@@ -36,7 +37,7 @@ export class RegisterComponent {
 
     this.userService.createUser(this.userCredentials).subscribe({
       next: () => this.goToLogin(),
-      error: err => console.error('Registration Failed', err)
+      error: err => this.usernameTaken = true,
     });
   }
 
