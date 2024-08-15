@@ -1,7 +1,6 @@
-package com.samcox.ranker;
+package com.samcox.ranker.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

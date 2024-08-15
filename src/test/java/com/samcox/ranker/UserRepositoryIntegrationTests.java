@@ -1,5 +1,7 @@
 package com.samcox.ranker;
 
+import com.samcox.ranker.user.User;
+import com.samcox.ranker.user.UserRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

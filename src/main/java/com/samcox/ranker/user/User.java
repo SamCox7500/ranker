@@ -1,4 +1,4 @@
-package com.samcox.ranker;
+package com.samcox.ranker.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -32,7 +32,6 @@ public class User {
     this.password = password;
     this.role = role;
   }
-
   public long getId() {
     return id;
   }

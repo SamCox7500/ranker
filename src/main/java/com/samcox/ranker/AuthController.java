@@ -1,5 +1,8 @@
 package com.samcox.ranker;
 
+import com.samcox.ranker.user.UserCredentials;
+import com.samcox.ranker.user.UserDTO;
+import com.samcox.ranker.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;

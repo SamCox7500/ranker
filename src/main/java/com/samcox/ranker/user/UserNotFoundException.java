@@ -1,4 +1,4 @@
-package com.samcox.ranker;
+package com.samcox.ranker.user;
 
 public class UserNotFoundException extends RuntimeException {
   public UserNotFoundException(String message) {

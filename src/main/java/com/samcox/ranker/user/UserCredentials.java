@@ -1,4 +1,4 @@
-package com.samcox.ranker;
+package com.samcox.ranker.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

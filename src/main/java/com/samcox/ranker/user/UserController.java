@@ -1,11 +1,10 @@
-package com.samcox.ranker;
+package com.samcox.ranker.user;
 
+import com.samcox.ranker.user.UserCredentials;
+import com.samcox.ranker.user.UserDTO;
+import com.samcox.ranker.user.UserService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 

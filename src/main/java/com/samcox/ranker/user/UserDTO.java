@@ -1,6 +1,4 @@
-package com.samcox.ranker;
-
-import jakarta.validation.constraints.NotNull;
+package com.samcox.ranker.user;
 
 import java.util.Objects;
 

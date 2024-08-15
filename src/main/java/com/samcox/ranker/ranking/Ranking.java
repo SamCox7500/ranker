@@ -1,5 +1,6 @@
-package com.samcox.ranker;
+package com.samcox.ranker.ranking;
 
+import com.samcox.ranker.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
