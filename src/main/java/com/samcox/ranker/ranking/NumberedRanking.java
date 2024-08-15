@@ -1,0 +1,21 @@
+package com.samcox.ranker.ranking;
+
+import com.samcox.ranker.user.User;
+import jakarta.persistence.Entity;
+
+@Entity
+public class NumberedRanking extends Ranking {
+  private boolean isReverseOrder;
+
+  public NumberedRanking() {}
+  public NumberedRanking(User user, String title, String desc, boolean isPublic, boolean isReverseOrder) {
+    super(user, title, desc, isPublic);
+    this.isReverseOrder = isReverseOrder;
+  }
+  public boolean getIsReverseOrder() {
+    return isReverseOrder;
+  }
+  public void toggleReverseOrder() {
+    isReverseOrder = !isReverseOrder;
+  }
+}

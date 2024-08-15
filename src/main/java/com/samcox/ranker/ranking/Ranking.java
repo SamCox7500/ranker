@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Ranking {
 
   @Id
@@ -28,6 +29,14 @@ public abstract class Ranking {
   private boolean isPublic;
 
   //todo type?
+
+  protected Ranking() {}
+  protected Ranking(User user, String title, String desc, boolean isPublic) {
+    this.user = user;
+    this.title = title;
+    this.description = desc;
+    this.isPublic = isPublic;
+  }
 
   public long getId() {
     return id;
