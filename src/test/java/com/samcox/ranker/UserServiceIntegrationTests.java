@@ -26,18 +26,18 @@ public class UserServiceIntegrationTests {
   @Autowired
   private UserService userService;
 
-  private User user;
+  private User testUser;
 
   @BeforeEach
   public void setUp() {
-    user = new User("testuser", passwordEncoder.encode("Validpassword1!"), "USER");
-    userRepository.save(user);
+    testUser = new User("testuser", passwordEncoder.encode("Validpassword1!"), "USER");
+    userRepository.save(testUser);
   }
   @Test
   public void testGetUserByID_Success() {
-    UserDTO userDTO = userService.getUserByID(user.getId());
-    assertNotNull(userDTO);
-    assertEquals(user.getUsername(), userDTO.getUsername());
+    User user = userService.getUserByID(testUser.getId());
+    assertNotNull(user);
+    assertEquals(testUser.getUsername(), user.getUsername());
   }
   @Test
   public void testGetUserByID_UserNotFound() {
@@ -45,9 +45,9 @@ public class UserServiceIntegrationTests {
   }
   @Test
   public void testGetUserByUsername_Success() {
-    UserDTO userDTO = userService.getUserByUsername("testuser");
-    assertNotNull(userDTO);
-    assertEquals(user.getUsername(), userDTO.getUsername());
+    User user = userService.getUserByUsername("testuser");
+    assertNotNull(user);
+    assertEquals(testUser.getUsername(), user.getUsername());
   }
   @Test
   public void testGetUserByUsername_UserNotFound() {
@@ -80,9 +80,9 @@ public class UserServiceIntegrationTests {
     newCredentials.setUsername("testuser");
     newCredentials.setPassword("NewValidPassword1!");
 
-    userService.changePassword(user.getId(), newCredentials);
+    userService.changePassword(testUser.getId(), newCredentials);
 
-    User updatedUser = userRepository.findById(user.getId()).orElse(null);
+    User updatedUser = userRepository.findById(testUser.getId()).orElse(null);
     assertNotNull(updatedUser);
     assertTrue(passwordEncoder.matches("NewValidPassword1!", updatedUser.getPassword()));
   }
@@ -92,13 +92,13 @@ public class UserServiceIntegrationTests {
     newCredentials.setUsername("wronguser");
     newCredentials.setPassword("NewValidPassword1!");
 
-    assertThrows(RuntimeException.class, () -> userService.changePassword(user.getId(), newCredentials));
+    assertThrows(RuntimeException.class, () -> userService.changePassword(testUser.getId(), newCredentials));
   }
   @Test
   public void testDeleteUser_Success() {
-    userService.deleteUser(user.getId());
+    userService.deleteUser(testUser.getId());
 
-    Optional<User> deletedUser = userRepository.findById(user.getId());
+    Optional<User> deletedUser = userRepository.findById(testUser.getId());
     assertTrue(deletedUser.isEmpty());
   }
   @Test
