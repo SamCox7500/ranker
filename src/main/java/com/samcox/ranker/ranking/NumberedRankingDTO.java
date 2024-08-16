@@ -19,6 +19,16 @@ public class NumberedRankingDTO {
   private boolean isPublic;
   private boolean isReverseOrder;
 
+  public NumberedRankingDTO() {}
+  public NumberedRankingDTO(long id, UserDTO userDTO, String title, String desc, boolean isPublic, boolean isReverseOrder) {
+    this.id = id;
+    this.userDTO = userDTO;
+    this.title = title;
+    this.description = desc;
+    this.isPublic = isPublic;
+    this.isReverseOrder = isReverseOrder;
+  }
+
   public long getId() {
     return id;
   }
