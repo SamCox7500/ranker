@@ -31,26 +31,31 @@ public class NumberedRankingService {
     return numberedRankingRepository.findByUser(user)
       .orElseThrow(() -> new UserNotFoundException("Cannot retrieve numbered rankings because user does not exist"));
   }
-  /*
+
   public void createNumberedRanking(@Valid NumberedRankingDTO numberedRankingDTO) {
-    if (numberedRankingDTO.getUserDTO() == null) {
-      throw new UserNotFoundException("Numbered ranking requires a user");
-    }
     User user = userService.getUserByID(numberedRankingDTO.getUserDTO().getId());
-    NumberedRanking numberedRanking = new NumberedRanking(numberedRankingDTO.)
+    NumberedRanking numberedRanking = new NumberedRanking();
+    numberedRanking.setUser(user);
+    numberedRanking.setTitle(numberedRankingDTO.getTitle());
+    numberedRanking.setDescription(numberedRankingDTO.getDescription());
+    numberedRanking.setPrivate(); //todo
+    numberedRanking.setReverseOrder(numberedRankingDTO.isReverseOrder());
     numberedRankingRepository.save(numberedRanking);
   }
-   */
-  public void updateNumberedRanking(long id, @Valid NumberedRanking newNumberedRanking) {
+  public void updateNumberedRanking(long id, @Valid NumberedRankingDTO newNumberedRanking) {
     NumberedRanking oldNumberedRanking = numberedRankingRepository.findById(id)
       .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + id));
     if (oldNumberedRanking.getId() != newNumberedRanking.getId()) {
       throw new RuntimeException("ID mismatch between numbered rankings");
     }
-    if (!oldNumberedRanking.getUser().equals(newNumberedRanking.getUser())) {
+    if (oldNumberedRanking.getUser().getId() != newNumberedRanking.getUserDTO().getId()) {
       throw new RuntimeException("Numbered rankings belong to different users");
     }
-
+    oldNumberedRanking.setTitle(newNumberedRanking.getTitle());
+    oldNumberedRanking.setDescription(newNumberedRanking.getDescription());
+    oldNumberedRanking.setPrivate(); //todo
+    oldNumberedRanking.setReverseOrder(newNumberedRanking.isReverseOrder());
+    numberedRankingRepository.save(oldNumberedRanking);
   }
   public void deleteNumberedRankingById(long id) {
     numberedRankingRepository.deleteById(id);

@@ -15,7 +15,7 @@ public class NumberedRanking extends Ranking {
   public boolean getIsReverseOrder() {
     return isReverseOrder;
   }
-  public void toggleReverseOrder() {
-    isReverseOrder = !isReverseOrder;
+  public void setReverseOrder(boolean isReverseOrder) {
+    this.isReverseOrder = isReverseOrder;
   }
 }
