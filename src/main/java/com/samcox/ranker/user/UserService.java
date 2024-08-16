@@ -18,17 +18,15 @@ public class UserService {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
   }
-  public List<UserDTO> getAllUsers() {
-    return UserDTOMapper.toUserDTOs(userRepository.findAll());
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
   }
-  public UserDTO getUserByID(Long id) {
-    User user = getUserFromRepoById(id);
-    return UserDTOMapper.toUserDTO(user);
+  public User getUserByID(Long id) {
+    return getUserFromRepoById(id);
   }
-  public UserDTO getUserByUsername(String username) {
-    User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username "
-      + username + " not found"));
-    return UserDTOMapper.toUserDTO(user);
+  public User getUserByUsername(String username) {
+    return userRepository.findByUsername(username)
+      .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
   }
   public void createUser(@Valid UserCredentials userCredentials) {
     if (userRepository.findByUsername(userCredentials.getUsername()).isPresent()) {
@@ -56,16 +54,4 @@ public class UserService {
     return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with ID "
       + id + " not found"));
   }
-  /*
-  private void validate(UserCredentials userCredentials) {
-    Set<ConstraintViolation<UserCredentials>> violations = validator.validate(userCredentials);
-    if (!violations.isEmpty()) {
-      StringBuilder sb = new StringBuilder();
-      for (ConstraintViolation<UserCredentials> constraintViolation: violations) {
-        sb.append(constraintViolation.getMessage());
-      }
-      throw new ConstraintViolationException("Error occured: " + sb, violations);
-    }
-  }
-   */
 }

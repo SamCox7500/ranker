@@ -17,11 +17,11 @@ public class UserController {
   }
   @GetMapping("/users")
   public List<UserDTO> getUsers() {
-    return userService.getAllUsers();
+    return UserDTOMapper.toUserDTOs(userService.getAllUsers());
   }
   @GetMapping("/users/{id}")
   public UserDTO getUser(@PathVariable("id") Long id) {
-     return userService.getUserByID(id);
+    return UserDTOMapper.toUserDTO(userService.getUserByID(id));
   }
   @PostMapping("/users")
   public void createUser(@Valid @RequestBody UserCredentials userCredentials) {

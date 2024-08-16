@@ -2,6 +2,7 @@ package com.samcox.ranker;
 
 import com.samcox.ranker.user.UserCredentials;
 import com.samcox.ranker.user.UserDTO;
+import com.samcox.ranker.user.UserDTOMapper;
 import com.samcox.ranker.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -59,6 +60,6 @@ public class AuthController {
   public UserDTO getAuthUser() {
     Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
     String username = currentAuth.getName();
-    return userService.getUserByUsername(username);
+    return UserDTOMapper.toUserDTO(userService.getUserByUsername(username));
   }
 }
