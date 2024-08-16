@@ -1,12 +1,21 @@
 package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.user.UserDTO;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class NumberedRankingDTO {
   private long id;
+  @NotBlank(message = "NumberedRankingDTO must have a user assigned to it")
   private UserDTO userDTO;
+  @NotBlank(message = "Ranking must have a title")
+  @Size(min = 1, max = 30, message = "Ranking title must be between 1 and 30 chars")
   private String title;
+
+  @NotBlank(message = "Ranking must have a description")
+  @Size(min = 1, max = 150, message = "Ranking description must be between 1 and 150 chars")
   private String description;
+
   private boolean isPublic;
   private boolean isReverseOrder;
 
