@@ -1,6 +1,7 @@
 package com.samcox.ranker;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samcox.ranker.auth.CustomUserDetailsService;
 import com.samcox.ranker.user.UserController;
 import com.samcox.ranker.user.UserRepository;
 import com.samcox.ranker.user.UserService;

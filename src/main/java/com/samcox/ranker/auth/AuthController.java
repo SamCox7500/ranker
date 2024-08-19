@@ -1,4 +1,4 @@
-package com.samcox.ranker;
+package com.samcox.ranker.auth;
 
 import com.samcox.ranker.user.UserCredentials;
 import com.samcox.ranker.user.UserDTO;
