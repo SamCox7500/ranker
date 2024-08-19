@@ -25,14 +25,15 @@ import java.util.Map;
 @RestController
 public class AuthController {
 
-  //private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
   private final AuthenticationManager authenticationManager;
   private final SecurityContextRepository securityContextRepository;
-  private final UserService userService;
-  public AuthController(AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository, UserService userService) {
+  //private final UserService userService;
+  private final AuthService authService;
+  public AuthController(AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository, AuthService authService) {
     this.authenticationManager = authenticationManager;
     this.securityContextRepository = securityContextRepository;
-    this.userService = userService;
+    //this.userService = userService;
+    this.authService = authService;
   }
   @PostMapping("/login")
   public ResponseEntity<Map<String, String>> login(@RequestBody UserCredentials userCredentials, HttpServletRequest request, HttpServletResponse response) {
@@ -58,8 +59,9 @@ public class AuthController {
   }
   @GetMapping("/authuser")
   public UserDTO getAuthUser() {
-    Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
-    String username = currentAuth.getName();
-    return UserDTOMapper.toUserDTO(userService.getUserByUsername(username));
+    //Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
+    //String username = currentAuth.getName();
+    //return UserDTOMapper.toUserDTO(userService.getUserByUsername(username));
+    return authService.getAuthenticatedUser();
   }
 }

@@ -1,5 +1,6 @@
 package com.samcox.ranker;
 
+import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.ranking.NumberedRankingRepository;
 import com.samcox.ranker.ranking.NumberedRankingService;
 import com.samcox.ranker.user.UserRepository;
@@ -24,5 +25,9 @@ public class AppConfig {
   @Bean
   public NumberedRankingService numberedRankingService(NumberedRankingRepository rankingRepository, UserService userService) {
     return new NumberedRankingService(rankingRepository, userService);
+  }
+  @Bean
+  public AuthService authService(UserService userService) {
+    return new AuthService(userService);
   }
 }
