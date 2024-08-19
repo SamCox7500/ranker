@@ -1,5 +1,6 @@
 package com.samcox.ranker.user;
 
+import com.samcox.ranker.auth.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,23 +15,35 @@ public class UserService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
-  public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+  private final AuthService authService;
+
+  public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthService authService) {
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+    this.authService = authService;
   }
+
   public List<User> getAllUsers() {
     return userRepository.findAll();
   }
+
   public User getUserByID(Long id) {
+    checkAuthorized(id);
     return getUserFromRepoById(id);
   }
+
   public User getUserByUsername(String username) {
-    return userRepository.findByUsername(username)
-      .orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
+    User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
+    checkAuthorized(user.getId());
+    return user;
   }
+
   public void createUser(@Valid UserCredentials userCredentials) {
     if (userRepository.findByUsername(userCredentials.getUsername()).isPresent()) {
       throw new UsernameExistsException("Username is already taken");
+    }
+    if (authService.isAuthenticated()) {
+      throw new RuntimeException("Cannot create new user when already logged in");
     }
     User user = new User();
     user.setUsername(userCredentials.getUsername());
@@ -38,7 +51,10 @@ public class UserService {
     user.setRole("USER"); //todo
     userRepository.save(user);
   }
+
+  //todo change name
   public void changePassword(Long id, @Valid UserCredentials userCredentials) {
+    checkAuthorized(id);
     User user = getUserFromRepoById(id);
     if (!user.getUsername().equals(userCredentials.getUsername())) {
       throw new RuntimeException("ID provided does not belong to that user");
@@ -46,12 +62,21 @@ public class UserService {
     user.setPassword(passwordEncoder.encode(userCredentials.getPassword()));
     userRepository.save(user);
   }
+
   public void deleteUser(Long id) {
+    checkAuthorized(id);
     User user = getUserFromRepoById(id);
     userRepository.delete(user);
   }
+
   private User getUserFromRepoById(Long id) {
+    checkAuthorized(id);
     return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with ID "
       + id + " not found"));
+  }
+  public void checkAuthorized(long userId) {
+    if (authService.getAuthenticatedUser().getId() != userId) {
+      throw new RuntimeException("User is not authorized");
+    }
   }
 }

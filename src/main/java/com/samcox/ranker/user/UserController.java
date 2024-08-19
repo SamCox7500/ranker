@@ -1,24 +1,28 @@
 package com.samcox.ranker.user;
 
+import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.user.UserCredentials;
 import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
   private final UserService userService;
-  public UserController(UserService userService) {
+  private final AuthService authService;
+  public UserController(UserService userService, AuthService authService) {
     this.userService = userService;
+    this.authService = authService;
   }
-  @GetMapping("/users")
-  public List<UserDTO> getUsers() {
-    return UserDTOMapper.toUserDTOs(userService.getAllUsers());
-  }
+  //@GetMapping("/users")
+  //public List<UserDTO> getUsers() {
+    //return UserDTOMapper.toUserDTOs(userService.getAllUsers());
+  //}
   @GetMapping("/users/{id}")
   public UserDTO getUser(@PathVariable("id") Long id) {
     return UserDTOMapper.toUserDTO(userService.getUserByID(id));

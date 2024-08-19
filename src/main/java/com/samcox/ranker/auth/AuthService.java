@@ -14,7 +14,7 @@ import java.nio.file.AccessDeniedException;
 @Service
 public class AuthService {
 
-  private UserService userService;
+  private final UserService userService;
 
   public AuthService(UserService userService) {
     this.userService = userService;
