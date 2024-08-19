@@ -27,7 +27,7 @@ public class AppConfig {
     return new NumberedRankingService(rankingRepository, userService);
   }
   @Bean
-  public AuthService authService(UserService userService) {
-    return new AuthService(userService);
+  public AuthService authService(UserRepository userRepository) {
+    return new AuthService(userRepository);
   }
 }

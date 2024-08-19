@@ -1,9 +1,6 @@
 package com.samcox.ranker.auth;
 
-import com.samcox.ranker.user.User;
-import com.samcox.ranker.user.UserDTO;
-import com.samcox.ranker.user.UserDTOMapper;
-import com.samcox.ranker.user.UserService;
+import com.samcox.ranker.user.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
@@ -13,11 +10,10 @@ import java.nio.file.AccessDeniedException;
 
 @Service
 public class AuthService {
+  private final UserRepository userRepository;
 
-  private final UserService userService;
-
-  public AuthService(UserService userService) {
-    this.userService = userService;
+  public AuthService(UserRepository userRepository) {
+    this.userRepository = userRepository;
   }
 
   public UserDTO getAuthenticatedUser() {
@@ -26,7 +22,9 @@ public class AuthService {
       throw new RuntimeException("User is not authenticated");
     }
     String username = auth.getName();
-    return UserDTOMapper.toUserDTO(userService.getUserByUsername(username));
+    User user = userRepository.findByUsername(username)
+      .orElseThrow(() -> new UserNotFoundException("Username does not exist"));
+    return UserDTOMapper.toUserDTO(user);
   }
   public boolean isAuthenticated() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
