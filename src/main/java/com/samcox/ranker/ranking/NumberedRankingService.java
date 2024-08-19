@@ -24,10 +24,19 @@ public class NumberedRankingService {
     return numberedRankingRepository.findById(id)
       .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + id));
   }
+  public NumberedRanking getNumberedRankingByUserAndId(long numberedRankingId, long userId) {
+    User user = userService.getUserByID(userId);
+    return numberedRankingRepository.findByIdAndUser(numberedRankingId, user)
+      .orElseThrow(
+        () -> new RankingNotFoundException("Numbered ranking was not found with id: " + numberedRankingId
+          + " and user: " + userId)
+      );
+  }
   public List<NumberedRanking> getAllNumberedRankings() {
     return numberedRankingRepository.findAll();
   }
-  public List<NumberedRanking> getAllNumberedRankingsByUser(User user) {
+  public List<NumberedRanking> getAllNumberedRankingsByUser(long userId) {
+    User user = userService.getUserByID(userId);
     return numberedRankingRepository.findByUser(user)
       .orElseThrow(() -> new UserNotFoundException("Cannot retrieve numbered rankings because user does not exist"));
   }
@@ -42,25 +51,27 @@ public class NumberedRankingService {
     numberedRanking.setReverseOrder(numberedRankingDTO.isReverseOrder());
     numberedRankingRepository.save(numberedRanking);
   }
-  public void updateNumberedRanking(long id, @Valid NumberedRankingDTO newNumberedRanking) {
-    NumberedRanking oldNumberedRanking = numberedRankingRepository.findById(id)
+  public void updateNumberedRanking(@Valid NumberedRankingDTO newNumberedRanking) {
+    long id = newNumberedRanking.getId();
+    NumberedRanking oldNumberedRanking = numberedRankingRepository.findById(newNumberedRanking.getId())
       .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + id));
-    if (oldNumberedRanking.getId() != newNumberedRanking.getId()) {
-      throw new RuntimeException("ID mismatch between numbered rankings");
-    }
-    if (oldNumberedRanking.getUser().getId() != newNumberedRanking.getUserDTO().getId()) {
-      throw new RuntimeException("Numbered rankings belong to different users");
-    }
     oldNumberedRanking.setTitle(newNumberedRanking.getTitle());
     oldNumberedRanking.setDescription(newNumberedRanking.getDescription());
     oldNumberedRanking.setPrivate(); //todo
     oldNumberedRanking.setReverseOrder(newNumberedRanking.isReverseOrder());
     numberedRankingRepository.save(oldNumberedRanking);
   }
-  public void deleteNumberedRankingById(long id) {
-    numberedRankingRepository.deleteById(id);
+  public void deleteNumberedRankingByIdAndUser(long rankingId, long userId) {
+    if (numberedRankingRepository.findById(rankingId).isEmpty()) {
+      throw new RankingNotFoundException("Cannot delete ranking. Ranking does not exist");
+    }
+    User user = userService.getUserByID(userId);
+    numberedRankingRepository.deleteByIdAndUser(rankingId, user);
   }
   public void deleteAllNumberedRankingsByUser(User user) {
+    if (numberedRankingRepository.findByUser(user).isEmpty()) {
+      throw new RankingNotFoundException("Failed to delete rankings. User has not rankings.");
+    }
     numberedRankingRepository.deleteByUser(user);
   }
 }
