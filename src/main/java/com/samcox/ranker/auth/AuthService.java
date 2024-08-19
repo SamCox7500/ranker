@@ -28,4 +28,8 @@ public class AuthService {
     String username = auth.getName();
     return UserDTOMapper.toUserDTO(userService.getUserByUsername(username));
   }
+  public boolean isAuthenticated() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    return !(auth == null || !auth.isAuthenticated());
+  }
 }
