@@ -23,8 +23,8 @@ public class AppConfig {
     return new UserService(userRepository, passwordEncoder, authService);
   }
   @Bean
-  public NumberedRankingService numberedRankingService(NumberedRankingRepository rankingRepository, UserService userService) {
-    return new NumberedRankingService(rankingRepository, userService);
+  public NumberedRankingService numberedRankingService(NumberedRankingRepository rankingRepository, UserService userService, AuthService authService) {
+    return new NumberedRankingService(rankingRepository, userService, authService);
   }
   @Bean
   public AuthService authService(UserRepository userRepository) {

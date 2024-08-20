@@ -32,7 +32,7 @@ public class NumberedRankingController {
     numberedRankingService.createNumberedRanking(rankingDTO);
   }
   @PutMapping("/users/{userId}/numberedrankings/{rankingId}")
-  public void updateRanking(@PathVariable("userId") long userId, @Valid NumberedRankingDTO rankingDTO) {
+  public void updateRanking(@PathVariable("userId") long userId, @Valid NumberedRankingDTO rankingDTO) throws AccessDeniedException {
     if (userId != rankingDTO.getUserDTO().getId()) {
       throw new RuntimeException("UserId Mismatch");
     }
