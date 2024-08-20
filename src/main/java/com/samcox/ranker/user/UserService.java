@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Validated
@@ -27,12 +28,12 @@ public class UserService {
     return userRepository.findAll();
   }
 
-  public User getUserByID(Long id) {
+  public User getUserByID(Long id) throws AccessDeniedException {
     checkAuthorized(id);
     return getUserFromRepoById(id);
   }
 
-  public User getUserByUsername(String username) {
+  public User getUserByUsername(String username) throws AccessDeniedException {
     User user = userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException("User with username " + username + " not found"));
     checkAuthorized(user.getId());
     return user;
@@ -53,7 +54,7 @@ public class UserService {
   }
 
   //todo change name
-  public void changePassword(Long id, @Valid UserCredentials userCredentials) {
+  public void changePassword(Long id, @Valid UserCredentials userCredentials) throws AccessDeniedException {
     checkAuthorized(id);
     User user = getUserFromRepoById(id);
     if (!user.getUsername().equals(userCredentials.getUsername())) {
@@ -63,20 +64,20 @@ public class UserService {
     userRepository.save(user);
   }
 
-  public void deleteUser(Long id) {
+  public void deleteUser(Long id) throws AccessDeniedException {
     checkAuthorized(id);
     User user = getUserFromRepoById(id);
     userRepository.delete(user);
   }
 
-  private User getUserFromRepoById(Long id) {
+  private User getUserFromRepoById(Long id) throws AccessDeniedException {
     checkAuthorized(id);
     return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with ID "
       + id + " not found"));
   }
-  public void checkAuthorized(long userId) {
+  public void checkAuthorized(long userId) throws AccessDeniedException {
     if (authService.getAuthenticatedUser().getId() != userId) {
-      throw new RuntimeException("User is not authorized");
+      throw new AccessDeniedException("User is not authorized");
     }
   }
 }

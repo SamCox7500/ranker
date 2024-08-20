@@ -24,7 +24,7 @@ public class UserController {
     //return UserDTOMapper.toUserDTOs(userService.getAllUsers());
   //}
   @GetMapping("/users/{id}")
-  public UserDTO getUser(@PathVariable("id") Long id) {
+  public UserDTO getUser(@PathVariable("id") Long id) throws AccessDeniedException {
     return UserDTOMapper.toUserDTO(userService.getUserByID(id));
   }
   @PostMapping("/users")
@@ -34,11 +34,11 @@ public class UserController {
   //todo move password changing logic somewhere else
   //todo have update other fields by here
   @PutMapping("/users/{id}")
-  public void updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserCredentials userCredentials) {
+  public void updateUser(@PathVariable("id") Long id, @Valid @RequestBody UserCredentials userCredentials) throws AccessDeniedException {
     userService.changePassword(id, userCredentials);
   }
   @DeleteMapping("/users/{id}")
-  public void deleteUser(@PathVariable("id") Long id) {
+  public void deleteUser(@PathVariable("id") Long id) throws AccessDeniedException {
     userService.deleteUser(id);
   }
 }
