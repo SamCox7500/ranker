@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @Validated
@@ -24,7 +25,7 @@ public class NumberedRankingService {
     return numberedRankingRepository.findById(id)
       .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + id));
   }
-  public NumberedRanking getNumberedRankingByUserAndId(long numberedRankingId, long userId) {
+  public NumberedRanking getNumberedRankingByUserAndId(long numberedRankingId, long userId) throws AccessDeniedException {
     User user = userService.getUserByID(userId);
     return numberedRankingRepository.findByIdAndUser(numberedRankingId, user)
       .orElseThrow(
@@ -35,13 +36,13 @@ public class NumberedRankingService {
   public List<NumberedRanking> getAllNumberedRankings() {
     return numberedRankingRepository.findAll();
   }
-  public List<NumberedRanking> getAllNumberedRankingsByUser(long userId) {
+  public List<NumberedRanking> getAllNumberedRankingsByUser(long userId) throws AccessDeniedException {
     User user = userService.getUserByID(userId);
     return numberedRankingRepository.findByUser(user)
       .orElseThrow(() -> new UserNotFoundException("Cannot retrieve numbered rankings because user does not exist"));
   }
 
-  public void createNumberedRanking(@Valid NumberedRankingDTO numberedRankingDTO) {
+  public void createNumberedRanking(@Valid NumberedRankingDTO numberedRankingDTO) throws AccessDeniedException {
     User user = userService.getUserByID(numberedRankingDTO.getUserDTO().getId());
     NumberedRanking numberedRanking = new NumberedRanking();
     numberedRanking.setUser(user);
@@ -61,7 +62,7 @@ public class NumberedRankingService {
     oldNumberedRanking.setReverseOrder(newNumberedRanking.isReverseOrder());
     numberedRankingRepository.save(oldNumberedRanking);
   }
-  public void deleteNumberedRankingByIdAndUser(long rankingId, long userId) {
+  public void deleteNumberedRankingByIdAndUser(long rankingId, long userId) throws AccessDeniedException {
     if (numberedRankingRepository.findById(rankingId).isEmpty()) {
       throw new RankingNotFoundException("Cannot delete ranking. Ranking does not exist");
     }
