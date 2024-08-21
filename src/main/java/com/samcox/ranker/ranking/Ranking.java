@@ -11,7 +11,7 @@ public abstract class Ranking {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
@@ -38,7 +38,7 @@ public abstract class Ranking {
     this.isPublic = isPublic;
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
 
