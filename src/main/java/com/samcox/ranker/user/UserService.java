@@ -75,8 +75,8 @@ public class UserService {
     return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User with ID "
       + id + " not found"));
   }
-  public void checkAuthorized(long userId) throws AccessDeniedException {
-    if (authService.getAuthenticatedUser().getId() != userId) {
+  public void checkAuthorized(Long userId) throws AccessDeniedException {
+    if (!authService.getAuthenticatedUser().getId().equals(userId)) {
       throw new AccessDeniedException("User is not authorized");
     }
   }
