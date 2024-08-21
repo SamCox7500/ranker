@@ -22,8 +22,8 @@ public class TestConfig {
     return new UserService(userRepository, passwordEncoder, authService);
   }
   @Bean
-  public UserController userController(UserService userService, AuthService authService) {
-    return new UserController(userService, authService);
+  public UserController userController(UserService userService) {
+    return new UserController(userService);
   }
   /*
   @Bean

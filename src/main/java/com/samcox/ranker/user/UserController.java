@@ -14,10 +14,9 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
   private final UserService userService;
-  private final AuthService authService;
-  public UserController(UserService userService, AuthService authService) {
+
+  public UserController(UserService userService) {
     this.userService = userService;
-    this.authService = authService;
   }
   //@GetMapping("/users")
   //public List<UserDTO> getUsers() {
