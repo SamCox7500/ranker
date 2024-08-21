@@ -21,4 +21,9 @@ public class FilmList extends MediaList {
   public void setRankedFilms(List<FilmListEntry> rankedFilms) {
     this.rankedFilms = rankedFilms;
   }
+
+  @Override
+  public String getMediaType() {
+    return "Films";
+  }
 }

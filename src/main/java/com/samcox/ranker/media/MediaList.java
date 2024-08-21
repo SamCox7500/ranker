@@ -13,4 +13,5 @@ public abstract class MediaList {
   public Long getId() {
     return id;
   }
+  public abstract String getMediaType();
 }
