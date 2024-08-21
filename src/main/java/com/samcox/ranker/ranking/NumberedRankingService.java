@@ -31,7 +31,7 @@ public class NumberedRankingService {
       .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + id));
   }
    */
-  public NumberedRanking getNumberedRankingByUserAndId(long numberedRankingId, long userId) throws AccessDeniedException {
+  public NumberedRanking getNumberedRankingByUserAndId(Long numberedRankingId, Long userId) throws AccessDeniedException {
     checkOwnership(numberedRankingId);
     User user = userService.getUserByID(userId);
     return numberedRankingRepository.findByIdAndUser(numberedRankingId, user)
@@ -45,7 +45,7 @@ public class NumberedRankingService {
     return numberedRankingRepository.findAll();
   }
    */
-  public List<NumberedRanking> getAllNumberedRankingsByUser(long userId) throws AccessDeniedException {
+  public List<NumberedRanking> getAllNumberedRankingsByUser(Long userId) throws AccessDeniedException {
     User user = userService.getUserByID(userId);
     return numberedRankingRepository.findByUser(user)
       .orElseThrow(() -> new UserNotFoundException("Cannot retrieve numbered rankings because user does not exist"));
@@ -63,7 +63,7 @@ public class NumberedRankingService {
   }
   public void updateNumberedRanking(@Valid NumberedRankingDTO newNumberedRanking) throws AccessDeniedException {
     checkOwnership(newNumberedRanking.getId());
-    long id = newNumberedRanking.getId();
+    Long id = newNumberedRanking.getId();
     NumberedRanking oldNumberedRanking = numberedRankingRepository.findById(newNumberedRanking.getId())
       .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + id));
     oldNumberedRanking.setTitle(newNumberedRanking.getTitle());
@@ -72,7 +72,7 @@ public class NumberedRankingService {
     oldNumberedRanking.setReverseOrder(newNumberedRanking.isReverseOrder());
     numberedRankingRepository.save(oldNumberedRanking);
   }
-  public void deleteNumberedRankingByIdAndUser(long rankingId, long userId) throws AccessDeniedException {
+  public void deleteNumberedRankingByIdAndUser(Long rankingId, Long userId) throws AccessDeniedException {
     checkOwnership(rankingId);
     if (numberedRankingRepository.findById(rankingId).isEmpty()) {
       throw new RankingNotFoundException("Cannot delete ranking. Ranking does not exist");
@@ -86,11 +86,11 @@ public class NumberedRankingService {
     }
     numberedRankingRepository.deleteByUser(user);
   }
-  public void checkOwnership(long rankingId) throws AccessDeniedException {
-    long authUserId = authService.getAuthenticatedUser().getId();
+  public void checkOwnership(Long rankingId) throws AccessDeniedException {
+    Long authUserId = authService.getAuthenticatedUser().getId();
     NumberedRanking ranking = numberedRankingRepository.findById(rankingId)
       .orElseThrow(() -> new RankingNotFoundException("Could not check ownership as ranking does not exist with id: " + rankingId));
-    if (ranking.getUser().getId() != authUserId) {
+    if (!ranking.getUser().getId().equals(authUserId)) {
       throw new AccessDeniedException("You do not have permission to access that resource");
     }
   }
