@@ -7,7 +7,7 @@ import jakarta.persistence.OneToMany;
 import java.util.List;
 
 @Entity
-public class FilmList {
+public class FilmList extends MediaList {
 
   @OneToMany(mappedBy = "filmList", cascade = CascadeType.ALL)
   private List<Film> films;
