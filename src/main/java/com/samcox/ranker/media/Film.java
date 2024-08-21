@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.ArrayList;
+
 @Entity
 public class Film {
 
@@ -13,4 +15,12 @@ public class Film {
   private Long id;
 
   private Long tmdbFilmId;
+
+  public Long getId() {
+    return id;
+  }
+
+  public Long getTmdbFilmId() {
+    return tmdbFilmId;
+  }
 }
