@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class NumberedRankingDTO {
-  private long id;
+  private Long id;
   @NotBlank(message = "NumberedRankingDTO must have a user assigned to it")
   private UserDTO userDTO;
   @NotBlank(message = "Ranking must have a title")
@@ -29,10 +29,10 @@ public class NumberedRankingDTO {
     this.isReverseOrder = isReverseOrder;
   }
 
-  public long getId() {
+  public Long getId() {
     return id;
   }
-  public void setId(long id) {
+  public void setId(Long id) {
     this.id = id;
   }
   public UserDTO getUserDTO() {
