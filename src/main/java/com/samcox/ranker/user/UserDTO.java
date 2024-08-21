@@ -14,7 +14,7 @@ public class UserDTO {
     this.id = id;
     this.username = username;
   }
-  public long getId() {
+  public Long getId() {
     return id;
   }
   public void setId(long id) {
