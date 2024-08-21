@@ -11,7 +11,7 @@ import java.util.Objects;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private long id;
+  private Long id;
   @NotBlank(message = "User must have a username")
   @Size(max = 30, message = "Max length of username is 30 characters")
   @Column(unique = true, nullable = false)
@@ -32,7 +32,7 @@ public class User {
     this.password = password;
     this.role = role;
   }
-  public long getId() {
+  public Long getId() {
     return id;
   }
   public String getUsername() {
