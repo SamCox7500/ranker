@@ -54,17 +54,6 @@ public class SecurityConfig {
 
     return new ProviderManager(authenticationProvider);
   }
-  /*
-  @Bean
-  public UserDetailsService userDetailsService() {
-    UserDetails userDetails = User.builder()
-      .username("user")
-      .password(passwordEncoder().encode("password"))
-      .roles("USER")
-      .build();
-    return new InMemoryUserDetailsManager(userDetails);
-  }
-   */
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();

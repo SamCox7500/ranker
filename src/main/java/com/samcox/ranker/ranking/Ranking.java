@@ -3,6 +3,7 @@ package com.samcox.ranker.ranking;
 import com.samcox.ranker.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -15,7 +16,7 @@ public abstract class Ranking {
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
-  @NotBlank(message = "Ranking must have a user assigned to it")
+  @NotNull(message = "Ranking must have a user assigned to it")
   private User user;
 
   @NotBlank(message = "Ranking must have a title")

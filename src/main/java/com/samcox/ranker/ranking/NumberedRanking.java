@@ -2,6 +2,7 @@ package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.user.User;
 import jakarta.persistence.Entity;
+import org.springframework.validation.annotation.Validated;
 
 @Entity
 public class NumberedRanking extends Ranking {

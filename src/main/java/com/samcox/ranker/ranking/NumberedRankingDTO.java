@@ -2,11 +2,13 @@ package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.user.UserDTO;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.validation.annotation.Validated;
 
 public class NumberedRankingDTO {
   private Long id;
-  @NotBlank(message = "NumberedRankingDTO must have a user assigned to it")
+  @NotNull(message = "NumberedRankingDTO must have a user assigned to it")
   private UserDTO userDTO;
   @NotBlank(message = "Ranking must have a title")
   @Size(min = 1, max = 30, message = "Ranking title must be between 1 and 30 chars")
