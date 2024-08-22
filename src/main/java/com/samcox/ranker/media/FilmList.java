@@ -13,13 +13,13 @@ public class FilmList extends MediaList {
 
   @OneToMany(mappedBy = "filmList", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("orderIndex ASC")
-  private List<FilmListEntry> rankedFilms = new ArrayList<>();
+  private List<FilmListEntry> filmListEntries = new ArrayList<>();
 
   public List<FilmListEntry> getRankedFilms() {
-    return rankedFilms;
+    return filmListEntries;
   }
   public void setRankedFilms(List<FilmListEntry> rankedFilms) {
-    this.rankedFilms = rankedFilms;
+    this.filmListEntries = rankedFilms;
   }
 
   @Override
