@@ -66,5 +66,7 @@ public class RankerApplication implements CommandLineRunner {
     ranking.setTitle("This is test ranking 1");
     ranking.setDescription("A test ranking. DAWDWADADWADAWDWADAWDADWADAWDAWD AWD DA WD AWD AWD DWA WDA D WAD A");
     numberedRankingService.createNumberedRanking(ranking);
+
+    SecurityContextHolder.clearContext();
   }
 }
