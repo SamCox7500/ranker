@@ -12,7 +12,8 @@ public class NumberedRankingDTOMapper {
       numberedRanking.getTitle(),
       numberedRanking.getDescription(),
       numberedRanking.getIsPublic(),
-      numberedRanking.getIsReverseOrder());
+      numberedRanking.getIsReverseOrder(),
+      numberedRanking.getMediaType());
   }
   public static List<NumberedRankingDTO> toNumberedRankingDTOs(List<NumberedRanking> rankings) {
     return rankings.stream()

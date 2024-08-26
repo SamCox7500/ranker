@@ -12,10 +12,13 @@ public class NumberedRanking extends Ranking {
   @JoinColumn(name = "media_list_id", referencedColumnName = "id")
   private MediaList<?> mediaList;
 
+  private String mediaType;
+
   public NumberedRanking() {}
-  public NumberedRanking(User user, String title, String desc, boolean isPublic, boolean isReverseOrder) {
+  public NumberedRanking(User user, String title, String desc, boolean isPublic, boolean isReverseOrder, String mediaType) {
     super(user, title, desc, isPublic);
     this.isReverseOrder = isReverseOrder;
+    this.mediaType = mediaType;
   }
 
   public boolean getIsReverseOrder() {
@@ -28,8 +31,14 @@ public class NumberedRanking extends Ranking {
   public MediaList<?> getMediaList() {
     return mediaList;
   }
-
   public void setMediaList(MediaList<?> mediaList) {
     this.mediaList = mediaList;
+  }
+
+  public String getMediaType() {
+    return mediaType;
+  }
+  public void setMediaType(String mediaType) {
+    this.mediaType = mediaType;
   }
 }

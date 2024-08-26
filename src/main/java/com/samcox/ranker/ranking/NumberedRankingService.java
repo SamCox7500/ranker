@@ -64,6 +64,7 @@ public class NumberedRankingService {
     numberedRanking.setDescription(numberedRankingDTO.getDescription());
     numberedRanking.setPrivate(); //todo
     numberedRanking.setReverseOrder(numberedRankingDTO.isReverseOrder());
+    numberedRanking.setMediaType(numberedRankingDTO.getMediaType());
 
     numberedRanking.setMediaList(mediaList);
 
