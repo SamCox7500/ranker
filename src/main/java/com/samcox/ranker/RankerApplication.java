@@ -61,11 +61,18 @@ public class RankerApplication implements CommandLineRunner {
     UserDTO userDTO = new UserDTO();
     userDTO.setId(userService.getUserByUsername("steve").getId());
     userDTO.setUsername("steve");
+
     NumberedRankingDTO ranking = new NumberedRankingDTO();
     ranking.setUserDTO(userDTO);
     ranking.setTitle("This is test ranking 1");
     ranking.setDescription("A test ranking. DAWDWADADWADAWDWADAWDADWADAWDAWD AWD DA WD AWD AWD DWA WDA D WAD A");
     numberedRankingService.createNumberedRanking(ranking);
+
+    NumberedRankingDTO ranking2 = new NumberedRankingDTO();
+    ranking2.setUserDTO(userDTO);
+    ranking2.setTitle("This is test ranking 2");
+    ranking2.setDescription("A 2nd test ranking.");
+    numberedRankingService.createNumberedRanking(ranking2);
 
     SecurityContextHolder.clearContext();
   }

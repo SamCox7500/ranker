@@ -14,7 +14,7 @@ public class NumberedRankingController {
   public NumberedRankingController(NumberedRankingService numberedRankingService) {
     this.numberedRankingService = numberedRankingService;
   }
-  @GetMapping("/users/{userId}/numberedranrankings")
+  @GetMapping("/users/{userId}/numberedrankings")
   public List<NumberedRankingDTO> getAllRankings(@PathVariable("userId") Long userId) throws AccessDeniedException {
     return NumberedRankingDTOMapper.toNumberedRankingDTOs(numberedRankingService
       .getAllNumberedRankingsByUser(userId));

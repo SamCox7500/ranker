@@ -37,4 +37,7 @@ export class HomeComponent {
   goToManageAccount() {
     this.router.navigate(['/manageuser']);
   }
+  goToRankings() {
+    this.router.navigate(['/rankings'])
+  }
 }

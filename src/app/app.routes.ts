@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { RegisterComponent } from './register/register.component';
 import { ManageAccountComponent } from './manage-account/manage-account.component';
+import { RankingListComponent } from './ranking-list/ranking-list.component';
 
 
 export const routes: Routes = [
@@ -14,4 +15,5 @@ export const routes: Routes = [
   { path: 'login', component: LoginFormComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'manageuser', component: ManageAccountComponent },
+  { path: 'rankings', component: RankingListComponent },
 ];

@@ -1,1 +1,22 @@
-<p>ranking-list works!</p>
+<div class="card my-5">
+  <div class="card-body">
+
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Desc</th>
+      </tr>
+      </thead>
+      <tbody>
+      @for (ranking of rankings; track ranking.id) {
+      <tr>
+          <td>{{ ranking.title }}</td>
+          <td>{{ ranking.description }}</td>
+      </tr>
+      }
+      </tbody>
+    </table>
+
+  </div>
+</div>
