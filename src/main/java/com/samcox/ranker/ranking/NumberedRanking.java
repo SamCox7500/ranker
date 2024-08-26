@@ -24,4 +24,12 @@ public class NumberedRanking extends Ranking {
   public void setReverseOrder(boolean isReverseOrder) {
     this.isReverseOrder = isReverseOrder;
   }
+
+  public MediaList<?> getMediaList() {
+    return mediaList;
+  }
+
+  public void setMediaList(MediaList<?> mediaList) {
+    this.mediaList = mediaList;
+  }
 }

@@ -1,6 +1,8 @@
 package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.auth.AuthService;
+import com.samcox.ranker.media.FilmList;
+import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.user.User;
 import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserNotFoundException;
@@ -53,17 +55,25 @@ public class NumberedRankingService {
 
   public void createNumberedRanking(@Valid NumberedRankingDTO numberedRankingDTO) throws AccessDeniedException {
     User user = userService.getUserByID(numberedRankingDTO.getUserDTO().getId());
+
+    MediaList<?> mediaList = createMediaList(numberedRankingDTO);
+
     NumberedRanking numberedRanking = new NumberedRanking();
     numberedRanking.setUser(user);
     numberedRanking.setTitle(numberedRankingDTO.getTitle());
     numberedRanking.setDescription(numberedRankingDTO.getDescription());
     numberedRanking.setPrivate(); //todo
     numberedRanking.setReverseOrder(numberedRankingDTO.isReverseOrder());
+
+    numberedRanking.setMediaList(mediaList);
+
     numberedRankingRepository.save(numberedRanking);
   }
   public void updateNumberedRanking(@Valid NumberedRankingDTO newNumberedRanking) throws AccessDeniedException {
     checkOwnership(newNumberedRanking.getId());
+
     Long id = newNumberedRanking.getId();
+
     NumberedRanking oldNumberedRanking = numberedRankingRepository.findById(newNumberedRanking.getId())
       .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + id));
     oldNumberedRanking.setTitle(newNumberedRanking.getTitle());
@@ -93,5 +103,15 @@ public class NumberedRankingService {
     if (!ranking.getUser().getId().equals(authUserId)) {
       throw new AccessDeniedException("You do not have permission to access that resource");
     }
+  }
+  private MediaList<?> createMediaList(NumberedRankingDTO numberedRankingDTO) {
+    MediaList<?> mediaList;
+    if (numberedRankingDTO.getMediaType().equals("film")) {
+      mediaList = new FilmList();
+    } else {
+      throw new IllegalArgumentException("Unsupported media type: " + numberedRankingDTO.getMediaType());
+    }
+    //todo add other types
+    return mediaList;
   }
 }
