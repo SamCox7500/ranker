@@ -21,14 +21,17 @@ public class NumberedRankingDTO {
   private boolean isPublic;
   private boolean isReverseOrder;
 
+  private String mediaType;
+
   public NumberedRankingDTO() {}
-  public NumberedRankingDTO(long id, UserDTO userDTO, String title, String desc, boolean isPublic, boolean isReverseOrder) {
+  public NumberedRankingDTO(long id, UserDTO userDTO, String title, String desc, boolean isPublic, boolean isReverseOrder, String mediaType) {
     this.id = id;
     this.userDTO = userDTO;
     this.title = title;
     this.description = desc;
     this.isPublic = isPublic;
     this.isReverseOrder = isReverseOrder;
+    this.mediaType = mediaType;
   }
 
   public Long getId() {
@@ -66,5 +69,11 @@ public class NumberedRankingDTO {
   }
   public void setReverseOrder(boolean reverseOrder) {
     isReverseOrder = reverseOrder;
+  }
+  public String getMediaType() {
+    return mediaType;
+  }
+  public void setMediaType(String mediaType) {
+    this.mediaType = mediaType;
   }
 }
