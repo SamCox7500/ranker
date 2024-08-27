@@ -1,10 +1,8 @@
 package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.auth.AuthService;
-import com.samcox.ranker.media.FilmList;
 import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.user.User;
-import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserNotFoundException;
 import com.samcox.ranker.user.UserService;
 import jakarta.validation.Valid;
