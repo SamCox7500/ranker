@@ -2,6 +2,7 @@ package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.media.MediaList;
+import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.user.User;
 import com.samcox.ranker.user.UserNotFoundException;
 import com.samcox.ranker.user.UserService;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import javax.print.attribute.standard.Media;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -55,6 +57,7 @@ public class NumberedRankingService {
     User user = userService.getUserByID(numberedRankingDTO.getUserDTO().getId());
 
     MediaList mediaList = new MediaList();
+    mediaList.setMediaType(MediaType.valueOf(numberedRankingDTO.getMediaType()));
 
     NumberedRanking numberedRanking = new NumberedRanking();
     numberedRanking.setUser(user);
@@ -62,7 +65,7 @@ public class NumberedRankingService {
     numberedRanking.setDescription(numberedRankingDTO.getDescription());
     numberedRanking.setPrivate(); //todo
     numberedRanking.setReverseOrder(numberedRankingDTO.isReverseOrder());
-    numberedRanking.setMediaType(numberedRankingDTO.getMediaType());
+    numberedRanking.setMediaType(MediaType.valueOf(numberedRankingDTO.getMediaType()));
 
     numberedRanking.setMediaList(mediaList);
 

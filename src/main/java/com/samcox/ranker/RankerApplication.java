@@ -66,14 +66,14 @@ public class RankerApplication implements CommandLineRunner {
     ranking.setUserDTO(userDTO);
     ranking.setTitle("This is test ranking 1");
     ranking.setDescription("A test ranking. DAWDWADADWADAWDWADAWDADWADAWDAWD AWD DA WD AWD AWD DWA WDA D WAD A");
-    ranking.setMediaType("film");
+    ranking.setMediaType("FILM");
     numberedRankingService.createNumberedRanking(ranking);
 
     NumberedRankingDTO ranking2 = new NumberedRankingDTO();
     ranking2.setUserDTO(userDTO);
     ranking2.setTitle("This is test ranking 2");
     ranking2.setDescription("A 2nd test ranking.");
-    ranking2.setMediaType("film");
+    ranking2.setMediaType("FILM");
     numberedRankingService.createNumberedRanking(ranking2);
 
     SecurityContextHolder.clearContext();

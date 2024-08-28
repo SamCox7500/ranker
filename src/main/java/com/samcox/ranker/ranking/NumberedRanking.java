@@ -1,9 +1,12 @@
 package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.media.MediaList;
+import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.user.User;
 import jakarta.persistence.*;
 import org.springframework.validation.annotation.Validated;
+
+import javax.print.attribute.standard.Media;
 
 @Entity
 public class NumberedRanking extends Ranking {
@@ -12,13 +15,15 @@ public class NumberedRanking extends Ranking {
   @JoinColumn(name = "media_list_id", referencedColumnName = "id")
   private MediaList mediaList;
 
-  private String mediaType;
+  @Enumerated(EnumType.STRING)
+  private MediaType mediaType;
 
   public NumberedRanking() {}
-  public NumberedRanking(User user, String title, String desc, boolean isPublic, boolean isReverseOrder, String mediaType) {
+  public NumberedRanking(User user, String title, String desc, boolean isPublic, boolean isReverseOrder, MediaType mediaType, MediaList mediaList) {
     super(user, title, desc, isPublic);
     this.isReverseOrder = isReverseOrder;
     this.mediaType = mediaType;
+    this.mediaList = mediaList;
   }
 
   public boolean getIsReverseOrder() {
@@ -35,10 +40,10 @@ public class NumberedRanking extends Ranking {
     this.mediaList = mediaList;
   }
 
-  public String getMediaType() {
+  public MediaType getMediaType() {
     return mediaType;
   }
-  public void setMediaType(String mediaType) {
+  public void setMediaType(MediaType mediaType) {
     this.mediaType = mediaType;
   }
 }

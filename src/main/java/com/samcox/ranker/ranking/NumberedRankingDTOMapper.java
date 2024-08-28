@@ -1,4 +1,5 @@
 package com.samcox.ranker.ranking;
+import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.user.UserDTOMapper;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public class NumberedRankingDTOMapper {
       numberedRanking.getDescription(),
       numberedRanking.getIsPublic(),
       numberedRanking.getIsReverseOrder(),
-      numberedRanking.getMediaType());
+      numberedRanking.getMediaType().toString());
   }
   public static List<NumberedRankingDTO> toNumberedRankingDTOs(List<NumberedRanking> rankings) {
     return rankings.stream()
