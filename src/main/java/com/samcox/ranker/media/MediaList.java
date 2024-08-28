@@ -45,21 +45,15 @@ public class MediaList {
   public void setNumberedRanking(NumberedRanking numberedRanking) {
     this.numberedRanking = numberedRanking;
   }
-
-  /*
-  public void addEntry(T entry) {
+  public void addEntry(MediaListEntry entry) {
     entries.add(entry);
     entry.setMediaList(this);
   }
-  public void removeEntry(T entry) {
+  public void removeEntry(MediaListEntry entry) {
     entries.remove(entry);
     entry.setMediaList(null);
   }
   public Long getId() {
     return id;
   }
-  public List<T> getEntries() {
-    return entries;
-  }
-*/
 }
