@@ -54,7 +54,7 @@ public class NumberedRankingService {
   public void createNumberedRanking(@Valid NumberedRankingDTO numberedRankingDTO) throws AccessDeniedException {
     User user = userService.getUserByID(numberedRankingDTO.getUserDTO().getId());
 
-    MediaList<?> mediaList = createMediaList(numberedRankingDTO);
+    MediaList mediaList = new MediaList();
 
     NumberedRanking numberedRanking = new NumberedRanking();
     numberedRanking.setUser(user);
@@ -102,15 +102,5 @@ public class NumberedRankingService {
     if (!ranking.getUser().getId().equals(authUserId)) {
       throw new AccessDeniedException("You do not have permission to access that resource");
     }
-  }
-  private MediaList<?> createMediaList(NumberedRankingDTO numberedRankingDTO) {
-    MediaList<?> mediaList;
-    if (numberedRankingDTO.getMediaType().equals("film")) {
-      mediaList = new FilmList();
-    } else {
-      throw new IllegalArgumentException("Unsupported media type: " + numberedRankingDTO.getMediaType());
-    }
-    //todo add other types
-    return mediaList;
   }
 }

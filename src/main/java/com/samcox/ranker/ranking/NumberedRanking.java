@@ -10,7 +10,7 @@ public class NumberedRanking extends Ranking {
   private boolean isReverseOrder;
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "media_list_id", referencedColumnName = "id")
-  private MediaList<?> mediaList;
+  private MediaList mediaList;
 
   private String mediaType;
 
@@ -28,10 +28,10 @@ public class NumberedRanking extends Ranking {
     this.isReverseOrder = isReverseOrder;
   }
 
-  public MediaList<?> getMediaList() {
+  public MediaList getMediaList() {
     return mediaList;
   }
-  public void setMediaList(MediaList<?> mediaList) {
+  public void setMediaList(MediaList mediaList) {
     this.mediaList = mediaList;
   }
 

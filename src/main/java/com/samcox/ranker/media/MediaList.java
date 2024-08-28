@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public abstract class MediaList {
+public class MediaList {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
