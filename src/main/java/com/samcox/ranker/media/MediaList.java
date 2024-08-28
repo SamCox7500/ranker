@@ -46,12 +46,18 @@ public class MediaList {
     this.numberedRanking = numberedRanking;
   }
   public void addEntry(MediaListEntry entry) {
+    entry.setRanking(this.entries.size() + 1);
     entries.add(entry);
     entry.setMediaList(this);
   }
   public void removeEntry(MediaListEntry entry) {
     entries.remove(entry);
     entry.setMediaList(null);
+
+    //reorder the remaining entries
+    for (int i = 0; i < this.entries.size(); i++) {
+      this.entries.get(i).setRanking(i + 1);
+    }
   }
   public Long getId() {
     return id;
