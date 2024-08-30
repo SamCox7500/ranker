@@ -8,6 +8,9 @@ public class MediaListEntryDTO {
   @NotNull
   private int ranking;
 
+  @NotNull
+  private MediaList mediaList;
+
   public Long getId() {
     return id;
   }
@@ -22,5 +25,12 @@ public class MediaListEntryDTO {
 
   public void setRanking(int ranking) {
     this.ranking = ranking;
+  }
+
+  public MediaList getMediaList() {
+    return mediaList;
+  }
+  public void setMediaList(MediaList mediaList) {
+    this.mediaList = mediaList;
   }
 }

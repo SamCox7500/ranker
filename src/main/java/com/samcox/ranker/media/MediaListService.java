@@ -31,6 +31,10 @@ public class MediaListService {
       .orElseThrow(() -> new MediaListNotFoundException("Media list cannot be found for numbered ranking: " +
         numberedRankingDTO.getId()));
   }
+  public MediaList getMediaListById(Long id) {
+    return mediaListRepository.findById(id)
+      .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id " + id));
+  }
   public void createMediaList(@Valid MediaListDTO mediaListDTO) throws AccessDeniedException {
     Long userId = mediaListDTO.getNumberedRankingDTO().getUserDTO().getId();
     NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(mediaListDTO.getNumberedRankingDTO().getId(), userId);
@@ -74,4 +78,6 @@ public class MediaListService {
 
     mediaListRepository.delete(mediaList);
   }
+  //todo use auth service
+  //todo use MediaListEntryService
 }
