@@ -55,11 +55,28 @@ public class MediaList {
     entry.setMediaList(null);
 
     //reorder the remaining entries
-    for (int i = 0; i < this.entries.size(); i++) {
-      this.entries.get(i).setRanking(i + 1);
-    }
+    reorderEntries();
   }
+  public void moveEntry(int oldPosition, int newPosition) {
+    if (oldPosition < 1 || newPosition < 1 || oldPosition > entries.size() || newPosition > entries.size()) {
+      throw new IllegalArgumentException("Invalid positions");
+    }
+
+    //Stores the removed element that is returned
+    MediaListEntry entry = entries.remove(oldPosition - 1);
+
+    //Add the element back to the array list in new position
+    entries.add(newPosition - 1, entry);
+
+    reorderEntries();
+  }
+
   public Long getId() {
     return id;
+  }
+  private void reorderEntries() {
+    for (int i = 0; i < entries.size(); i++) {
+      entries.get(i).setRanking(i + 1);
+    }
   }
 }
