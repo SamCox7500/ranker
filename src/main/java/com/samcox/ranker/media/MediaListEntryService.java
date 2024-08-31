@@ -7,11 +7,9 @@ import java.util.List;
 public class MediaListEntryService {
 
   private final MediaListEntryRepository mediaListEntryRepository;
-  private final MediaListService mediaListService;
 
   public MediaListEntryService(MediaListEntryRepository mediaListEntryRepository, MediaListService mediaListService) {
     this.mediaListEntryRepository = mediaListEntryRepository;
-    this.mediaListService = mediaListService;
   }
   public MediaListEntry getMediaListEntryById(Long id) {
     return mediaListEntryRepository.findById(id)

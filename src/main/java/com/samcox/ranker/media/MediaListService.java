@@ -17,9 +17,12 @@ public class MediaListService {
   private final MediaListRepository mediaListRepository;
   private final NumberedRankingService numberedRankingService;
 
-  public MediaListService(MediaListRepository mediaListRepository, NumberedRankingService numberedRankingService) {
+  private final MediaListEntryService mediaListEntryService;
+
+  public MediaListService(MediaListRepository mediaListRepository, NumberedRankingService numberedRankingService, MediaListEntryService mediaListEntryService) {
     this.mediaListRepository = mediaListRepository;
     this.numberedRankingService = numberedRankingService;
+    this.mediaListEntryService = mediaListEntryService;
   }
 
   public MediaList getMediaListByNumberedRanking(@Valid NumberedRankingDTO numberedRankingDTO) throws AccessDeniedException {
@@ -48,7 +51,6 @@ public class MediaListService {
 
     mediaListRepository.save(mediaList);
   }
-  //todo update
   public void moveEntryInList(Long mediaListId, int oldPosition, int newPosition) {
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
@@ -59,10 +61,9 @@ public class MediaListService {
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("Media list not found with id: " + mediaListId));
 
-    MediaListEntry entry = mediaList.getEntries().stream()
-      .filter(e -> e.getId().equals(entryId))
-      .findFirst()
-      .orElseThrow(() -> new MediaListEntryNotFoundException("MediaListEntry not found with id: " + entryId));
+    MediaListEntry entry = mediaListEntryService.getMediaListEntryById(entryId);
+    mediaList.removeEntry(entry);
+    mediaListRepository.save(mediaList);
   }
   public void addEntryToList(Long mediaListId, MediaListEntry newEntry) {
     MediaList mediaList = mediaListRepository.findById(mediaListId)
