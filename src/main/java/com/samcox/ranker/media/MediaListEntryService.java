@@ -1,21 +1,29 @@
 package com.samcox.ranker.media;
 
+import com.samcox.ranker.auth.AuthService;
 import jakarta.validation.Valid;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 public class MediaListEntryService {
 
   private final MediaListEntryRepository mediaListEntryRepository;
 
-  public MediaListEntryService(MediaListEntryRepository mediaListEntryRepository, MediaListService mediaListService) {
+  private final AuthService authService;
+
+  public MediaListEntryService(MediaListEntryRepository mediaListEntryRepository, MediaListService mediaListService, AuthService authService) {
     this.mediaListEntryRepository = mediaListEntryRepository;
+    this.authService = authService;
   }
-  public MediaListEntry getMediaListEntryById(Long id) {
+  public MediaListEntry getMediaListEntryById(Long id) throws AccessDeniedException {
+    checkOwnership(id);
     return mediaListEntryRepository.findById(id)
       .orElseThrow(() -> new MediaListEntryNotFoundException("MediaListEntry not found with id: " + id));
   }
-  public MediaListEntry getMediaListEntryByMediaListAndRanking(MediaList mediaList, int ranking) {
+  /*
+  public MediaListEntry getMediaListEntryByMediaListAndRanking(MediaList mediaList, int ranking) throws AccessDeniedException {
+    checkOwnership(mediaList.getId());
     return mediaListEntryRepository.findByMediaListAndRanking(mediaList, ranking)
       .orElseThrow(() -> new MediaListEntryNotFoundException("MediaListEntry not found with MediaList: "
         + mediaList.getId() + " and ranking position: " + ranking));
@@ -24,6 +32,7 @@ public class MediaListEntryService {
     return mediaListEntryRepository.findByMediaList(mediaList)
       .orElseThrow(() -> new MediaListEntryNotFoundException("MediaListEntries not found for MediaList: " + mediaList.getId()));
   }
+
   public void createMediaListEntry(@Valid MediaListEntryDTO mediaListEntryDTO) {
     MediaListEntry entry = new MediaListEntry();
     entry.setMediaList(mediaListEntryDTO.getMediaList());
@@ -41,5 +50,14 @@ public class MediaListEntryService {
   }
   public void deleteMediaListEntry(Long id) {
     mediaListEntryRepository.deleteById(id);
+  }
+   */
+  public void checkOwnership(Long mediaListEntryId) throws AccessDeniedException {
+    Long authUserId = authService.getAuthenticatedUser().getId();
+    MediaListEntry mediaListEntry = mediaListEntryRepository.findById(mediaListEntryId)
+      .orElseThrow(() -> new MediaListEntryNotFoundException("Could not check ownership as mediaListEntry does not exist with id: " + mediaListEntryId));
+    if (!mediaListEntry.getMediaList().getNumberedRanking().getUser().getId().equals(authUserId)) {
+      throw new AccessDeniedException("You do not have permission to access that resource");
+    }
   }
 }
