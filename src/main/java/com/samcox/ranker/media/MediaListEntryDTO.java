@@ -8,8 +8,11 @@ public class MediaListEntryDTO {
   @NotNull
   private int ranking;
 
-  @NotNull
-  private MediaList mediaList;
+  private String tmdbId;
+
+  public MediaListEntryDTO(Long id, int ranking, String tmdbId) {
+
+  }
 
   public Long getId() {
     return id;
@@ -27,10 +30,10 @@ public class MediaListEntryDTO {
     this.ranking = ranking;
   }
 
-  public MediaList getMediaList() {
-    return mediaList;
+  public String getTmdbId() {
+    return tmdbId;
   }
-  public void setMediaList(MediaList mediaList) {
-    this.mediaList = mediaList;
+  public void setTmdbId(String tmdbId) {
+    this.tmdbId = tmdbId;
   }
 }

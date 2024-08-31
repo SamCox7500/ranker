@@ -11,6 +11,8 @@ public class MediaListEntry {
 
   private int ranking;
 
+  private String tmdbId;
+
   @ManyToOne
   @JoinColumn(name = "media_list_id")
   private MediaList mediaList;
@@ -33,5 +35,12 @@ public class MediaListEntry {
 
   public void setMediaList(MediaList mediaList) {
     this.mediaList = mediaList;
+  }
+
+  public String getTmdbId() {
+    return tmdbId;
+  }
+  public void setTmdbId(String tmdbId) {
+    this.tmdbId = tmdbId;
   }
 }

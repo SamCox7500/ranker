@@ -28,14 +28,11 @@ public class MediaListService {
     this.authService = authService;
   }
 
-  public MediaList getMediaListByNumberedRanking(@Valid NumberedRankingDTO numberedRankingDTO) throws AccessDeniedException {
-    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(
-      numberedRankingDTO.getId(),
-      numberedRankingDTO.getUserDTO().getId()
-    );
+  public MediaList getMediaListByNumberedRankingAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(numberedRankingId, userId);
     return mediaListRepository.findByNumberedRanking(numberedRanking)
-      .orElseThrow(() -> new MediaListNotFoundException("Media list cannot be found for numbered ranking: " +
-        numberedRankingDTO.getId()));
+      .orElseThrow(() -> new MediaListNotFoundException("Media list cannot be found for numbered ranking: "
+        + numberedRankingId));
   }
   public MediaList getMediaListById(Long id) {
     return mediaListRepository.findById(id)
@@ -72,12 +69,18 @@ public class MediaListService {
     mediaList.removeEntry(entry);
     mediaListRepository.save(mediaList);
   }
-  public void addEntryToList(Long mediaListId, MediaListEntry newEntry) throws AccessDeniedException {
+  public void addEntryToList(Long mediaListId, MediaListEntryDTO newEntryDTO) throws AccessDeniedException {
     checkOwnership(mediaListId);
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
-    mediaList.addEntry(newEntry);
+
+    MediaListEntry mediaListEntry = new MediaListEntry();
+    mediaListEntry.setRanking(newEntryDTO.getRanking());
+    mediaListEntry.setMediaList(mediaList);
+    mediaListEntry.setTmdbId(newEntryDTO.getTmdbId());
+
+    mediaList.addEntry(mediaListEntry);
     mediaListRepository.save(mediaList);
   }
   public void deleteMediaListByNumberedRankingAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
