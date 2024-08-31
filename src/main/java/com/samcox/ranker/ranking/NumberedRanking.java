@@ -11,7 +11,7 @@ import javax.print.attribute.standard.Media;
 @Entity
 public class NumberedRanking extends Ranking {
   private boolean isReverseOrder;
-  @OneToOne(cascade = CascadeType.ALL)
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "media_list_id", referencedColumnName = "id")
   private MediaList mediaList;
 
