@@ -38,8 +38,8 @@ public class AppConfig {
   }
 
   @Bean
-  public MediaListService mediaListService(MediaListRepository mediaListRepository, NumberedRankingService numberedRankingService) {
-    return new MediaListService(mediaListRepository, numberedRankingService);
+  public MediaListService mediaListService(MediaListRepository mediaListRepository, NumberedRankingService numberedRankingService, MediaListEntryService mediaListEntryService, AuthService authService) {
+    return new MediaListService(mediaListRepository, numberedRankingService, mediaListEntryService, authService);
   }
   @Bean
   public MediaListEntryService mediaListEntryService(MediaListEntryRepository mediaListEntryRepository, MediaListService mediaListService) {
