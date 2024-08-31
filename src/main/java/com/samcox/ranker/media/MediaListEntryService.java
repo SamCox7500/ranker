@@ -12,7 +12,7 @@ public class MediaListEntryService {
 
   private final AuthService authService;
 
-  public MediaListEntryService(MediaListEntryRepository mediaListEntryRepository, MediaListService mediaListService, AuthService authService) {
+  public MediaListEntryService(MediaListEntryRepository mediaListEntryRepository, AuthService authService) {
     this.mediaListEntryRepository = mediaListEntryRepository;
     this.authService = authService;
   }

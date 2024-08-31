@@ -42,7 +42,7 @@ public class AppConfig {
     return new MediaListService(mediaListRepository, numberedRankingService, mediaListEntryService, authService);
   }
   @Bean
-  public MediaListEntryService mediaListEntryService(MediaListEntryRepository mediaListEntryRepository, MediaListService mediaListService, AuthService authService) {
-    return new MediaListEntryService(mediaListEntryRepository, mediaListService, authService);
+  public MediaListEntryService mediaListEntryService(MediaListEntryRepository mediaListEntryRepository, AuthService authService) {
+    return new MediaListEntryService(mediaListEntryRepository, authService);
   }
 }
