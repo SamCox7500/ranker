@@ -28,6 +28,27 @@ public class MediaListService {
     this.authService = authService;
   }
 
+  public List<MediaListEntryDTO> getMediaListEntries(Long mediaListId) {
+    //todo auth
+    MediaList mediaList = mediaListRepository.findById(mediaListId)
+      .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
+    List<MediaListEntryDTO> entries = new ArrayList<>();
+
+    MediaType mediaType = mediaList.getMediaType();
+
+
+    for (MediaListEntry entry: mediaList.getEntries()) {
+      if (mediaType == MediaType.FILM) {
+        FilmDTO filmDTO;
+        //todo use tmdb service.
+      } else if (mediaType == MediaType.TV_SHOW) {
+        //TODO tvshow db
+        //todo tmdb service
+      }
+    }
+    return entries;
+  }
+
   public MediaList getMediaListByNumberedRankingAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
     NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(numberedRankingId, userId);
     return mediaListRepository.findByNumberedRanking(numberedRanking)
