@@ -22,6 +22,8 @@ public class MediaListController {
     MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
     return MediaListDTOMapper.toMediaListDTO(mediaList);
   }
+  //todo think about this works in the frontend
+
   @PostMapping("/users/{userId}/numberedrankings/{rankingId}/mediaList/entries")
   public void addEntryToMediaList(
     @PathVariable Long userId,
