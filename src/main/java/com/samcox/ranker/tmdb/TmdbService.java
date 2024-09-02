@@ -21,6 +21,15 @@ public class TmdbService {
   public TmdbService(RestTemplate restTemplate) {
       this.restTemplate = restTemplate;
   }
+  public TMDBFilmSearchResultsDTO searchFilms(String query) {
+    URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
+      .pathSegment("search", "movie")
+      .queryParam("api_key", apiKey)
+      .queryParam("query", query)
+      .build()
+      .toUri();
+    return restTemplate.getForObject(uri, TMDBFilmSearchResultsDTO.class);
+  }
   public FilmDTO getFilmDetails(Long tmdbId) {
     URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
       .pathSegment("movie", tmdbId.toString())
