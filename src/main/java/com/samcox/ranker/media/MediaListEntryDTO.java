@@ -5,12 +5,12 @@ import jakarta.validation.constraints.NotNull;
 
 public class MediaListEntryDTO {
   private Long id;
-  private String tmdbId;
+  private Long tmdbId;
   private int ranking;
   private String title;
   private MediaType mediaType;
 
-  public MediaListEntryDTO(Long id, String tmdbId, int ranking, String title, MediaType mediaType) {
+  public MediaListEntryDTO(Long id, Long tmdbId, int ranking, String title, MediaType mediaType) {
     this.id = id;
     this.tmdbId = tmdbId;
     this.ranking = ranking;
@@ -24,10 +24,10 @@ public class MediaListEntryDTO {
   public void setId(Long id) {
     this.id = id;
   }
-  public String getTmdbId() {
+  public Long getTmdbId() {
     return tmdbId;
   }
-  public void setTmdbId(String tmdbId) {
+  public void setTmdbId(Long tmdbId) {
     this.tmdbId = tmdbId;
   }
   public int getRanking() {

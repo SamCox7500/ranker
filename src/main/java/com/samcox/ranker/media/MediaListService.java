@@ -69,16 +69,16 @@ public class MediaListService {
     mediaList.removeEntry(entry);
     mediaListRepository.save(mediaList);
   }
-  public void addEntryToList(Long mediaListId, MediaListEntryDTO newEntryDTO) throws AccessDeniedException {
+  public void addEntryToList(@Valid AddMediaRequest addMediaRequest, Long mediaListId) throws AccessDeniedException {
     checkOwnership(mediaListId);
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
 
     MediaListEntry mediaListEntry = new MediaListEntry();
-    mediaListEntry.setRanking(newEntryDTO.getRanking());
+    mediaListEntry.setRanking(addMediaRequest.getRanking());
     mediaListEntry.setMediaList(mediaList);
-    mediaListEntry.setTmdbId(newEntryDTO.getTmdbId());
+    mediaListEntry.setTmdbId(addMediaRequest.getTmdbId());
 
     mediaList.addEntry(mediaListEntry);
     mediaListRepository.save(mediaList);
