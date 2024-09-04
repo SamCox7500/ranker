@@ -4,6 +4,7 @@ import com.samcox.ranker.ranking.NumberedRankingService;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @RestController
 public class MediaListController {
@@ -58,4 +59,13 @@ public class MediaListController {
       mediaListService.removeEntryInList(mediaListId, entryId);
   }
   //todo removing multiple entries
+  @DeleteMapping("/users/{usersId}/numberedrankings/{rankingId}/mediaList/entries")
+  public void removeEntriesFromMediaList(
+    @PathVariable Long userId,
+    @PathVariable Long rankingId,
+    @PathVariable Long mediaListId,
+    @RequestBody List<Long> entryIds
+    ) throws AccessDeniedException {
+    mediaListService.removeEntriesInList(mediaListId, entryIds);
+  }
 }

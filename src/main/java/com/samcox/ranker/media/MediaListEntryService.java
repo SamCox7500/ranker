@@ -21,6 +21,11 @@ public class MediaListEntryService {
     return mediaListEntryRepository.findById(id)
       .orElseThrow(() -> new MediaListEntryNotFoundException("MediaListEntry not found with id: " + id));
   }
+  public MediaListEntry getMediaListEntryByMediaListAndId(MediaList mediaList, Long id) {
+    return mediaListEntryRepository.findByMediaListAndId(mediaList, id)
+      .orElseThrow(() -> new MediaListEntryNotFoundException("MediaListEntry not found for MediaList: "
+        + mediaList.getId() + " and entry id: " + id));
+  }
   /*
   public MediaListEntry getMediaListEntryByMediaListAndRanking(MediaList mediaList, int ranking) throws AccessDeniedException {
     checkOwnership(mediaList.getId());

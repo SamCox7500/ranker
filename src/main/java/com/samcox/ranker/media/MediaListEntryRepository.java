@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface MediaListEntryRepository extends JpaRepository<MediaListEntry, Long> {
   Optional<MediaListEntry> findByMediaListAndRanking(MediaList mediaList, int ranking);
   Optional<List<MediaListEntry>> findByMediaList(MediaList mediaList);
+  Optional<MediaListEntry> findByMediaListAndId(MediaList mediaList, Long id);
 }

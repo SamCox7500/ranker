@@ -76,7 +76,20 @@ public class MediaListService {
     mediaList.removeEntry(entry);
     mediaListRepository.save(mediaList);
   }
-  //todo method for removing multiple entries at once
+  public void removeEntriesInList(Long mediaListId, List<Long> mediaListEntryIds) throws AccessDeniedException {
+    checkOwnership(mediaListId);
+
+    MediaList mediaList = mediaListRepository.findById(mediaListId)
+      .orElseThrow(() -> new MediaListNotFoundException("Media list not found with id: " + mediaListId));
+
+    List<MediaListEntry> mediaListEntriesRemoveList = new ArrayList<>();
+
+    for (Long mediaListEntryId: mediaListEntryIds) {
+      MediaListEntry mediaListEntry = mediaListEntryService.getMediaListEntryByMediaListAndId(mediaList, mediaListEntryId);
+      mediaListEntriesRemoveList.add(mediaListEntry);
+    }
+    mediaList.removeEntries(mediaListEntriesRemoveList);
+  }
   public void addEntryToList(@Valid EntryAddRequest entryAddRequest, Long mediaListId) throws AccessDeniedException {
     checkOwnership(mediaListId);
 
