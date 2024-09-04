@@ -57,6 +57,13 @@ public class MediaList {
     //reorder the remaining entries
     reorderEntries();
   }
+  public void removeEntries(List<MediaListEntry> entries) {
+    for (MediaListEntry entry: entries) {
+      entries.remove(entry);
+      entry.setMediaList(null);
+    }
+    reorderEntries();
+  }
   public void moveEntry(int oldPosition, int newPosition) {
     if (oldPosition < 1 || newPosition < 1 || oldPosition > entries.size() || newPosition > entries.size()) {
       throw new IllegalArgumentException("Invalid positions");
