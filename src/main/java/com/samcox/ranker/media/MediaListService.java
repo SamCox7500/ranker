@@ -1,10 +1,8 @@
 package com.samcox.ranker.media;
 
 import com.samcox.ranker.auth.AuthService;
-import com.samcox.ranker.ranking.NumberedRanking;
-import com.samcox.ranker.ranking.NumberedRankingDTO;
-import com.samcox.ranker.ranking.NumberedRankingService;
-import com.samcox.ranker.ranking.RankingNotFoundException;
+import com.samcox.ranker.ranking.*;
+import com.samcox.ranker.tmdb.TmdbService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
@@ -21,32 +19,20 @@ public class MediaListService {
   private final MediaListEntryService mediaListEntryService;
   private final AuthService authService;
 
-  public MediaListService(MediaListRepository mediaListRepository, NumberedRankingService numberedRankingService, MediaListEntryService mediaListEntryService, AuthService authService) {
+  private final TmdbService tmdbService;
+
+  public MediaListService(
+    MediaListRepository mediaListRepository,
+    NumberedRankingService numberedRankingService,
+    MediaListEntryService mediaListEntryService,
+    AuthService authService,
+    TmdbService tmdbService
+  ) {
     this.mediaListRepository = mediaListRepository;
     this.numberedRankingService = numberedRankingService;
     this.mediaListEntryService = mediaListEntryService;
     this.authService = authService;
-  }
-
-  public List<MediaListEntryDTO> getMediaListEntries(Long mediaListId) {
-    //todo auth
-    MediaList mediaList = mediaListRepository.findById(mediaListId)
-      .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
-    List<MediaListEntryDTO> entries = new ArrayList<>();
-
-    MediaType mediaType = mediaList.getMediaType();
-
-
-    for (MediaListEntry entry: mediaList.getEntries()) {
-      if (mediaType == MediaType.FILM) {
-        FilmDTO filmDTO;
-        //todo use tmdb service.
-      } else if (mediaType == MediaType.TV_SHOW) {
-        //TODO tvshow db
-        //todo tmdb service
-      }
-    }
-    return entries;
+    this.tmdbService = tmdbService;
   }
 
   public MediaList getMediaListByNumberedRankingAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
@@ -90,16 +76,17 @@ public class MediaListService {
     mediaList.removeEntry(entry);
     mediaListRepository.save(mediaList);
   }
-  public void addEntryToList(@Valid AddMediaRequest addMediaRequest, Long mediaListId) throws AccessDeniedException {
+  //todo method for removing multiple entries at once
+  public void addEntryToList(@Valid EntryAddRequest entryAddRequest, Long mediaListId) throws AccessDeniedException {
     checkOwnership(mediaListId);
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
 
     MediaListEntry mediaListEntry = new MediaListEntry();
-    mediaListEntry.setRanking(addMediaRequest.getRanking());
+    mediaListEntry.setRanking(entryAddRequest.getRanking());
     mediaListEntry.setMediaList(mediaList);
-    mediaListEntry.setTmdbId(addMediaRequest.getTmdbId());
+    mediaListEntry.setTmdbId(entryAddRequest.getTmdbId());
 
     mediaList.addEntry(mediaListEntry);
     mediaListRepository.save(mediaList);
@@ -121,5 +108,32 @@ public class MediaListService {
     if (!mediaList.getNumberedRanking().getUser().getId().equals(authUserId)) {
       throw new AccessDeniedException("You do not have permission to access that resource");
     }
+  }
+  public MediaListDTO toMediaListDTO(MediaList mediaList) {
+    List<MediaListEntryDTO> entryDTOS = toMediaListEntryDTOS(mediaList.getMediaType(), mediaList.getEntries());
+
+    NumberedRankingDTO numberedRankingDTO = NumberedRankingDTOMapper.toNumberedRankingDTO(mediaList.getNumberedRanking());
+
+    return new MediaListDTO(mediaList.getId(), mediaList.getMediaType(), entryDTOS, numberedRankingDTO);
+  }
+  private List<MediaListEntryDTO> toMediaListEntryDTOS (MediaType mediaType, List<MediaListEntry> mediaListEntries) {
+    List<MediaListEntryDTO> entries = new ArrayList<>();
+
+    for (MediaListEntry entry: mediaListEntries) {
+
+      MediaListEntryDTO mediaListEntryDTO = new MediaListEntryDTO();
+      mediaListEntryDTO.setRanking(entry.getRanking());
+
+      if (mediaType == MediaType.FILM) {
+        FilmDTO filmDTO = tmdbService.getFilmDetails(entry.getTmdbId());
+        mediaListEntryDTO.setMediaDTO(filmDTO);
+      } else if (mediaType == MediaType.TV_SHOW) {
+        //todo tv
+      } else {
+        //todo throw exception
+      }
+      entries.add(mediaListEntryDTO);
+    }
+    return entries;
   }
 }

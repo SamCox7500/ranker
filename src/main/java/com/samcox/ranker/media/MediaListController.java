@@ -17,21 +17,23 @@ public class MediaListController {
     this.mediaListEntryService = mediaListEntryService;
     this.numberedRankingService = numberedRankingService;
   }
+
   @GetMapping("/users/{userId}/numberedrankings/{rankingId}/medialist")
   public MediaListDTO getMediaList(@PathVariable Long userId, @PathVariable Long rankingId) throws AccessDeniedException {
+
     MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
-    return MediaListDTOMapper.toMediaListDTO(mediaList);
+    return mediaListService.toMediaListDTO(mediaList);
+
   }
   //todo think about this works in the frontend
-
   @PostMapping("/users/{userId}/numberedrankings/{rankingId}/mediaList/entries")
   public void addEntryToMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,
     @PathVariable Long mediaListId,
-    @RequestBody MediaListEntryDTO entryDTO
+    @RequestBody EntryAddRequest entryAddRequest
   ) throws AccessDeniedException {
-    mediaListService.addEntryToList(mediaListId, entryDTO);
+    mediaListService.addEntryToList(entryAddRequest, mediaListId);
   }
   @PutMapping("/users/{usersId}/numberedrankings/{rankingId}/mediaList/entries/{entryId}")
   public void moveEntryInMediaList(
@@ -39,11 +41,11 @@ public class MediaListController {
     @PathVariable Long rankingId,
     @PathVariable Long mediaListId,
     @PathVariable Long entryId,
-    @RequestBody MediaListEntryDTO mediaListEntryDTO
+    @RequestBody EntryMoveRequest entryMoveRequest
   ) throws AccessDeniedException {
-      MediaListEntry mediaListEntry = mediaListEntryService.getMediaListEntryById(mediaListEntryDTO.getId());
+      MediaListEntry mediaListEntry = mediaListEntryService.getMediaListEntryById(entryMoveRequest.getEntryId());
       int oldPosition = mediaListEntry.getRanking();
-      int newPosition = mediaListEntryDTO.getRanking();
+      int newPosition = entryMoveRequest.getNewPosition();
       mediaListService.moveEntryInList(mediaListId, oldPosition, newPosition);
   }
   @DeleteMapping("/users/{usersId}/numberedrankings/{rankingId}/mediaList/entries/{entryId}")
@@ -55,4 +57,5 @@ public class MediaListController {
   ) throws AccessDeniedException {
       mediaListService.removeEntryInList(mediaListId, entryId);
   }
+  //todo removing multiple entries
 }

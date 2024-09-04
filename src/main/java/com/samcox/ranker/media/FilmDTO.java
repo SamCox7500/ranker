@@ -1,10 +1,27 @@
 package com.samcox.ranker.media;
 
-public class FilmDTO extends MediaListEntryDTO {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class FilmDTO extends MediaDTO {
+
+  @JsonProperty("release_date")
   private String releaseDate;
 
-  public FilmDTO(Long id, Long tmdbId, int ranking, String title, MediaType mediaType, String releaseDate) {
-    super(id, tmdbId, ranking, title, mediaType);
+  public FilmDTO(String title, String releaseDate) {
+    super(title);
     this.releaseDate = releaseDate;
+  }
+  public void setReleaseDate(String releaseDate) {
+    this.releaseDate = releaseDate;
+  }
+  public String getReleaseDate() {
+    return releaseDate;
+  }
+
+  @Override
+  public String toString() {
+    return "FilmDTO{" +
+      "releaseDate='" + releaseDate + '\'' +
+      '}';
   }
 }

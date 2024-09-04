@@ -1,7 +1,11 @@
 package com.samcox.ranker.media;
 
-public class AddMediaRequest {
+import jakarta.validation.constraints.NotNull;
+
+public class EntryAddRequest {
+  @NotNull
   private Long tmdbId;
+  @NotNull
   private MediaType mediaType;
   private int ranking;
 

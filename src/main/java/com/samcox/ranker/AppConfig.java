@@ -7,6 +7,7 @@ import com.samcox.ranker.media.MediaListRepository;
 import com.samcox.ranker.media.MediaListService;
 import com.samcox.ranker.ranking.NumberedRankingRepository;
 import com.samcox.ranker.ranking.NumberedRankingService;
+import com.samcox.ranker.tmdb.TmdbService;
 import com.samcox.ranker.user.UserRepository;
 import com.samcox.ranker.user.UserService;
 import org.springframework.context.annotation.Bean;
@@ -36,11 +37,15 @@ public class AppConfig {
   }
 
   @Bean
-  public MediaListService mediaListService(MediaListRepository mediaListRepository, NumberedRankingService numberedRankingService, MediaListEntryService mediaListEntryService, AuthService authService) {
-    return new MediaListService(mediaListRepository, numberedRankingService, mediaListEntryService, authService);
+  public MediaListService mediaListService(MediaListRepository mediaListRepository, NumberedRankingService numberedRankingService, MediaListEntryService mediaListEntryService, AuthService authService, TmdbService tmdbService) {
+    return new MediaListService(mediaListRepository, numberedRankingService, mediaListEntryService, authService, tmdbService);
   }
   @Bean
   public MediaListEntryService mediaListEntryService(MediaListEntryRepository mediaListEntryRepository, AuthService authService) {
     return new MediaListEntryService(mediaListEntryRepository, authService);
+  }
+  @Bean
+  public TmdbService tmdbService(RestTemplate restTemplate) {
+    return new TmdbService(restTemplate);
   }
 }

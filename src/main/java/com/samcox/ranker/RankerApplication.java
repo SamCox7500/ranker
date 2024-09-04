@@ -1,7 +1,9 @@
 package com.samcox.ranker;
 
+import com.samcox.ranker.media.FilmDTO;
 import com.samcox.ranker.ranking.NumberedRankingDTO;
 import com.samcox.ranker.ranking.NumberedRankingService;
+import com.samcox.ranker.tmdb.TmdbService;
 import com.samcox.ranker.user.UserCredentials;
 import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserService;
@@ -28,6 +30,9 @@ public class RankerApplication implements CommandLineRunner {
 
   @Autowired
   private NumberedRankingService numberedRankingService;
+
+  @Autowired
+  private TmdbService tmdbService;
 
   public static void main(String[] args) {
 		SpringApplication.run(RankerApplication.class, args);
@@ -77,5 +82,9 @@ public class RankerApplication implements CommandLineRunner {
     numberedRankingService.createNumberedRanking(ranking2);
 
     SecurityContextHolder.clearContext();
+
+    FilmDTO filmDTO = tmdbService.getFilmDetails(100L);
+    System.out.println(filmDTO.toString());
+    System.out.println(filmDTO.getTitle());
   }
 }
