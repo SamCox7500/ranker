@@ -91,6 +91,7 @@ public class MediaListService {
     mediaList.addEntry(mediaListEntry);
     mediaListRepository.save(mediaList);
   }
+  /*
   public void deleteMediaListByNumberedRankingAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
     NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(numberedRankingId, userId);
     MediaList mediaList = mediaListRepository.findByNumberedRanking(numberedRanking)
@@ -99,6 +100,7 @@ public class MediaListService {
 
     mediaListRepository.delete(mediaList);
   }
+   */
   //todo use auth service
   public void checkOwnership(Long mediaListId) throws AccessDeniedException {
     Long authUserId = authService.getAuthenticatedUser().getId();
