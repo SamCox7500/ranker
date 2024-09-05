@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class TMDBFilmSearchResultDTO {
+public class TMDBSearchResultsDTO {
   @JsonProperty("results")
-  private List<TMDBFilmSearchResultDTO> results;
+  private List<TMDBSearchResultDTO> results;
 }

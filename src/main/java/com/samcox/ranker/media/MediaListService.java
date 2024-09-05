@@ -45,19 +45,6 @@ public class MediaListService {
     return mediaListRepository.findById(id)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id " + id));
   }
-  public void createMediaList(@Valid MediaListDTO mediaListDTO) throws AccessDeniedException {
-    Long userId = mediaListDTO.getNumberedRankingDTO().getUserDTO().getId();
-    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(mediaListDTO.getNumberedRankingDTO().getId(), userId);
-
-    List<MediaListEntry> mediaListEntries = new ArrayList<>();
-
-    MediaList mediaList = new MediaList();
-    mediaList.setNumberedRanking(numberedRanking);
-    mediaList.setMediaType(mediaListDTO.getMediaType());
-    mediaList.setEntries(mediaListEntries);
-
-    mediaListRepository.save(mediaList);
-  }
   public void moveEntryInList(Long mediaListId, int oldPosition, int newPosition) throws AccessDeniedException {
     checkOwnership(mediaListId);
 
@@ -104,16 +91,6 @@ public class MediaListService {
     mediaList.addEntry(mediaListEntry);
     mediaListRepository.save(mediaList);
   }
-  /*
-  public void deleteMediaListByNumberedRankingAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
-    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(numberedRankingId, userId);
-    MediaList mediaList = mediaListRepository.findByNumberedRanking(numberedRanking)
-      .orElseThrow(() -> new MediaListNotFoundException("Media list not found for numbered ranking: " +
-        numberedRankingId + " and user: " + userId));
-
-    mediaListRepository.delete(mediaList);
-  }
-   */
   //todo use auth service
   public void checkOwnership(Long mediaListId) throws AccessDeniedException {
     Long authUserId = authService.getAuthenticatedUser().getId();
@@ -136,19 +113,42 @@ public class MediaListService {
 
     for (MediaListEntry entry: mediaListEntries) {
 
-      MediaListEntryDTO mediaListEntryDTO = new MediaListEntryDTO();
-      mediaListEntryDTO.setRanking(entry.getRanking());
-
       if (mediaType == MediaType.FILM) {
         FilmDTO filmDTO = tmdbService.getFilmDetails(entry.getTmdbId());
-        mediaListEntryDTO.setMediaDTO(filmDTO);
+        filmDTO.setId(entry.getTmdbId());
+        filmDTO.setRanking(entry.getRanking());
+        entries.add(filmDTO);
       } else if (mediaType == MediaType.TV_SHOW) {
-        //todo tv
+        //Todo tv
       } else {
         //todo throw exception
       }
-      entries.add(mediaListEntryDTO);
     }
     return entries;
   }
+   /*
+  public void deleteMediaListByNumberedRankingAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(numberedRankingId, userId);
+    MediaList mediaList = mediaListRepository.findByNumberedRanking(numberedRanking)
+      .orElseThrow(() -> new MediaListNotFoundException("Media list not found for numbered ranking: " +
+        numberedRankingId + " and user: " + userId));
+
+    mediaListRepository.delete(mediaList);
+  }
+   */
+  /*
+  public void createMediaList(@Valid MediaListDTO mediaListDTO) throws AccessDeniedException {
+    Long userId = mediaListDTO.getNumberedRankingDTO().getUserDTO().getId();
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(mediaListDTO.getNumberedRankingDTO().getId(), userId);
+
+    List<MediaListEntry> mediaListEntries = new ArrayList<>();
+
+    MediaList mediaList = new MediaList();
+    mediaList.setNumberedRanking(numberedRanking);
+    mediaList.setMediaType(mediaListDTO.getMediaType());
+    mediaList.setEntries(mediaListEntries);
+
+    mediaListRepository.save(mediaList);
+  }
+   */
 }

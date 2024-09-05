@@ -9,8 +9,14 @@ import java.util.List;
 public class MediaListEntryDTO {
   private Long id;
   private int ranking;
-  private MediaDTO mediaDTO;
 
+  public MediaListEntryDTO() {
+
+  }
+  public MediaListEntryDTO(Long id, int ranking) {
+    this.id = id;
+    this.ranking = ranking;
+  }
   public Long getId() {
     return id;
   }
@@ -24,10 +30,4 @@ public class MediaListEntryDTO {
     this.ranking = ranking;
   }
 
-  public void setMediaDTO(MediaDTO mediaDTO) {
-    this.mediaDTO = mediaDTO;
-  }
-  public MediaDTO getMediaDTO() {
-    return mediaDTO;
-  }
 }
