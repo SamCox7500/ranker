@@ -1,6 +1,7 @@
 package com.samcox.ranker;
 
 import com.samcox.ranker.media.FilmDTO;
+import com.samcox.ranker.media.MediaListService;
 import com.samcox.ranker.ranking.NumberedRankingDTO;
 import com.samcox.ranker.ranking.NumberedRankingService;
 import com.samcox.ranker.tmdb.*;
