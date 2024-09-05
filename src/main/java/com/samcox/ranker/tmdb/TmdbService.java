@@ -39,5 +39,14 @@ public class TmdbService {
 
     return restTemplate.getForObject(uri, FilmDTO.class);
   }
+  public FilmSearchResultDTO searchFilms(String query) {
+    URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
+      .pathSegment("search", "movie")
+      .queryParam("api_key", apiKey)
+      .queryParam("query", query)
+      .build()
+      .toUri();
+    return restTemplate.getForObject(uri, FilmSearchResultDTO.class);
+  }
   //todo tv show details
 }
