@@ -3,7 +3,7 @@ package com.samcox.ranker;
 import com.samcox.ranker.media.FilmDTO;
 import com.samcox.ranker.ranking.NumberedRankingDTO;
 import com.samcox.ranker.ranking.NumberedRankingService;
-import com.samcox.ranker.tmdb.TmdbService;
+import com.samcox.ranker.tmdb.*;
 import com.samcox.ranker.user.UserCredentials;
 import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserService;
@@ -85,6 +85,10 @@ public class RankerApplication implements CommandLineRunner {
 
     FilmDTO filmDTO = tmdbService.getFilmDetails(100L);
     System.out.println(filmDTO.toString());
-    System.out.println(filmDTO.getTitle());
+
+    FilmSearchResultListDTO tmdbSearchResultsDTO = tmdbService.searchFilms("There will be blood");
+     for (FilmSearchResultDTO filmSearchResultDTO: tmdbSearchResultsDTO.getResults()) {
+       System.out.println(filmSearchResultDTO);
+     }
   }
 }

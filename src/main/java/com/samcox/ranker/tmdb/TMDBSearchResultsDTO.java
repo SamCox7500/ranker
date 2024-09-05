@@ -7,4 +7,7 @@ import java.util.List;
 public class TMDBSearchResultsDTO {
   @JsonProperty("results")
   private List<TMDBSearchResultDTO> results;
+  public List<TMDBSearchResultDTO> getResults() {
+    return results;
+  }
 }

@@ -21,15 +21,7 @@ public class TmdbService {
   public TmdbService(RestTemplate restTemplate) {
       this.restTemplate = restTemplate;
   }
-  public TMDBSearchResultsDTO searchFilms(String query, String mediaType) {
-    URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
-      .pathSegment("search", mediaType)
-      .queryParam("api_key", apiKey)
-      .queryParam("query", query)
-      .build()
-      .toUri();
-    return restTemplate.getForObject(uri, TMDBSearchResultsDTO.class);
-  }
+
   public FilmDTO getFilmDetails(Long tmdbId) {
     URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
       .pathSegment("movie", tmdbId.toString())
@@ -39,14 +31,15 @@ public class TmdbService {
 
     return restTemplate.getForObject(uri, FilmDTO.class);
   }
-  public FilmSearchResultDTO searchFilms(String query) {
+  public FilmSearchResultListDTO searchFilms(String query) {
     URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
       .pathSegment("search", "movie")
       .queryParam("api_key", apiKey)
       .queryParam("query", query)
       .build()
       .toUri();
-    return restTemplate.getForObject(uri, FilmSearchResultDTO.class);
+
+    return restTemplate.getForObject(uri, FilmSearchResultListDTO.class);
   }
   //todo tv show details
 }
