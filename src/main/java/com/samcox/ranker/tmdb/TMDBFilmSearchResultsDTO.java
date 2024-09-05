@@ -1,9 +1,10 @@
 package com.samcox.ranker.tmdb;
 
+import com.samcox.ranker.media.MediaDTO;
+import com.samcox.ranker.media.MediaType;
+
 public class TMDBFilmSearchResultsDTO {
   private Long id;
-  private String title;
-  private String overview;
-  private String posterPath;
-  private String releaseDate;
+  private MediaType mediaType;
+  private MediaDTO mediaDTO;
 }
