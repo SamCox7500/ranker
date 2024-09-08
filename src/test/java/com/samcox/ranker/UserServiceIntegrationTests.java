@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceIntegrationTests {
 
-  /*
+
   @Autowired
   private UserRepository userRepository;
 
@@ -34,6 +34,8 @@ public class UserServiceIntegrationTests {
   public void setUp() {
     testUser = new User("testuser", passwordEncoder.encode("Validpassword1!"), "USER");
     userRepository.save(testUser);
+
+    //todo login process
   }
   @Test
   public void testGetUserByID_Success() {
@@ -107,5 +109,4 @@ public class UserServiceIntegrationTests {
   public void testDeleteUser_UserNotFound() {
     assertThrows(UserNotFoundException.class, () -> userService.deleteUser(999L));
   }
-   */
 }
