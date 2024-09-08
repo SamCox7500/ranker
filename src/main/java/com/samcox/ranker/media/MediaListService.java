@@ -91,7 +91,6 @@ public class MediaListService {
     mediaList.addEntry(mediaListEntry);
     mediaListRepository.save(mediaList);
   }
-  //todo use auth service
   public void checkOwnership(Long mediaListId) throws AccessDeniedException {
     Long authUserId = authService.getAuthenticatedUser().getId();
 
@@ -104,27 +103,30 @@ public class MediaListService {
   public MediaListDTO toMediaListDTO(MediaList mediaList) {
 
     //Creating list of DTOs depending on the media type
-    List<MediaListEntryDTO> mediaListEntries = null;
-    if (mediaList.getMediaType().equals(MediaType.FILM)) {
-      mediaListEntries = toFilmListDTOs(mediaList.getEntries());
-    } else if (mediaList.getMediaType().equals(MediaType.TV_SHOW)) {
-      //todo tv show
-    } else {
-      throw new IllegalArgumentException("Invalid media type for media list: " + mediaList.getId());
-    }
+    List<MediaListEntryDTO> mediaListEntryDTOS = null;
+
+    mediaListEntryDTOS = toMediaDTO(mediaList.getEntries(), mediaList.getMediaType());
+
     NumberedRankingDTO numberedRankingDTO = NumberedRankingDTOMapper.toNumberedRankingDTO(mediaList.getNumberedRanking());
 
-    return new MediaListDTO(mediaList.getId(), mediaList.getMediaType(), mediaListEntries, numberedRankingDTO);
+    return new MediaListDTO(mediaList.getId(), mediaList.getMediaType(), mediaListEntryDTOS, numberedRankingDTO);
   }
-  private List<MediaListEntryDTO> toFilmListDTOs(List<MediaListEntry> mediaListEntries) {
-    List<MediaListEntryDTO> filmDTOList = new ArrayList<>();
+  private List<MediaListEntryDTO> toMediaDTO(List<MediaListEntry> mediaListEntries, MediaType mediaType) {
+    List<MediaListEntryDTO> mediaDTOList = new ArrayList<>();
 
     for (MediaListEntry entry: mediaListEntries) {
-      FilmDTO filmDTO = tmdbService.getFilmDetails(entry.getTmdbId());
-      filmDTO.setId(entry.getTmdbId());
-      filmDTO.setRanking(entry.getRanking());
-      filmDTOList.add(filmDTO);
+      if (mediaType.equals(MediaType.FILM)) {
+        FilmDTO filmDTO = tmdbService.getFilmDetails(entry.getTmdbId());
+        filmDTO.setId(entry.getId());
+        filmDTO.setRanking(entry.getRanking());
+        mediaDTOList.add(filmDTO);
+      } else if (mediaType.equals(MediaType.TV_SHOW)) {
+        TVShowDTO tvShowDTO = tmdbService.getTVShowDetails(entry.getTmdbId());
+        tvShowDTO.setId(entry.getId());
+        tvShowDTO.setRanking(entry.getRanking());
+        mediaDTOList.add(tvShowDTO);
+      }
     }
-    return filmDTOList;
+    return mediaDTOList;
   }
 }
