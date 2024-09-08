@@ -1,6 +1,7 @@
 package com.samcox.ranker.tmdb;
 
 import com.samcox.ranker.media.FilmDTO;
+import com.samcox.ranker.media.TVShowDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -41,5 +42,23 @@ public class TmdbService {
 
     return restTemplate.getForObject(uri, FilmSearchResultListDTO.class);
   }
-  //todo tv show details
+  public TVShowDTO getTVShowDetails(Long tmdbId) {
+    URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
+      .pathSegment("tv", tmdbId.toString())
+      .queryParam("api_key", apiKey)
+      .build()
+      .toUri();
+
+    return restTemplate.getForObject(uri, TVShowDTO.class);
+  }
+  public TVShowSearchResultListDTO searchTVShows(String query) {
+    URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
+      .pathSegment("search", "tv")
+      .queryParam("api_key", apiKey)
+      .queryParam("query", query)
+      .build()
+      .toUri();
+
+    return restTemplate.getForObject(uri, TVShowSearchResultListDTO.class);
+  }
 }

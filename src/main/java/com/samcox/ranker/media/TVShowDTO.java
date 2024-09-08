@@ -11,4 +11,6 @@ public class TVShowDTO extends MediaListEntryDTO {
 
   String number_of_episodes;
 
+  String poster_path;
+
 }
