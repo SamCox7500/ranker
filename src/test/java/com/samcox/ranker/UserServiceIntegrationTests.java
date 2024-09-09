@@ -3,12 +3,20 @@ package com.samcox.ranker;
 
 import com.samcox.ranker.user.*;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,8 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 
 public class UserServiceIntegrationTests {
-
-  /*
 
   @Autowired
   private UserRepository userRepository;
@@ -29,27 +35,59 @@ public class UserServiceIntegrationTests {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private AuthenticationManager authenticationManager;
+
+  /*
+  public UserServiceIntegrationTests(
+    UserRepository userRepository,
+    PasswordEncoder passwordEncoder,
+    UserService userService,
+    AuthenticationManager authenticationManager
+  ) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.userService = userService;
+    this.authenticationManager = authenticationManager;
+  }
+   */
   private User testUser;
+  private User testUser1;
 
   @BeforeEach
   public void setUp() {
     testUser = new User("testuser", passwordEncoder.encode("Validpassword1!"), "USER");
     userRepository.save(testUser);
 
-    //todo login process
+    testUser1 = new User("testuser1", passwordEncoder.encode("Validpassword1!"), "USER");
+    userRepository.save(testUser1);
+
+    UserCredentials userCredentials = new UserCredentials();
+    userCredentials.setUsername("testuser");
+    userCredentials.setPassword("Validpassword1!");
+
+    //Authenticating user for testing methods that require authentication
+    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+      userCredentials.getUsername(), userCredentials.getPassword());
+    Authentication authentication = authenticationManager.authenticate(authToken);
+    SecurityContext context = SecurityContextHolder.createEmptyContext();
+    context.setAuthentication(authentication);
+    SecurityContextHolder.setContext(context);
   }
   @Test
-  public void testGetUserByID_Success() {
+  public void testGetUserByID_Success() throws AccessDeniedException {
     User user = userService.getUserByID(testUser.getId());
     assertNotNull(user);
     assertEquals(testUser.getUsername(), user.getUsername());
   }
   @Test
-  public void testGetUserByID_UserNotFound() {
-    assertThrows(UserNotFoundException.class, () -> userService.getUserByID(999L));
+  public void testGetUserByID_UserNotAuthorized() {
+    //The user to get has a different id than the currently authenticated user.
+    //So no access is granted
+    assertThrows(AccessDeniedException.class,() -> userService.getUserByID(999L));
   }
   @Test
-  public void testGetUserByUsername_Success() {
+  public void testGetUserByUsername_Success() throws AccessDeniedException {
     User user = userService.getUserByUsername("testuser");
     assertNotNull(user);
     assertEquals(testUser.getUsername(), user.getUsername());
@@ -59,7 +97,15 @@ public class UserServiceIntegrationTests {
     assertThrows(UserNotFoundException.class, () -> userService.getUserByUsername("nonexistentuser"));
   }
   @Test
+  public void testGetUserByUsername_NotAuthorized() {
+    assertThrows(AccessDeniedException.class, () -> userService.getUserByUsername("testuser1"));
+  }
+
+  @Test
   public void testCreateUser_Success() {
+    //Logout the test user as a user should not be created when a user is already authenticated.
+    SecurityContextHolder.clearContext();
+
     UserCredentials newUserCredentials = new UserCredentials();
     newUserCredentials.setUsername("newuser");
     newUserCredentials.setPassword("Validpassword1!");
@@ -72,6 +118,17 @@ public class UserServiceIntegrationTests {
     assertTrue(passwordEncoder.matches("Validpassword1!", createdUser.getPassword()));
   }
   @Test
+  public void testCreateUser_UserAlreadyAuthenticated() {
+
+    UserCredentials newUserCredentials = new UserCredentials();
+    newUserCredentials.setUsername("newuser");
+    newUserCredentials.setPassword("Validpassword1!");
+
+    //Runtime exception as user is already logged in and cannot create a new user
+    assertThrows(RuntimeException.class, () -> userService.createUser(newUserCredentials));
+  }
+
+  @Test
   public void testCreateUser_UsernameAlreadyExists() {
     UserCredentials existingUsernameCredentials = new UserCredentials();
     existingUsernameCredentials.setUsername("testuser");
@@ -80,7 +137,42 @@ public class UserServiceIntegrationTests {
     assertThrows(UsernameExistsException.class, () -> userService.createUser(existingUsernameCredentials));
   }
   @Test
-  public void testChangePassword_Success() {
+  public void testCreateUser_BlankUsername() {
+    UserCredentials invalidUsernameCredentials = new UserCredentials();
+
+    //Username is blank which violates constraints
+    invalidUsernameCredentials.setUsername("");
+    invalidUsernameCredentials.setPassword("Validpassword1!");
+
+    assertThrows(ConstraintViolationException.class, () -> userService.createUser(invalidUsernameCredentials));
+  }
+  @Test
+  public void testCreateUser_UsernameTooLong() {
+    UserCredentials invalidUsernameCredentials = new UserCredentials();
+
+    //Username is more than 30 chars which violates constraints
+
+    invalidUsernameCredentials.setUsername("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    invalidUsernameCredentials.setPassword("Validpassword1!");
+
+    assertThrows(ConstraintViolationException.class, () -> userService.createUser(invalidUsernameCredentials));
+  }
+  @Test
+  public void testCreateUser_InvalidPasswordPattern() {
+    UserCredentials invalidPasswordCredentials = new UserCredentials();
+
+    //Password does not match required pattern. In this case missing special char.
+    //This violates constraints
+
+    invalidPasswordCredentials.setUsername("validusername");
+    invalidPasswordCredentials.setPassword("Invalidpassword1");
+
+    assertThrows(ConstraintViolationException.class, () -> userService.createUser(invalidPasswordCredentials));
+  }
+
+
+  @Test
+  public void testChangePassword_Success() throws AccessDeniedException {
     UserCredentials newCredentials = new UserCredentials();
     newCredentials.setUsername("testuser");
     newCredentials.setPassword("NewValidPassword1!");
@@ -91,6 +183,7 @@ public class UserServiceIntegrationTests {
     assertNotNull(updatedUser);
     assertTrue(passwordEncoder.matches("NewValidPassword1!", updatedUser.getPassword()));
   }
+
   @Test
   public void testChangePassword_IdMismatch() {
     UserCredentials newCredentials = new UserCredentials();
@@ -100,15 +193,35 @@ public class UserServiceIntegrationTests {
     assertThrows(RuntimeException.class, () -> userService.changePassword(testUser.getId(), newCredentials));
   }
   @Test
-  public void testDeleteUser_Success() {
+  public void testChangePassword_NotAuthorized() {
+    UserCredentials newCredentials = new UserCredentials();
+    newCredentials.setUsername("testuser");
+    newCredentials.setPassword("NewValidPassword1!");
+
+    //Authenticated user trying to change the credentials of a different user
+    assertThrows(AccessDeniedException.class, () -> userService.changePassword(testUser1.getId(), newCredentials));
+  }
+
+  @Test
+  public void testDeleteUser_Success() throws AccessDeniedException {
     userService.deleteUser(testUser.getId());
 
     Optional<User> deletedUser = userRepository.findById(testUser.getId());
     assertTrue(deletedUser.isEmpty());
   }
   @Test
-  public void testDeleteUser_UserNotFound() {
-    assertThrows(UserNotFoundException.class, () -> userService.deleteUser(999L));
+  public void testDeleteUser_NotAuthorized() {
+    assertThrows(AccessDeniedException.class, () -> userService.deleteUser(999L));
   }
-   */
+  @Test
+  public void testCheckAuthorized_Success() throws AccessDeniedException {
+    //Checking authenticated user id matches the id to be checked for authorisation
+    //No exception should be thrown
+    userService.checkAuthorized(testUser.getId());
+  }
+  @Test
+  public void testCheckAuthorized_NotAuthorized() throws AccessDeniedException {
+    //Id to be checked does not match authenticated user, therefore exception should be thrown
+    assertThrows(AccessDeniedException.class, () -> userService.checkAuthorized(testUser1.getId()));
+  }
 }
