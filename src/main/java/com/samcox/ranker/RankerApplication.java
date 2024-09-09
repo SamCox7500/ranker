@@ -41,6 +41,7 @@ public class RankerApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
+    /*
     // Register a default user at startup
     UserCredentials userCredentials = new UserCredentials();
     userCredentials.setUsername("steve");
@@ -91,5 +92,6 @@ public class RankerApplication implements CommandLineRunner {
      for (FilmSearchResultDTO filmSearchResultDTO: tmdbSearchResultsDTO.getResults()) {
        System.out.println(filmSearchResultDTO);
      }
+     */
   }
 }

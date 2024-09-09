@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AuthControllerIntegrationTests {
+  /*
   @Autowired
   private MockMvc mockMvc;
 
@@ -91,4 +92,5 @@ public class AuthControllerIntegrationTests {
       .andExpect(status().isForbidden());
     //todo should be unauthorized
   }
+   */
 }

@@ -8,6 +8,7 @@ import com.samcox.ranker.ranking.RankingNotFoundException;
 import com.samcox.ranker.user.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,19 +47,6 @@ public class UserServiceIntegrationTests {
   @Autowired
   private AuthenticationManager authenticationManager;
 
-  /*
-  public UserServiceIntegrationTests(
-    UserRepository userRepository,
-    PasswordEncoder passwordEncoder,
-    UserService userService,
-    AuthenticationManager authenticationManager
-  ) {
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-    this.userService = userService;
-    this.authenticationManager = authenticationManager;
-  }
-   */
   private User testUser;
   private User testUser1;
 
@@ -81,6 +69,10 @@ public class UserServiceIntegrationTests {
     SecurityContext context = SecurityContextHolder.createEmptyContext();
     context.setAuthentication(authentication);
     SecurityContextHolder.setContext(context);
+  }
+  @AfterAll
+  public static void logout() {
+    SecurityContextHolder.clearContext();
   }
   @Test
   public void testGetUserByID_Success() throws AccessDeniedException {
