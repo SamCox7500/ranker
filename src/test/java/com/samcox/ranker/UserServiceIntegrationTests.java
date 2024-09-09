@@ -1,6 +1,10 @@
 package com.samcox.ranker;
 
 
+import com.samcox.ranker.ranking.NumberedRanking;
+import com.samcox.ranker.ranking.NumberedRankingRepository;
+import com.samcox.ranker.ranking.Ranking;
+import com.samcox.ranker.ranking.RankingNotFoundException;
 import com.samcox.ranker.user.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
@@ -17,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +33,9 @@ public class UserServiceIntegrationTests {
 
   @Autowired
   private UserRepository userRepository;
+
+  @Autowired
+  private NumberedRankingRepository numberedRankingRepository;
 
   @Autowired
   private PasswordEncoder passwordEncoder;
@@ -212,6 +220,46 @@ public class UserServiceIntegrationTests {
   @Test
   public void testDeleteUser_NotAuthorized() {
     assertThrows(AccessDeniedException.class, () -> userService.deleteUser(999L));
+  }
+  @Test
+  public void testDeleteUserWithRankings_Success() throws AccessDeniedException {
+    SecurityContextHolder.clearContext();
+
+    User userWithRankings = new User("userwithrankings", passwordEncoder.encode("Validpassword1!"), "USER");
+    userRepository.save(userWithRankings);
+    UserCredentials userWithRankingsCredentials = new UserCredentials();
+    userWithRankingsCredentials.setUsername("userwithrankings");
+    userWithRankingsCredentials.setPassword("Validpassword1!");
+
+    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+      userWithRankingsCredentials.getUsername(), userWithRankingsCredentials.getPassword());
+    Authentication authentication = authenticationManager.authenticate(authToken);
+    SecurityContext context = SecurityContextHolder.createEmptyContext();
+    context.setAuthentication(authentication);
+    SecurityContextHolder.setContext(context);
+
+
+
+    //Testing that if a user has rankings, and the user is deleted, the rankings are as well
+    NumberedRanking numberedRanking = new NumberedRanking();
+    numberedRanking.setUser(userWithRankings);
+    numberedRanking.setTitle("Numbered ranking for test user");
+    numberedRanking.setDescription("This is a desc of a ranking");
+    numberedRankingRepository.save(numberedRanking);
+
+    long numRankId = numberedRanking.getId();
+    long deleteUserId = userWithRankings.getId();
+
+    userService.deleteUser(userWithRankings.getId());
+
+    //Check the numbered ranking belonging to the user has been deleted
+    Optional<NumberedRanking> numberedRankingOptional = numberedRankingRepository.findById(numRankId);
+    assertTrue(numberedRankingOptional.isEmpty());
+
+    //Check the user has been deleted
+    Optional<User> deletedUser = userRepository.findById(deleteUserId);
+    assertTrue(deletedUser.isEmpty());
+
   }
   @Test
   public void testCheckAuthorized_Success() throws AccessDeniedException {
