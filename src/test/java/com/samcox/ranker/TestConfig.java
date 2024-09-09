@@ -3,6 +3,7 @@ package com.samcox.ranker;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.auth.CustomUserDetailsService;
+import com.samcox.ranker.ranking.RankingRepository;
 import com.samcox.ranker.user.UserController;
 import com.samcox.ranker.user.UserRepository;
 import com.samcox.ranker.user.UserService;
@@ -18,8 +19,8 @@ public class TestConfig {
     return new BCryptPasswordEncoder();
   }
   @Bean
-  public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthService authService) {
-    return new UserService(userRepository, passwordEncoder, authService);
+  public UserService userService(UserRepository userRepository, RankingRepository rankingRepository, PasswordEncoder passwordEncoder, AuthService authService) {
+    return new UserService(userRepository, rankingRepository, passwordEncoder, authService);
   }
   @Bean
   public UserController userController(UserService userService) {

@@ -7,6 +7,8 @@ import com.samcox.ranker.media.MediaListRepository;
 import com.samcox.ranker.media.MediaListService;
 import com.samcox.ranker.ranking.NumberedRankingRepository;
 import com.samcox.ranker.ranking.NumberedRankingService;
+import com.samcox.ranker.ranking.Ranking;
+import com.samcox.ranker.ranking.RankingRepository;
 import com.samcox.ranker.tmdb.TmdbService;
 import com.samcox.ranker.user.UserRepository;
 import com.samcox.ranker.user.UserService;
@@ -22,8 +24,8 @@ public class AppConfig {
     return new RestTemplate();
   }
   @Bean
-  public UserService userService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthService authService) {
-    return new UserService(userRepository, passwordEncoder, authService);
+  public UserService userService(UserRepository userRepository, RankingRepository rankingRepository, PasswordEncoder passwordEncoder, AuthService authService) {
+    return new UserService(userRepository, rankingRepository, passwordEncoder, authService);
   }
 
   @Bean

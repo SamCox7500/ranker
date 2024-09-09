@@ -1,6 +1,7 @@
 package com.samcox.ranker.user;
 
 import com.samcox.ranker.auth.AuthService;
+import com.samcox.ranker.ranking.RankingRepository;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,14 @@ import java.util.List;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final RankingRepository rankingRepository;
   private final PasswordEncoder passwordEncoder;
 
   private final AuthService authService;
 
-  public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthService authService) {
+  public UserService(UserRepository userRepository, RankingRepository rankingRepository, PasswordEncoder passwordEncoder, AuthService authService) {
     this.userRepository = userRepository;
+    this.rankingRepository = rankingRepository;
     this.passwordEncoder = passwordEncoder;
     this.authService = authService;
   }
@@ -67,6 +70,12 @@ public class UserService {
   public void deleteUser(Long id) throws AccessDeniedException {
     checkAuthorized(id);
     User user = getUserFromRepoById(id);
+
+    //Check user has no rankings
+    //If user has rankings, then delete them all
+    if(rankingRepository.findByUser(user).isPresent()) {
+      rankingRepository.deleteByUserId(user.getId());
+    }
     userRepository.delete(user);
   }
 
