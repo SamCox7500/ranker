@@ -1,6 +1,7 @@
 package com.samcox.ranker.auth;
 
 import com.samcox.ranker.user.*;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.SecurityContextRepository;
@@ -28,6 +29,7 @@ public class AuthService {
   }
   public boolean isAuthenticated() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    return !(auth == null || !auth.isAuthenticated());
+    //return !(auth == null || !auth.isAuthenticated());
+    return auth != null && auth.isAuthenticated() && !(auth instanceof AnonymousAuthenticationToken);
   }
 }

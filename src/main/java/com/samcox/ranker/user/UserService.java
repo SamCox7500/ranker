@@ -47,7 +47,7 @@ public class UserService {
       throw new UsernameExistsException("Username is already taken");
     }
     if (authService.isAuthenticated()) {
-      throw new RuntimeException("Cannot create new user when already logged in");
+      throw new UserAlreadyLoggedInException("Cannot create new user when already logged in");
     }
     User user = new User();
     user.setUsername(userCredentials.getUsername());

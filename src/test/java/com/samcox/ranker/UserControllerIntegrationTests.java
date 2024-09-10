@@ -20,9 +20,14 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.nio.file.AccessDeniedException;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,6 +52,7 @@ public class UserControllerIntegrationTests {
 
 
   private User user;
+  private User user1;
   @BeforeEach
   public void setUp() {
     userRepository.deleteAll();
@@ -56,23 +62,14 @@ public class UserControllerIntegrationTests {
     user.setRole("USER");
     userRepository.save(user);
 
-
-    UserCredentials userCredentials = new UserCredentials();
-    userCredentials.setUsername("testuser");
-    userCredentials.setPassword("Validpassword1!");
+    user1 = new User();
+    user1.setUsername("wronguser");
+    user1.setPassword(passwordEncoder.encode("Validpassword1!"));
+    user1.setRole("USER");
+    userRepository.save(user1);
 
     SecurityContextHolder.clearContext();
-
-    //Authenticating user for testing methods that require authentication
-    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-      userCredentials.getUsername(), userCredentials.getPassword());
-    Authentication authentication = authenticationManager.authenticate(authToken);
-    SecurityContext context = SecurityContextHolder.createEmptyContext();
-    context.setAuthentication(authentication);
-    SecurityContextHolder.setContext(context);
-
   }
-  //todo authorization
   /*
   @Test
   public void testGetUsers() throws Exception {
@@ -83,7 +80,8 @@ public class UserControllerIntegrationTests {
   }
    */
   @Test
-  public void testGetUser() throws Exception {
+  @WithMockUser(username = "testuser", roles = "USER")
+  public void testGetUser_Success() throws Exception {
     mockMvc.perform(get("/users/" + user.getId())
         .contentType(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
@@ -91,37 +89,90 @@ public class UserControllerIntegrationTests {
       .andExpect(jsonPath("$.username").value("testuser"));
   }
   @Test
+  @WithMockUser(username = "wronguser", roles = "USER")
+  public void testGetUser_NotAuthorized() throws Exception {
+    mockMvc.perform(get("/users/" + user.getId())
+        .contentType(MediaType.APPLICATION_JSON))
+      .andExpect(status().isForbidden());
+  }
+  @Test
+  @WithAnonymousUser
   public void testCreateUser() throws Exception {
     //Clear auth as user cannot be created when already logged in
-    SecurityContextHolder.clearContext();
+    //SecurityContextHolder.clearContext();
 
     UserCredentials newUser = new UserCredentials();
     newUser.setUsername("newuser");
     newUser.setPassword("Validpassword1!");
 
-
-    //UserDTO userDTO = authService.getAuthenticatedUser();
-    //System.out.println(userDTO);
-
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-    System.out.println(auth.isAuthenticated());
-
-    /*
     mockMvc.perform(post("/users")
       .contentType(MediaType.APPLICATION_JSON)
       .content(objectMapper.writeValueAsString(newUser)))
       .andExpect(status().isOk());
 
-    mockMvc.perform(get("/users")
-      .contentType(MediaType.APPLICATION_JSON))
-      .andExpect(jsonPath("$[1].username").value("newuser"));
-     */
+    Optional<User> user = userRepository.findByUsername("newuser");
+    assertTrue(user.isPresent());
   }
   @Test
-  public void testUpdateUser() throws Exception {
+  @WithMockUser()
+  public void testCreateUser_AlreadyLoggedIn() throws Exception {
+
+    UserCredentials newUser = new UserCredentials();
+    newUser.setUsername("newuser");
+    newUser.setPassword("Validpassword1!");
+
+    mockMvc.perform(post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(newUser)))
+      .andExpect(status().isForbidden());
+  }
+  @Test
+  @WithAnonymousUser()
+  public void testCreateUser_UsernameAlreadyExists() throws Exception {
+
+    UserCredentials userCredentials = new UserCredentials();
+    userCredentials.setUsername("testuser");
+    userCredentials.setPassword("Validpassword1!");
+
+    mockMvc.perform(post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(userCredentials)))
+      .andExpect(status().isForbidden());
+  }
+  @Test
+  @WithAnonymousUser()
+  public void testCreateUser_InvalidUsername() throws Exception {
+
+    UserCredentials userCredentials = new UserCredentials();
+    //username too long
+    userCredentials.setUsername("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    userCredentials.setPassword("Validpassword1!");
+
+    mockMvc.perform(post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(userCredentials)))
+      .andExpect(status().isBadRequest());
+  }
+  @Test
+  @WithAnonymousUser()
+  public void testCreateUser_InvalidPassword() throws Exception {
+
+    UserCredentials userCredentials = new UserCredentials();
+    userCredentials.setUsername("validusername");
+    userCredentials.setPassword("Invalidpassword1");
+
+    mockMvc.perform(post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(userCredentials)))
+      .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  @WithMockUser(username = "testuser")
+  public void testUpdateUser_Success() throws Exception {
     UserCredentials newCredentials = new UserCredentials();
     newCredentials.setUsername("testuser");
+    //The new password to be set
     newCredentials.setPassword("Newvalidpassword1!");
 
     mockMvc.perform(put("/users/" + user.getId())
@@ -134,6 +185,19 @@ public class UserControllerIntegrationTests {
     assertTrue(passwordEncoder.matches("Newvalidpassword1!", updatedUser.getPassword()));
   }
   @Test
+  @WithMockUser(username = "testuser")
+  public void testUpdateUser_InvalidPassword() throws Exception {
+    UserCredentials newCredentials = new UserCredentials();
+    newCredentials.setUsername("validusername");
+    newCredentials.setPassword("Invalidpassword1");
+
+    mockMvc.perform(put("/users/" + user.getId())
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(newCredentials)))
+      .andExpect(status().isBadRequest());
+  }
+  @Test
+  @WithMockUser(username = "testuser")
   public void testDeleteUser() throws Exception {
     mockMvc.perform(delete("/users/" + user.getId())
       .contentType(MediaType.APPLICATION_JSON))
@@ -141,5 +205,12 @@ public class UserControllerIntegrationTests {
 
     User deletedUser = userRepository.findById(user.getId()).orElse(null);
     assertNull(deletedUser);
+  }
+  @Test
+  @WithMockUser(username = "testuser")
+  public void testDeleteUser_InvalidId() throws Exception {
+    mockMvc.perform(delete("/users/" + 999L)
+        .contentType(MediaType.APPLICATION_JSON))
+      .andExpect(status().isForbidden());
   }
 }
