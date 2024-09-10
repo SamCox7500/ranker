@@ -42,11 +42,6 @@ public class NumberedRankingService {
           + " and user: " + userId)
       );
   }
-  /*
-  public List<NumberedRanking> getAllNumberedRankings() {
-    return numberedRankingRepository.findAll();
-  }
-   */
   public List<NumberedRanking> getAllNumberedRankingsByUser(Long userId) throws AccessDeniedException {
     User user = userService.getUserByID(userId);
     return numberedRankingRepository.findByUser(user)

@@ -1,4 +1,4 @@
-package com.samcox.ranker;
+package com.samcox.ranker.user;
 
 
 import com.samcox.ranker.ranking.NumberedRanking;
