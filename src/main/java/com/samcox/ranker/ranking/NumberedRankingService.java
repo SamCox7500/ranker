@@ -1,6 +1,7 @@
 package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.auth.AuthService;
+import com.samcox.ranker.media.InvalidMediaTypeException;
 import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.user.User;
@@ -49,6 +50,13 @@ public class NumberedRankingService {
   }
 
   public void createNumberedRanking(@Valid NumberedRankingDTO numberedRankingDTO) throws AccessDeniedException {
+
+    try {
+      MediaType mediaType = MediaType.valueOf(numberedRankingDTO.getMediaType());
+    } catch (IllegalArgumentException e) {
+      throw new InvalidMediaTypeException("Invalid media type: " + numberedRankingDTO.getMediaType());
+    }
+
     User user = userService.getUserByID(numberedRankingDTO.getUserDTO().getId());
 
     MediaList mediaList = new MediaList();
@@ -60,6 +68,7 @@ public class NumberedRankingService {
     numberedRanking.setDescription(numberedRankingDTO.getDescription());
     numberedRanking.setPrivate(); //todo
     numberedRanking.setReverseOrder(numberedRankingDTO.isReverseOrder());
+    numberedRanking.setMediaType(mediaList.getMediaType());
     numberedRanking.setMediaType(MediaType.valueOf(numberedRankingDTO.getMediaType()));
 
     numberedRanking.setMediaList(mediaList);
