@@ -25,14 +25,14 @@ public class NumberedRankingController {
   }
   //todo should service method have id seperate as well.
   @PostMapping("/users/{userId}/numberedrankings")
-  public void createRanking(@PathVariable("userId") Long userId, @Valid NumberedRankingDTO rankingDTO) throws AccessDeniedException {
+  public void createRanking(@PathVariable("userId") Long userId, @RequestBody @Valid NumberedRankingDTO rankingDTO) throws AccessDeniedException {
     if (!userId.equals(rankingDTO.getUserDTO().getId())) {
-      throw new RuntimeException("UserId Mismatch");
+      throw new AccessDeniedException("User ID mismatch");
     }
     numberedRankingService.createNumberedRanking(rankingDTO);
   }
   @PutMapping("/users/{userId}/numberedrankings/{rankingId}")
-  public void updateRanking(@PathVariable("userId") Long userId, @Valid NumberedRankingDTO rankingDTO) throws AccessDeniedException {
+  public void updateRanking(@PathVariable("userId") Long userId, @RequestBody @Valid NumberedRankingDTO rankingDTO) throws AccessDeniedException {
     if (!userId.equals(rankingDTO.getUserDTO().getId())) {
       throw new RuntimeException("UserId Mismatch");
     }

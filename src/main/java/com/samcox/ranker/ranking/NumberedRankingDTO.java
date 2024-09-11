@@ -76,4 +76,17 @@ public class NumberedRankingDTO {
   public void setMediaType(String mediaType) {
     this.mediaType = mediaType;
   }
+
+  @Override
+  public String toString() {
+    return "NumberedRankingDTO{" +
+      "id=" + id +
+      ", userDTO=" + userDTO +
+      ", title='" + title + '\'' +
+      ", description='" + description + '\'' +
+      ", isPublic=" + isPublic +
+      ", isReverseOrder=" + isReverseOrder +
+      ", mediaType='" + mediaType + '\'' +
+      '}';
+  }
 }
