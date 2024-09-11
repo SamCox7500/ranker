@@ -76,6 +76,10 @@ public class NumberedRankingService {
     numberedRankingRepository.save(numberedRanking);
   }
   public void updateNumberedRanking(@Valid NumberedRankingDTO newNumberedRanking) throws AccessDeniedException {
+    if (newNumberedRanking.getId() == null) {
+      throw new RankingNotFoundException("Ranking could not be found because ID is null");
+    }
+
     checkOwnership(newNumberedRanking.getId());
 
     Long id = newNumberedRanking.getId();
@@ -96,12 +100,14 @@ public class NumberedRankingService {
     User user = userService.getUserByID(userId);
     numberedRankingRepository.deleteByIdAndUser(rankingId, user);
   }
+  /*
   public void deleteAllNumberedRankingsByUser(User user) {
     if (numberedRankingRepository.findByUser(user).isEmpty()) {
       throw new RankingNotFoundException("Failed to delete rankings. User has not rankings.");
     }
     numberedRankingRepository.deleteByUser(user);
   }
+   */
   public void checkOwnership(Long rankingId) throws AccessDeniedException {
     Long authUserId = authService.getAuthenticatedUser().getId();
     NumberedRanking ranking = numberedRankingRepository.findById(rankingId)

@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -296,5 +295,169 @@ public class NumberedRankingControllerIntegrationTests {
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(numberedRankingDTO)))
       .andExpect(status().isBadRequest());
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testUpdateRanking_Success() throws Exception {
+
+    UserDTO userDTO = new UserDTO(testUser.getId(), testUser.getUsername());
+
+    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
+    numberedRankingDTO.setId(testNumberedRanking.getId());
+    numberedRankingDTO.setUserDTO(userDTO);
+    numberedRankingDTO.setTitle("New title");
+    numberedRankingDTO.setDescription("New desc");
+    numberedRankingDTO.setMediaType("FILM");
+
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(numberedRankingDTO)))
+      .andExpect(status().isOk());
+
+    NumberedRanking updatedNumberedRanking = numberedRankingRepository.findById(testNumberedRanking.getId()).orElseThrow();
+
+
+    assertEquals(updatedNumberedRanking.getUser().getId(), numberedRankingDTO.getUserDTO().getId());
+    assertEquals(updatedNumberedRanking.getUser().getUsername(), numberedRankingDTO.getUserDTO().getUsername());
+    assertEquals(updatedNumberedRanking.getTitle(), numberedRankingDTO.getTitle());
+    assertEquals(updatedNumberedRanking.getDescription(), numberedRankingDTO.getDescription());
+    assertEquals(updatedNumberedRanking.getMediaType().toString(), numberedRankingDTO.getMediaType());
+  }
+  @Test
+  @WithMockUser("testuser1")
+  public void testUpdateRanking_NotAuthorized() throws Exception {
+
+    UserDTO userDTO = new UserDTO(testUser.getId(), testUser.getUsername());
+
+    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
+    numberedRankingDTO.setId(testNumberedRanking.getId());
+    numberedRankingDTO.setUserDTO(userDTO);
+    numberedRankingDTO.setTitle("New title");
+    numberedRankingDTO.setDescription("New desc");
+    numberedRankingDTO.setMediaType("FILM");
+
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(numberedRankingDTO)))
+      .andExpect(status().isForbidden());
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testUpdateRanking_InvalidId() throws Exception {
+
+    UserDTO userDTO = new UserDTO(testUser.getId(), testUser.getUsername());
+
+    //DTO is missing id so should get bad request
+    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
+    numberedRankingDTO.setUserDTO(userDTO);
+    numberedRankingDTO.setTitle("New title");
+    numberedRankingDTO.setDescription("New desc");
+    numberedRankingDTO.setMediaType("FILM");
+
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(numberedRankingDTO)))
+      .andExpect(status().isBadRequest());
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testUpdateRanking_InvalidUserDTO() throws Exception {
+    //UserDTO is is incorrect so should be forbidden
+    UserDTO userDTO = new UserDTO(999L, testUser.getUsername());
+
+    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
+    numberedRankingDTO.setId(testNumberedRanking.getId());
+    numberedRankingDTO.setUserDTO(userDTO);
+    numberedRankingDTO.setTitle("New title");
+    numberedRankingDTO.setDescription("New desc");
+    numberedRankingDTO.setMediaType("FILM");
+
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(numberedRankingDTO)))
+      .andExpect(status().isForbidden());
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testUpdateRanking_InvalidTitle() throws Exception {
+
+    UserDTO userDTO = new UserDTO(testUser.getId(), testUser.getUsername());
+
+    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
+    numberedRankingDTO.setId(testNumberedRanking.getId());
+    numberedRankingDTO.setUserDTO(userDTO);
+    numberedRankingDTO.setTitle("");
+    numberedRankingDTO.setDescription("New desc");
+    numberedRankingDTO.setMediaType("FILM");
+
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(numberedRankingDTO)))
+      .andExpect(status().isBadRequest());
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testUpdateRanking_InvalidDesc() throws Exception {
+
+    UserDTO userDTO = new UserDTO(testUser.getId(), testUser.getUsername());
+
+    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
+    numberedRankingDTO.setId(testNumberedRanking.getId());
+    numberedRankingDTO.setUserDTO(userDTO);
+    numberedRankingDTO.setTitle("New title");
+    numberedRankingDTO.setDescription("");
+    numberedRankingDTO.setMediaType("FILM");
+
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(numberedRankingDTO)))
+      .andExpect(status().isBadRequest());
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testUpdateRanking_ChangingMediaType() throws Exception {
+
+    //Request should be accepted but MediaType should not be changed
+
+    UserDTO userDTO = new UserDTO(testUser.getId(), testUser.getUsername());
+
+    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
+    numberedRankingDTO.setId(testNumberedRanking.getId());
+    numberedRankingDTO.setUserDTO(userDTO);
+    numberedRankingDTO.setTitle("New title");
+    numberedRankingDTO.setDescription("New desc");
+    numberedRankingDTO.setMediaType("TVShow");
+
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(numberedRankingDTO)))
+      .andExpect(status().isOk());
+
+    NumberedRanking updatedNumberedRanking = numberedRankingRepository.findById(testNumberedRanking.getId()).orElseThrow();
+    assertEquals(updatedNumberedRanking.getMediaType().toString(), "FILM");
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testDeleteRanking_Success() throws Exception {
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
+      .andExpect(status().isOk());
+
+    NumberedRanking deletedRanking = numberedRankingRepository.findById(testNumberedRanking.getId()).orElse(null);
+    assertNull(deletedRanking);
+  }
+  @Test
+  @WithMockUser(username = "testuser")
+  public void testDeleteRanking_InvalidId() throws Exception {
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + 999L)
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
+      .andExpect(status().isBadRequest());
+  }
+  @Test
+  @WithMockUser(username = "testuser1")
+  public void testDeleteRanking_NotAuthorized() throws Exception {
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
+      .andExpect(status().isForbidden());
   }
 }

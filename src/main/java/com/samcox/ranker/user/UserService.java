@@ -58,6 +58,9 @@ public class UserService {
 
   //todo change name
   public void changePassword(Long id, @Valid UserCredentials userCredentials) throws AccessDeniedException {
+    if (id == null) {
+      throw new UserNotFoundException("User not found because ID is null");
+    }
     checkAuthorized(id);
     User user = getUserFromRepoById(id);
     if (!user.getUsername().equals(userCredentials.getUsername())) {
