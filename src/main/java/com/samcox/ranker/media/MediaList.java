@@ -46,9 +46,9 @@ public class MediaList {
     this.numberedRanking = numberedRanking;
   }
   public void addEntry(MediaListEntry entry) {
-    entry.setRanking(this.entries.size() + 1);
-    entries.add(entry);
+    entries.add(entry.getRanking()-1, entry);
     entry.setMediaList(this);
+    reorderEntries();
   }
   public void removeEntry(MediaListEntry entry) {
     entries.remove(entry);

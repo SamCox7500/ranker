@@ -12,10 +12,8 @@ public class EntryAddRequest {
   public Long getTmdbId() {
     return tmdbId;
   }
-  public void setTmdbId(Long tmdbId, MediaType mediaType, int ranking) {
+  public void setTmdbId(Long tmdbId) {
     this.tmdbId = tmdbId;
-    this.mediaType = mediaType;
-    this.ranking = ranking;
   }
   public MediaType getMediaType() {
     return mediaType;

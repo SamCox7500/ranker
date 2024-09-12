@@ -6,6 +6,7 @@ import com.samcox.ranker.user.User;
 import com.samcox.ranker.user.UserRepository;
 import com.samcox.ranker.user.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -120,7 +121,7 @@ public class MediaListServiceIntegrationTests {
     }
 
   }
-
+  @Test
   @WithMockUser("testuser1")
   public void testGetMediaListByNumberedRankingAndUser_NotAuthorized() throws AccessDeniedException {
     assertThrows(AccessDeniedException.class,
@@ -215,10 +216,6 @@ public class MediaListServiceIntegrationTests {
     entriesToDelete.add(testMediaListEntry.getId());
     entriesToDelete.add(testMediaListEntry2.getId());
 
-    for(Long id: entriesToDelete) {
-      System.out.println(id);
-    }
-
     mediaListService.removeEntriesInList(testMediaList.getId(), entriesToDelete);
 
     List<MediaListEntry> entries = mediaListRepository.findById(testMediaList.getId()).get().getEntries();
@@ -229,38 +226,102 @@ public class MediaListServiceIntegrationTests {
   @Test
   @WithMockUser("testuser1")
   public void testRemoveEntries_NotAuthorized() throws AccessDeniedException {
+    List<Long> entriesToDelete = new ArrayList<>();
+    entriesToDelete.add(testMediaListEntry.getId());
+    entriesToDelete.add(testMediaListEntry2.getId());
+
+    assertThrows(AccessDeniedException.class, () ->  mediaListService.removeEntriesInList(testMediaList.getId(), entriesToDelete));
   }
   @Test
   @WithMockUser("testuser")
   public void testRemoveEntries_InvalidEntries() throws AccessDeniedException {
+    List<Long> entriesToDelete = new ArrayList<>();
+    entriesToDelete.add(testMediaListEntry.getId());
+    entriesToDelete.add(999L);
+
+    assertThrows(MediaListEntryNotFoundException.class, () ->  mediaListService.removeEntriesInList(testMediaList.getId(), entriesToDelete));
   }
   @Test
   @WithMockUser("testuser")
   public void testRemoveEntries_NoEntriesSpecified() throws AccessDeniedException {
-  }
-  @Test
-  @WithMockUser("testuser")
-  public void testRemoveEntries_InvalidEntryListId() throws AccessDeniedException {
+    List<Long> entriesToDelete = new ArrayList<>();
+    assertThrows(MediaListEntryNotFoundException.class, () ->  mediaListService.removeEntriesInList(testMediaList.getId(), entriesToDelete));
   }
   @Test
   @WithMockUser("testuser")
   public void testAddEntry_Success() throws AccessDeniedException {
+    EntryAddRequest entryAddRequest = new EntryAddRequest();
+    entryAddRequest.setMediaType(MediaType.FILM);
+    entryAddRequest.setTmdbId(299534L);
+    entryAddRequest.setRanking(2);
+
+    mediaListService.addEntryToList(entryAddRequest, testMediaList.getId());
+
+    List<MediaListEntry> entries = mediaListRepository.findById(testMediaList.getId()).get().getEntries();
+    assertEquals(4, entries.size());
+
+
+    assertEquals(entries.get(0).getRanking(), 1);
+    assertEquals(entries.get(0).getTmdbId(), 7345L);
+    assertEquals(entries.get(0).getMediaList().getId(), testMediaList.getId());
+
+    assertEquals(entries.get(1).getRanking(), 2);
+    assertEquals(entries.get(1).getTmdbId(), 299534L);
+    assertEquals(entries.get(1).getMediaList().getId(), testMediaList.getId());
+
+    assertEquals(entries.get(2).getRanking(), 3);
+    assertEquals(entries.get(2).getTmdbId(), 115L);
+    assertEquals(entries.get(2).getMediaList().getId(), testMediaList.getId());
+
+    assertEquals(entries.get(3).getRanking(), 4);
+    assertEquals(entries.get(3).getTmdbId(), 4638L);
+    assertEquals(entries.get(3).getMediaList().getId(), testMediaList.getId());
+
   }
   @Test
   @WithMockUser("testuser1")
   public void testAddEntry_NotAuthorized() throws AccessDeniedException {
+    EntryAddRequest entryAddRequest = new EntryAddRequest();
+    entryAddRequest.setMediaType(MediaType.FILM);
+    entryAddRequest.setTmdbId(299534L);
+    entryAddRequest.setRanking(2);
+
+    assertThrows(AccessDeniedException.class, () ->  mediaListService.addEntryToList(entryAddRequest, testMediaList.getId()));
   }
   @Test
   @WithMockUser("testuser")
   public void testAddEntry_InvalidMediaListId() throws AccessDeniedException {
+    EntryAddRequest entryAddRequest = new EntryAddRequest();
+    entryAddRequest.setMediaType(MediaType.FILM);
+    entryAddRequest.setTmdbId(299534L);
+    entryAddRequest.setRanking(2);
+
+    assertThrows(MediaListNotFoundException.class, () ->  mediaListService.addEntryToList(entryAddRequest, 999L));
   }
   @Test
   @WithMockUser("testuser")
   public void testAddEntry_NullTmdbId() throws AccessDeniedException {
+    EntryAddRequest entryAddRequest = new EntryAddRequest();
+    entryAddRequest.setMediaType(MediaType.FILM);
+    //entryAddRequest.setTmdbId(299534L);
+    entryAddRequest.setRanking(2);
+
+    assertThrows(ConstraintViolationException.class, () ->  mediaListService.addEntryToList(entryAddRequest, testMediaList.getId()));
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testAddEntry_InvalidTmdbId() throws AccessDeniedException {
+  //todo use tmdb service to check validity
   }
   @Test
   @WithMockUser("testuser")
   public void testAddEntry_InvalidRanking() throws AccessDeniedException {
+    EntryAddRequest entryAddRequest = new EntryAddRequest();
+    entryAddRequest.setMediaType(MediaType.FILM);
+    entryAddRequest.setTmdbId(299534L);
+    entryAddRequest.setRanking(5);
+
+    assertThrows(IllegalArgumentException.class, () ->  mediaListService.addEntryToList(entryAddRequest, testMediaList.getId()));
   }
   @Test
   @WithMockUser("testuser")
@@ -269,9 +330,11 @@ public class MediaListServiceIntegrationTests {
   @Test
   @WithMockUser("testuser")
   public void checkOwnership_Success() throws AccessDeniedException {
+    mediaListService.checkOwnership(testMediaList.getId());
   }
   @Test
   @WithMockUser("testuser1")
   public void checkOwnership_InvalidOwner() throws AccessDeniedException {
+    assertThrows(AccessDeniedException.class, () -> mediaListService.checkOwnership(testMediaList.getId()));
   }
 }

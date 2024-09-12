@@ -5,13 +5,14 @@ import com.samcox.ranker.ranking.*;
 import com.samcox.ranker.tmdb.TmdbService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Valid
+@Validated
 public class MediaListService {
 
   private final MediaListRepository mediaListRepository;
@@ -67,6 +68,9 @@ public class MediaListService {
   }
   public void removeEntriesInList(Long mediaListId, List<Long> mediaListEntryIds) throws AccessDeniedException {
     checkOwnership(mediaListId);
+    if (mediaListEntryIds.isEmpty()) {
+      throw new MediaListEntryNotFoundException("No media lists could be found to be deleted because no IDs were provided");
+    }
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("Media list not found with id: " + mediaListId));
@@ -84,6 +88,10 @@ public class MediaListService {
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
+
+    if (entryAddRequest.getRanking() < 1 || entryAddRequest.getRanking() > mediaList.getEntries().size() + 1) {
+      throw new IllegalArgumentException("Ranking for entry is out of bounds");
+    }
 
     MediaListEntry mediaListEntry = new MediaListEntry();
     mediaListEntry.setRanking(entryAddRequest.getRanking());
