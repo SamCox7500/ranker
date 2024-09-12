@@ -77,6 +77,9 @@ public class MediaList {
 
     reorderEntries();
   }
+  public boolean hasEntryWithTmdbId(Long tmdbId) {
+    return entries.stream().anyMatch(entry -> entry.getTmdbId().equals(tmdbId));
+  }
 
   public Long getId() {
     return id;

@@ -93,6 +93,10 @@ public class MediaListService {
       throw new IllegalArgumentException("Ranking for entry is out of bounds");
     }
 
+    if (mediaList.hasEntryWithTmdbId(entryAddRequest.getTmdbId())) {
+      throw new DuplicateMediaEntryException("tmdb id " + entryAddRequest.getTmdbId() + " already exists in list");
+    }
+
     MediaListEntry mediaListEntry = new MediaListEntry();
     mediaListEntry.setRanking(entryAddRequest.getRanking());
     mediaListEntry.setMediaList(mediaList);

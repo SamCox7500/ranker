@@ -326,6 +326,12 @@ public class MediaListServiceIntegrationTests {
   @Test
   @WithMockUser("testuser")
   public void testAddEntry_DuplicateMediaId() throws AccessDeniedException {
+    EntryAddRequest entryAddRequest = new EntryAddRequest();
+    entryAddRequest.setMediaType(MediaType.FILM);
+    entryAddRequest.setTmdbId(115L);
+    entryAddRequest.setRanking(4);
+
+    assertThrows(DuplicateMediaEntryException.class, () ->  mediaListService.addEntryToList(entryAddRequest, testMediaList.getId()));
   }
   @Test
   @WithMockUser("testuser")
