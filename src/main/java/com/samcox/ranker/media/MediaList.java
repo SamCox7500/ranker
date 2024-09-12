@@ -19,7 +19,7 @@ public class MediaList {
   @OneToMany(mappedBy = "mediaList", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<MediaListEntry> entries = new ArrayList<>();
 
-  @OneToOne(mappedBy = "mediaList")
+  @OneToOne(mappedBy = "mediaList", cascade = CascadeType.ALL)
   private NumberedRanking numberedRanking;
 
   public MediaType getMediaType() {
@@ -85,5 +85,14 @@ public class MediaList {
     for (int i = 0; i < entries.size(); i++) {
       entries.get(i).setRanking(i + 1);
     }
+  }
+  @Override
+  public String toString() {
+    return "MediaList{" +
+      "id=" + id +
+      ", mediaType=" + mediaType +
+      ", entries=" + entries +
+      ", numberedRanking=" + numberedRanking +
+      '}';
   }
 }

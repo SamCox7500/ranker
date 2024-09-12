@@ -41,10 +41,12 @@ public class MediaListService {
       .orElseThrow(() -> new MediaListNotFoundException("Media list cannot be found for numbered ranking: "
         + numberedRankingId));
   }
+  /*
   public MediaList getMediaListById(Long id) {
     return mediaListRepository.findById(id)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id " + id));
   }
+   */
   public void moveEntryInList(Long mediaListId, int oldPosition, int newPosition) throws AccessDeniedException {
     checkOwnership(mediaListId);
 

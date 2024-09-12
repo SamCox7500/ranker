@@ -70,4 +70,14 @@ public abstract class Ranking {
   public void setPrivate() {
     isPublic = false;
   }
+  @Override
+  public String toString() {
+    return "Ranking{" +
+      "id=" + id +
+      ", user=" + user +
+      ", title='" + title + '\'' +
+      ", description='" + description + '\'' +
+      ", isPublic=" + isPublic +
+      '}';
+  }
 }

@@ -69,7 +69,6 @@ public class NumberedRankingService {
     numberedRanking.setPrivate(); //todo
     numberedRanking.setReverseOrder(numberedRankingDTO.isReverseOrder());
     numberedRanking.setMediaType(mediaList.getMediaType());
-    numberedRanking.setMediaType(MediaType.valueOf(numberedRankingDTO.getMediaType()));
 
     numberedRanking.setMediaList(mediaList);
 

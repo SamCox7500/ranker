@@ -19,13 +19,15 @@ public class NumberedRanking extends Ranking {
   private MediaType mediaType;
 
   public NumberedRanking() {}
+
+
   public NumberedRanking(User user, String title, String desc, boolean isPublic, boolean isReverseOrder, MediaType mediaType, MediaList mediaList) {
     super(user, title, desc, isPublic);
     this.isReverseOrder = isReverseOrder;
     this.mediaType = mediaType;
     this.mediaList = mediaList;
+    mediaList.setNumberedRanking(this);
   }
-
   public boolean getIsReverseOrder() {
     return isReverseOrder;
   }
@@ -38,6 +40,7 @@ public class NumberedRanking extends Ranking {
   }
   public void setMediaList(MediaList mediaList) {
     this.mediaList = mediaList;
+    mediaList.setNumberedRanking(this);
   }
 
   public MediaType getMediaType() {
