@@ -43,4 +43,13 @@ public class MediaListEntry {
   public void setTmdbId(Long tmdbId) {
     this.tmdbId = tmdbId;
   }
+
+  @Override
+  public String toString() {
+    return "MediaListEntry{" +
+      "id=" + id +
+      ", ranking=" + ranking +
+      ", tmdbId=" + tmdbId +
+      '}';
+  }
 }

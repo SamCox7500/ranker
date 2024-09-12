@@ -59,9 +59,9 @@ public class MediaList {
   }
   public void removeEntries(List<MediaListEntry> entries) {
     for (MediaListEntry entry: entries) {
-      entries.remove(entry);
       entry.setMediaList(null);
     }
+    this.entries.removeAll(entries);
     reorderEntries();
   }
   public void moveEntry(int oldPosition, int newPosition) {
