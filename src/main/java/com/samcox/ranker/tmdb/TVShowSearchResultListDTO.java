@@ -8,4 +8,8 @@ public class TVShowSearchResultListDTO {
 
   @JsonProperty("results")
   List<TVShowSearchResultDTO> results;
+
+  public List<TVShowSearchResultDTO> getResults() {
+    return results;
+  }
 }

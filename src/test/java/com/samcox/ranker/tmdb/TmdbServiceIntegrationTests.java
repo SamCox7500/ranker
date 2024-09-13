@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,5 +51,26 @@ public class TmdbServiceIntegrationTests {
   public void testGetTVShowDetails_InvalidId() {
     Long invalidShowId = 9999999999999999L;
     assertThrows(HttpClientErrorException.class, () -> tmdbService.getTVShowDetails(invalidShowId));
+  }
+  @Test
+  public void testSearchFilms() {
+    String query = "There Will Be Bloo";
+    FilmSearchResultListDTO searchResultListDTO = tmdbService.searchFilms(query);
+
+    FilmSearchResultDTO bestResultDTO = searchResultListDTO.getResults().get(0);
+    assertEquals(bestResultDTO.title, "There Will Be Blood");
+    assertEquals(bestResultDTO.getPoster_path(), "/fa0RDkAlCec0STeMNAhPaF89q6U.jpg");
+    assertEquals(bestResultDTO.getRelease_date(), "2007-12-26");
+    assertEquals(bestResultDTO.getId(), 7345L);
+  }
+  @Test
+  public void testSearchShows() {
+    String query = "Game Of ";
+    TVShowSearchResultListDTO searchResultListDTO = tmdbService.searchTVShows(query);
+
+    TVShowSearchResultDTO bestResultDTO = searchResultListDTO.getResults().get(0);
+    assertEquals(bestResultDTO.getName(),"Game of Thrones");
+    assertEquals(bestResultDTO.getPoster_path(), "/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg");
+    assertEquals(bestResultDTO.getFirst_air_date(), "2011-04-17");
   }
 }
