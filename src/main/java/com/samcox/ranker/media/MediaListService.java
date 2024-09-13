@@ -53,6 +53,14 @@ public class MediaListService {
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
+
+    if (oldPosition < 1 || oldPosition > mediaList.getEntries().size()) {
+      throw new RankingOutOfBoundsException("Old position out of bounds");
+    }
+    if (newPosition < 1 || newPosition > mediaList.getEntries().size()) {
+      throw new RankingOutOfBoundsException("New position out of bounds");
+    }
+
     mediaList.moveEntry(oldPosition, newPosition);
     mediaListRepository.save(mediaList);
   }
@@ -90,7 +98,7 @@ public class MediaListService {
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
 
     if (entryAddRequest.getRanking() < 1 || entryAddRequest.getRanking() > mediaList.getEntries().size() + 1) {
-      throw new IllegalArgumentException("Ranking for entry is out of bounds");
+      throw new RankingOutOfBoundsException("Ranking for entry is out of bounds");
     }
 
     if (mediaList.hasEntryWithTmdbId(entryAddRequest.getTmdbId())) {

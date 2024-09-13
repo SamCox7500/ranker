@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class MediaListEntryNotFoundException extends RuntimeException{
-  public MediaListEntryNotFoundException(String message) {
+public class RankingOutOfBoundsException extends IllegalArgumentException {
+  public RankingOutOfBoundsException(String message) {
     super(message);
   }
 }

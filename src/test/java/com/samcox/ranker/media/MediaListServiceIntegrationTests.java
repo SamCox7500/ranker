@@ -251,7 +251,6 @@ public class MediaListServiceIntegrationTests {
   @WithMockUser("testuser")
   public void testAddEntry_Success() throws AccessDeniedException {
     EntryAddRequest entryAddRequest = new EntryAddRequest();
-    entryAddRequest.setMediaType(MediaType.FILM);
     entryAddRequest.setTmdbId(299534L);
     entryAddRequest.setRanking(2);
 
@@ -282,7 +281,6 @@ public class MediaListServiceIntegrationTests {
   @WithMockUser("testuser1")
   public void testAddEntry_NotAuthorized() throws AccessDeniedException {
     EntryAddRequest entryAddRequest = new EntryAddRequest();
-    entryAddRequest.setMediaType(MediaType.FILM);
     entryAddRequest.setTmdbId(299534L);
     entryAddRequest.setRanking(2);
 
@@ -292,7 +290,6 @@ public class MediaListServiceIntegrationTests {
   @WithMockUser("testuser")
   public void testAddEntry_InvalidMediaListId() throws AccessDeniedException {
     EntryAddRequest entryAddRequest = new EntryAddRequest();
-    entryAddRequest.setMediaType(MediaType.FILM);
     entryAddRequest.setTmdbId(299534L);
     entryAddRequest.setRanking(2);
 
@@ -302,7 +299,6 @@ public class MediaListServiceIntegrationTests {
   @WithMockUser("testuser")
   public void testAddEntry_NullTmdbId() throws AccessDeniedException {
     EntryAddRequest entryAddRequest = new EntryAddRequest();
-    entryAddRequest.setMediaType(MediaType.FILM);
     //entryAddRequest.setTmdbId(299534L);
     entryAddRequest.setRanking(2);
 
@@ -317,7 +313,6 @@ public class MediaListServiceIntegrationTests {
   @WithMockUser("testuser")
   public void testAddEntry_InvalidRanking() throws AccessDeniedException {
     EntryAddRequest entryAddRequest = new EntryAddRequest();
-    entryAddRequest.setMediaType(MediaType.FILM);
     entryAddRequest.setTmdbId(299534L);
     entryAddRequest.setRanking(5);
 
@@ -327,7 +322,6 @@ public class MediaListServiceIntegrationTests {
   @WithMockUser("testuser")
   public void testAddEntry_DuplicateMediaId() throws AccessDeniedException {
     EntryAddRequest entryAddRequest = new EntryAddRequest();
-    entryAddRequest.setMediaType(MediaType.FILM);
     entryAddRequest.setTmdbId(115L);
     entryAddRequest.setRanking(4);
 

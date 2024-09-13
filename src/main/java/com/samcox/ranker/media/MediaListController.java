@@ -1,6 +1,7 @@
 package com.samcox.ranker.media;
 
 import com.samcox.ranker.ranking.NumberedRankingService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
@@ -32,7 +33,7 @@ public class MediaListController {
     @PathVariable Long userId,
     @PathVariable Long rankingId,
     @PathVariable Long mediaListId,
-    @RequestBody EntryAddRequest entryAddRequest
+    @RequestBody @Valid EntryAddRequest entryAddRequest
   ) throws AccessDeniedException {
     mediaListService.addEntryToList(entryAddRequest, mediaListId);
   }
@@ -42,12 +43,13 @@ public class MediaListController {
     @PathVariable Long rankingId,
     @PathVariable Long mediaListId,
     @PathVariable Long entryId,
-    @RequestBody EntryMoveRequest entryMoveRequest
+    @RequestBody @Valid EntryMoveRequest entryMoveRequest
   ) throws AccessDeniedException {
       MediaListEntry mediaListEntry = mediaListEntryService.getMediaListEntryById(entryMoveRequest.getEntryId());
       int oldPosition = mediaListEntry.getRanking();
       int newPosition = entryMoveRequest.getNewPosition();
       mediaListService.moveEntryInList(mediaListId, oldPosition, newPosition);
+      //todo change to be mediaListId, mediaListEntryId, newPosition
   }
   @DeleteMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries/{entryId}")
   public void removeEntryFromMediaList(

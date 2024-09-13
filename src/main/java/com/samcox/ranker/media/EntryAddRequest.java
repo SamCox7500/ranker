@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 public class EntryAddRequest {
   @NotNull
   private Long tmdbId;
-  @NotNull
-  private MediaType mediaType;
   private int ranking;
 
   public Long getTmdbId() {
@@ -14,12 +12,6 @@ public class EntryAddRequest {
   }
   public void setTmdbId(Long tmdbId) {
     this.tmdbId = tmdbId;
-  }
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-  public void setMediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
   }
 
   public int getRanking() {
