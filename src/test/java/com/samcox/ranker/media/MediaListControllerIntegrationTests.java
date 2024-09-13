@@ -1,0 +1,247 @@
+package com.samcox.ranker.media;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.samcox.ranker.auth.AuthService;
+import com.samcox.ranker.ranking.NumberedRanking;
+import com.samcox.ranker.ranking.NumberedRankingDTO;
+import com.samcox.ranker.ranking.NumberedRankingRepository;
+import com.samcox.ranker.user.User;
+import com.samcox.ranker.user.UserDTO;
+import com.samcox.ranker.user.UserRepository;
+import jdk.swing.interop.SwingInterOpUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+public class MediaListControllerIntegrationTests {
+
+  @Autowired
+  private MockMvc mockMvc;
+  @Autowired
+  private ObjectMapper objectMapper;
+  @Autowired
+  private UserRepository userRepository;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
+  @Autowired
+  private AuthenticationManager authenticationManager;
+
+  @Autowired
+  private AuthService authService;
+
+  @Autowired
+  private NumberedRankingRepository numberedRankingRepository;
+
+  @Autowired
+  private MediaListRepository mediaListRepository;
+
+  private User testUser;
+  private User testUser1;
+
+  private NumberedRanking testNumberedRanking;
+
+  private MediaList testMediaList;
+
+  private MediaListEntry testMediaListEntry;
+  private MediaListEntry testMediaListEntry1;
+  private MediaListEntry testMediaListEntry2;
+
+  @BeforeEach
+  public void setUp() {
+    mediaListRepository.deleteAll();
+    numberedRankingRepository.deleteAll();
+    userRepository.deleteAll();
+
+    testUser = new User("testuser", passwordEncoder.encode("Validpassword1!"), "USER");
+    userRepository.save(testUser);
+
+
+    testUser1 = new User("testuser1", passwordEncoder.encode("Validpassword1!"), "USER");
+    userRepository.save(testUser1);
+
+
+    testMediaListEntry = new MediaListEntry();
+    testMediaListEntry.setTmdbId(7345L);
+    testMediaListEntry.setRanking(1);
+    testMediaListEntry1 = new MediaListEntry();
+    testMediaListEntry1.setTmdbId(115L);
+    testMediaListEntry1.setRanking(2);
+    testMediaListEntry2 = new MediaListEntry();
+    testMediaListEntry2.setTmdbId(4638L);
+    testMediaListEntry2.setRanking(3);
+
+
+    testMediaList = new MediaList();
+    testMediaList.setMediaType(MediaType.FILM);
+    testMediaList.addEntry(testMediaListEntry);
+    testMediaList.addEntry(testMediaListEntry1);
+    testMediaList.addEntry(testMediaListEntry2);
+
+    testNumberedRanking = new NumberedRanking();
+    testNumberedRanking.setUser(testUser);
+    testNumberedRanking.setTitle("This is a test title");
+    testNumberedRanking.setDescription("This is a test desc of a numbered ranking");
+    testNumberedRanking.setMediaType(MediaType.FILM);
+    testNumberedRanking.setMediaList(testMediaList);
+
+    numberedRankingRepository.save(testNumberedRanking);
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testGetMediaList_Success() throws Exception {
+    mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + + testMediaList.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.mediaType")
+        .value("FILM"))
+      .andExpect(jsonPath("$.numberedRankingDTO.title").value(testNumberedRanking.getTitle()))
+      .andExpect(jsonPath("$.numberedRankingDTO.description").value(testNumberedRanking.getDescription()))
+      .andExpect(jsonPath("$.numberedRankingDTO.userDTO.username").value(testUser.getUsername()))
+      .andExpect(jsonPath("$.mediaListEntryDTOList[0].ranking").value(testMediaListEntry.getRanking()))
+      .andExpect(jsonPath("$.mediaListEntryDTOList[0].id").value(testMediaListEntry.getId()))
+      .andExpect(jsonPath("$.mediaListEntryDTOList[0].title").value("There Will Be Blood"))
+      .andExpect(jsonPath("$.mediaListEntryDTOList[0].release_date").value("2007-12-26"))
+      .andExpect(jsonPath("$.mediaListEntryDTOList[0].poster_path").value("/fa0RDkAlCec0STeMNAhPaF89q6U.jpg"));
+  }
+
+  @Test
+  @WithMockUser("testuser1")
+  public void testGetMediaList_NotAuthorized() throws Exception {
+    mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
+      .andExpect(status().isForbidden());
+  }
+
+  @Test
+  @WithMockUser("testuser")
+  public void testGetMediaList_InvalidUserId() throws Exception {
+    mockMvc.perform(get("/users/" + 999L + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
+      .andExpect(status().isForbidden());
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testGetMediaList_InvalidNumberedRankingId() throws Exception {
+    mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + 999L + "/medialist/" + testMediaList.getId())
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
+      .andExpect(status().isBadRequest());
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testAddEntryToMediaList_Success() throws Exception {
+    EntryAddRequest entryAddRequest = new EntryAddRequest();
+    entryAddRequest.setMediaType(MediaType.FILM);
+    entryAddRequest.setTmdbId(299534L);
+    entryAddRequest.setRanking(1);
+
+    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(entryAddRequest)))
+      .andExpect(status().isOk());
+
+    MediaList mediaList = mediaListRepository.findById(testMediaList.getId()).orElseThrow();
+    assert(mediaList.getEntries().size() == 4);
+
+    assertEquals(mediaList.getEntries().get(0).getRanking(), 1);
+    assertEquals(mediaList.getEntries().get(0).getTmdbId(), 299534L);
+
+    assertEquals(mediaList.getEntries().get(1).getRanking(), 2);
+    assertEquals(mediaList.getEntries().get(1).getTmdbId(), 7345L);
+    assertEquals(mediaList.getEntries().get(1).getMediaList().getId(), testMediaList.getId());
+
+    assertEquals(mediaList.getEntries().get(2).getRanking(), 3);
+    assertEquals(mediaList.getEntries().get(2).getTmdbId(), 115L);
+    assertEquals(mediaList.getEntries().get(2).getMediaList().getId(), testMediaList.getId());
+
+    assertEquals(mediaList.getEntries().get(3).getRanking(), 4);
+    assertEquals(mediaList.getEntries().get(3).getTmdbId(), 4638L);
+    assertEquals(mediaList.getEntries().get(3).getMediaList().getId(), testMediaList.getId());
+  }
+  @Test
+  @WithMockUser("testuser1")
+  public void testAddEntryToMediaList_NotAuthorized() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testAddEntryToMediaList_InvalidMediaListId() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testAddEntryToMediaList_InvalidTmdb() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testAddEntryToMediaList_InvalidMediaType() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testAddEntryToMediaList_InvalidRanking() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testMoveEntryInMediaList_Success() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser1")
+  public void testMoveEntryInMediaList_NotAuthorized() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testMoveEntryInMediaList_InvalidMediaListId() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testMoveEntryInMediaList_InvalidMediaType() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testMoveEntryInMediaList_InvalidRanking() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testRemoveEntryFromMediaList_Success() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser1")
+  public void testRemoveEntryFromMediaList_NotAuthorized() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testRemoveEntryFromMediaList_InvalidMediaListId() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testRemoveEntryFromMediaList_InvalidEntryId() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testRemoveEntriesFromMediaList_Success() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser1")
+  public void testRemoveEntriesFromMediaList_NotAuthorized() throws Exception {
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testRemoveEntriesFromMediaList_InvalidEntries() throws Exception {
+  }
+}

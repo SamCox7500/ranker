@@ -3,6 +3,7 @@ package com.samcox.ranker.ranking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.media.MediaList;
+import com.samcox.ranker.media.MediaListEntry;
 import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.user.User;
 import com.samcox.ranker.user.UserCredentials;

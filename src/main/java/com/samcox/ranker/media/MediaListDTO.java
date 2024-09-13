@@ -17,6 +17,10 @@ public class MediaListDTO {
   @NotNull
   private NumberedRankingDTO numberedRankingDTO;
 
+  public MediaListDTO() {
+
+  }
+
   public MediaListDTO(Long id, MediaType mediaType, List<MediaListEntryDTO> mediaListEntryDTOList, NumberedRankingDTO numberedRankingDTO) {
     this.id = id;
     this.mediaType = mediaType;

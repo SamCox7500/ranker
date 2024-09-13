@@ -19,7 +19,7 @@ public class MediaListController {
     this.numberedRankingService = numberedRankingService;
   }
 
-  @GetMapping("/users/{userId}/numberedrankings/{rankingId}/medialist")
+  @GetMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}")
   public MediaListDTO getMediaList(@PathVariable Long userId, @PathVariable Long rankingId) throws AccessDeniedException {
 
     MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
@@ -27,7 +27,7 @@ public class MediaListController {
 
   }
   //todo think about this works in the frontend
-  @PostMapping("/users/{userId}/numberedrankings/{rankingId}/mediaList/entries")
+  @PostMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries")
   public void addEntryToMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,
@@ -36,7 +36,7 @@ public class MediaListController {
   ) throws AccessDeniedException {
     mediaListService.addEntryToList(entryAddRequest, mediaListId);
   }
-  @PutMapping("/users/{usersId}/numberedrankings/{rankingId}/mediaList/entries/{entryId}")
+  @PutMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries/{entryId}")
   public void moveEntryInMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,
@@ -49,7 +49,7 @@ public class MediaListController {
       int newPosition = entryMoveRequest.getNewPosition();
       mediaListService.moveEntryInList(mediaListId, oldPosition, newPosition);
   }
-  @DeleteMapping("/users/{usersId}/numberedrankings/{rankingId}/mediaList/entries/{entryId}")
+  @DeleteMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries/{entryId}")
   public void removeEntryFromMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,
@@ -58,8 +58,7 @@ public class MediaListController {
   ) throws AccessDeniedException {
       mediaListService.removeEntryInList(mediaListId, entryId);
   }
-  //todo removing multiple entries
-  @DeleteMapping("/users/{usersId}/numberedrankings/{rankingId}/mediaList/entries")
+  @DeleteMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries")
   public void removeEntriesFromMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,

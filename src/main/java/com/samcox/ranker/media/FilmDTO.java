@@ -8,10 +8,16 @@ public class FilmDTO extends MediaListEntryDTO {
   @JsonProperty("release_date")
   private String releaseDate;
 
-  public FilmDTO(Long id, int ranking, String title, String releaseDate) {
+  private String poster_path;
+
+  public FilmDTO() {
+
+  }
+  public FilmDTO(Long id, int ranking, String title, String releaseDate, String poster_path) {
     super(id, ranking);
     this.title = title;
     this.releaseDate = releaseDate;
+    this.poster_path = poster_path;
   }
   public String getTitle() {
     return title;
@@ -24,6 +30,12 @@ public class FilmDTO extends MediaListEntryDTO {
   }
   public String getReleaseDate() {
     return releaseDate;
+  }
+  public String getPoster_path() {
+    return poster_path;
+  }
+  public void setPoster_path(String poster_path) {
+    this.poster_path = poster_path;
   }
   @Override
   public String toString() {
