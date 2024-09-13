@@ -30,6 +30,7 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.POST, "/users").permitAll()
         .requestMatchers("/login", "/resources/**", "/static/**", "/templates/**", "/authuser").permitAll()
         .requestMatchers("/users", "/users/*").permitAll()
+        .requestMatchers("/tmdb/**").permitAll()
         .requestMatchers("/testforbidden").authenticated()
         .anyRequest().authenticated()
       )

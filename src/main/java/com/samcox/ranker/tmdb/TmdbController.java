@@ -5,6 +5,7 @@ import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.media.MediaListDTO;
 import com.samcox.ranker.media.TVShowDTO;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.nio.file.AccessDeniedException;
 
@@ -22,7 +23,11 @@ public class TmdbController {
   }
   @GetMapping("/tmdb/movies/{id}")
   public FilmDTO getMovieDetails(@PathVariable Long id) {
-    return tmdbService.getFilmDetails(id);
+    try {
+      return tmdbService.getFilmDetails(id);
+    } catch (HttpClientErrorException e) {
+      throw new MediaNotFoundException("Movie could not be found with id" + id);
+    }
   }
   @GetMapping("/tmdb/tv/search")
   public TVShowSearchResultListDTO searchTVShows(@RequestParam("query") String query) {
@@ -30,6 +35,10 @@ public class TmdbController {
   }
   @GetMapping("/tmdb/tv/{id}")
   public TVShowDTO getTVShowDetails(@PathVariable Long id) {
-    return tmdbService.getTVShowDetails(id);
+    try {
+      return tmdbService.getTVShowDetails(id);
+    } catch (HttpClientErrorException e) {
+      throw new MediaNotFoundException("TVShow could not be found with id" + id);
+    }
   }
 }

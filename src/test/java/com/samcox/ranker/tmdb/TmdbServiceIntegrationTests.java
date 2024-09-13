@@ -28,7 +28,6 @@ public class TmdbServiceIntegrationTests {
     assertEquals(filmDTO.getTitle(),"There Will Be Blood");
     assertEquals(filmDTO.getPoster_path(), "/fa0RDkAlCec0STeMNAhPaF89q6U.jpg");
     assertEquals(filmDTO.getReleaseDate(), "2007-12-26");
-
   }
   @Test
   public void testGetFilmDetails_InvalidId() {
