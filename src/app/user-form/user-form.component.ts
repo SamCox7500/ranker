@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { User } from '../user';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular/forms';
+import { UserCredentials } from '../user-credentials';
 
 
 @Component({
@@ -13,24 +14,28 @@ import { ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular
   styleUrl: './user-form.component.css'
 })
 export class UserFormComponent {
+  /*
 
-  /*userForm = new FormGroup({
+  userForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
   });
 
-  user: User
+  user: User;
+  userCredentials: UserCredentials;
 
   constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {
     this.user = new User();
+    this.userCredentials = new UserCredentials();
   }
 
   onSubmit() {
-    this.user.username = this.userForm.value.username || '';
-    this.userService.save(this.user).subscribe(result => this.goToUserList());
+    this.userCredentials.username = this.userForm.value.username || '';
+    this.userCredentials.password = this.userForm.value.password || '';
+    this.userService.createUser(this.userCredentials).subscribe(result => this.goToUserList());
   }
 
   goToUserList() {
     this.router.navigate(['/users']);
   }
-*/
+    */
 }
