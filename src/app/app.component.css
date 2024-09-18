@@ -8,3 +8,6 @@
     padding-left: 1rem;
     padding-right: 1rem;
 }
+.navbar-nav .nav-link.dropdown-toggle {
+    padding-right: 1rem;
+}
