@@ -20,14 +20,17 @@ export class AppComponent implements OnInit {
   user: User | null = null;
   authenticated: boolean = false;
 
-  constructor(private loginService: LoginService, private currentUserService: CurrentUserService) {}
+  constructor(private loginService: LoginService, private currentUserService: CurrentUserService, private router: Router) {}
 
   ngOnInit(): void {
     this.updateAuth();
   }
   logout() {
     this.loginService.logout().subscribe({
-      next: () => this.updateAuth(),
+      next: () => {
+        this.updateAuth();
+        this.goToLanding();
+      },
       error: err => console.error('Logout failed', err)
     });
   }
@@ -38,5 +41,8 @@ export class AppComponent implements OnInit {
     this.loginService.authenticated$.subscribe(authStatus => {
       this.authenticated = authStatus;
     }); 
+  }
+  goToLanding() {
+    this.router.navigate(['/']);
   }
 }

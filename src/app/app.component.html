@@ -14,35 +14,44 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="">Home</a>
         </li>
+        @if (authenticated) {
         <li class="nav-item">
-          <a class="nav-link" href="#">View Ranking</a>
+          <a class="nav-link" routerLink="rankings">View Ranking</a>
         </li>
         <li class="nav-item">
           <a class="nav-link create-ranking" href="#">Create Ranking</a>
         </li>
+        } @else {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="login">View Ranking</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link create-ranking" routerLink="login">Create Ranking</a>
+          </li>
+        }
       </ul>
 
       <ul class="navbar-nav">
-        @if (authenticated == false) {
-          <li class="nav-item">
-            <a class="nav-link" routerLink="login">Log In</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" routerLink="register">Create Account</a>
-          </li>
+        @if (!authenticated) {
+        <li class="nav-item">
+          <a class="nav-link" routerLink="login">Log In</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="register">Create Account</a>
+        </li>
         } @else {
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              @if (user) {
-                {{user.username}}
-              }
-            </a>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" routerLink="manageuser">Manage Account</a>
-              <a class="dropdown-item" (click)="logout()">Log Out</a>
-            </div>
-          </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            @if (user) {
+            {{user.username}}
+            }
+          </a>
+          <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" routerLink="manageuser">Manage Account</a>
+            <a class="dropdown-item" (click)="logout()">Log Out</a>
+          </div>
+        </li>
         }
       </ul>
     </div>
