@@ -15,4 +15,16 @@ export class RankingService {
   public getRankingsByUserId(userId: number): Observable<Ranking[]> {
     return this.http.get<Ranking[]>(`${this.usersUrl}/${userId}/${'numberedrankings'}`, {withCredentials: true});
   }
+  public getRankingByIdAndUser(rankingId: number, userId: number) : Observable<Ranking> {
+    return this.http.get<Ranking>(`${this.usersUrl}/${userId}/${'numberedrankings'}/${rankingId}`, {withCredentials: true});
+  }
+  public createRanking(userId: number) {
+    return this.http.post<Ranking>(`${this.usersUrl}/${userId}/${'numberedrankings'}`, {withCredentials: true});
+  }
+  public updateRanking(userId: number, rankingId: number) {
+    return this.http.put<Ranking>(`${this.usersUrl}/${userId}/${'numberedrankings'}/${rankingId}`, {withCredentials: true});
+  }
+  public deleteRanking(userId: number, rankingId: number) {
+    return this.http.delete<Ranking>(`${this.usersUrl}/${userId}/${'numberedrankings'}/${rankingId}`, {withCredentials: true});
+  }
 }
