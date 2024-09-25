@@ -12,10 +12,10 @@ export class RankingService {
 
   constructor(private http: HttpClient) { }
 
-  public getRankingsByUserId(userId: number): Observable<Ranking[]> {
+  public getAllRankings(userId: number): Observable<Ranking[]> {
     return this.http.get<Ranking[]>(`${this.usersUrl}/${userId}/${'numberedrankings'}`, {withCredentials: true});
   }
-  public getRankingByIdAndUser(rankingId: number, userId: number) : Observable<Ranking> {
+  public getRanking(userId: number, rankingId: number) : Observable<Ranking> {
     return this.http.get<Ranking>(`${this.usersUrl}/${userId}/${'numberedrankings'}/${rankingId}`, {withCredentials: true});
   }
   public createRanking(userId: number) {
