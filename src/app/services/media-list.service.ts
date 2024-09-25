@@ -10,7 +10,7 @@ import { EntryMoveRequestDTO } from '../entry-move-request-dto';
 })
 export class MediaListService {
 
-  private usersUrl: string = 'http://localhost:8080/users'
+  private usersUrl: string = 'http://localhost:8080/users';
 
   constructor(private http: HttpClient) { }
 
