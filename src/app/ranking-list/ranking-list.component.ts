@@ -26,7 +26,7 @@ export class RankingListComponent {
       }
     });
     if (this.user) {
-      this.rankingService.getRankingsByUserId(this.user.id).subscribe((data: Ranking[]) => {
+      this.rankingService.getAllRankings(this.user.id).subscribe((data: Ranking[]) => {
         this.rankings = data;
       });
     }

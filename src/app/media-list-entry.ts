@@ -1,4 +1,4 @@
-import { FilmEntry } from "./film-entry";
+import { MovieEntry } from "./movie-entry";
 import { TVShowEntry } from "./tvshow-entry";
 
-export type MediaListEntry = FilmEntry | TVShowEntry;
+export type MediaListEntry = MovieEntry | TVShowEntry;
