@@ -18,13 +18,13 @@ export class RankingService {
   public getRanking(userId: number, rankingId: number) : Observable<Ranking> {
     return this.http.get<Ranking>(`${this.usersUrl}/${userId}/${'numberedrankings'}/${rankingId}`, {withCredentials: true});
   }
-  public createRanking(userId: number) {
-    return this.http.post<Ranking>(`${this.usersUrl}/${userId}/${'numberedrankings'}`, {withCredentials: true});
+  public createRanking(userId: number, ranking: Ranking) : Observable<void> {
+    return this.http.post<void>(`${this.usersUrl}/${userId}/${'numberedrankings'}`, ranking, {withCredentials: true});
   }
-  public updateRanking(userId: number, rankingId: number) {
-    return this.http.put<Ranking>(`${this.usersUrl}/${userId}/${'numberedrankings'}/${rankingId}`, {withCredentials: true});
+  public updateRanking(userId: number, rankingId: number, ranking: Ranking) : Observable<void> {
+    return this.http.put<void>(`${this.usersUrl}/${userId}/${'numberedrankings'}/${rankingId}`, ranking, {withCredentials: true});
   }
-  public deleteRanking(userId: number, rankingId: number) {
-    return this.http.delete<Ranking>(`${this.usersUrl}/${userId}/${'numberedrankings'}/${rankingId}`, {withCredentials: true});
+  public deleteRanking(userId: number, rankingId: number) : Observable<void> {
+    return this.http.delete<void>(`${this.usersUrl}/${userId}/${'numberedrankings'}/${rankingId}`, {withCredentials: true});
   }
 }
