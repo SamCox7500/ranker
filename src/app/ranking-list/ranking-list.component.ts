@@ -17,7 +17,8 @@ export class RankingListComponent {
   user: User | null = null;
   rankings: Ranking[] = [];
 
-  constructor(private rankingService: RankingService, private currentUserService: CurrentUserService) {}
+  constructor(private route: ActivatedRoute, private router: Router, private rankingService: RankingService, private currentUserService: CurrentUserService) {}
+
   ngOnInit(): void {
     this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
       this.user = user;
@@ -30,5 +31,8 @@ export class RankingListComponent {
         this.rankings = data;
       });
     }
+  }
+  goToCreateRanking(): void {
+    this.router.navigate(['/createranking']);
   }
 }

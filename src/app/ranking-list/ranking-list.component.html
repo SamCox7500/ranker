@@ -1,4 +1,47 @@
-<div class="card my-5">
+<div class="container-fluid d-flex justify-content-evenly align-items-center bg-dark text-white py-5">
+  <h2>
+    Your Rankings
+  </h2>
+  <a class="btn btn-primary btn-lg" href="#">
+    Create New Ranking
+  </a>
+</div>
+<div class="container align-items-center">
+  @for (ranking of rankings; track ranking.id) {
+    <div class="card">
+      <!--<div class="card-header">
+        {{ranking.title}}
+      </div>-->
+      <div class="card-body">
+        <h5 class="card-title">
+          {{ranking.title}}
+        </h5>
+        <p class="card-text">
+          {{ranking.description}}
+        </p>
+      </div>
+    </div>
+  }
+</div>
+
+
+
+
+
+<!--<div class="card text-bg-dark">
+  <div class="container-fluid">
+    <div class="card-body">
+      <h2 class="card-body">
+        Your Rankings
+      </h2>
+      <a class="btn btn-primary" href="#">
+        New Ranking
+      </a>
+    </div>
+  </div>
+</div>-->
+
+<!-- <div class="card my-5">
   <div class="card-body">
 
     <table class="table table-bordered table-striped">
@@ -20,3 +63,4 @@
 
   </div>
 </div>
+-->
