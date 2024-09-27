@@ -1,1 +1,38 @@
-<p>create-ranking works!</p>
+<div class="card my-5">
+    <div class="card-body">
+        <form [formGroup]="createRankingForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="title"
+                    placeholder="Example: My top 20 horror films!" formControlName="title">
+            </div>
+            @if (title.touched && title.hasError('required')) {
+            <div class="alert alert-danger">Title is required</div>
+            }
+            @if (title.touched && (title.hasError('maxlength') || title.hasError('minlength'))) {
+            <div class="alert alert-danger">Ranking title must be between 1-30 chars</div>
+            }
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" name="description"
+                    placeholder="This is a list of my top 20 horror films that I have seen in the last decade"
+                    formControlName="description">
+            </div>
+            @if (description.touched && description.hasError('required')) {
+            <div class="alert alert-danger">Ranking description is required.</div>
+            }
+            @if (description.touched && (description.hasError('minlength') || description.hasError('maxlength'))) {
+                <div class="alert alert-danger">Ranking description must be between 1 and 150 chars.</div>
+            }
+
+            <label for="mediaType">Ranking type</label>
+            <select type="text" class="form-control" id="mediaType" name="mediaType" formControlName="mediaType">
+                <option value="FILM">Movies</option>
+                <option value="TV_SHOW">TV Shows</option>
+            </select>      
+
+            <button type="submit" [disabled]="!createRankingForm.valid" class="btn btn-info">Create Ranking</button>
+        </form>
+    </div>
+</div>
