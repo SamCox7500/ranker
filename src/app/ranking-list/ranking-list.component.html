@@ -8,7 +8,7 @@
 </div>
 <div class="container align-items-center">
   @for (ranking of rankings; track ranking.id) {
-    <div class="card">
+    <div class="card" (click)="goToMediaList(ranking.id)">
       <!--<div class="card-header">
         {{ranking.title}}
       </div>-->
