@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MediaListService } from '../services/media-list.service';
 
 @Component({
@@ -13,7 +13,7 @@ export class MediaListComponent implements OnInit {
 
   rankingId: number | null = null;
 
-  constructor(private route: ActivatedRoute, private mediaListService: MediaListService) {}
+  constructor(private route: ActivatedRoute, private mediaListService: MediaListService, private router: Router) {}
 
   ngOnInit(): void {
       this.rankingId = Number(this.route.snapshot.paramMap.get('rankingId'));
