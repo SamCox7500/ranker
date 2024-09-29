@@ -1,1 +1,46 @@
-<p>{{rankingId}}</p>
+<h3>Title: {{ranking?.title}}</h3>
+<h3>Desc: {{ranking?.description}}</h3>
+<p>Media type: {{mediaType}}</p>
+<!--@if(mediaType == 'FILMS') {-->
+@for(mediaListEntry of mediaListEntries; track mediaListEntry.ranking) {
+@if(isMovieEntry(mediaListEntry)) {
+<div class="card">
+    <div class="card-body">
+        <div class="card-title">
+            Title: {{mediaListEntry.title}}
+        </div>
+        <div class="card-text">
+            Release Date: {{mediaListEntry.release_date}}
+        </div>
+        <div class="card-text">
+            Ranking: {{mediaListEntry.ranking}}
+        </div>
+
+    </div>
+</div>
+} @else if (isTVShowEntry(mediaListEntry)) {
+    <div class="card">
+        <div class="card-body">
+            <div class="card-title">
+                Name: {{mediaListEntry.name}}
+            </div>
+            <div class="card-text">
+                First Air Date: {{mediaListEntry.first_air_date}}
+            </div>
+            <div class="card-text">
+                Last Air Date: {{mediaListEntry.last_air_date}}
+            </div>
+            <div class="card-text">
+                Number of seasons: {{mediaListEntry.number_of_seasons}}
+            </div>
+            <div class="card-text">
+                Number of episodes: {{mediaListEntry.number_of_episodes}}
+            </div>
+            <div class="card-text">
+                Ranking: {{mediaListEntry.ranking}}
+            </div>
+        </div>
+    </div>
+}
+}
+<!--}-->

@@ -15,19 +15,19 @@ export class MediaListService {
 
   constructor(private http: HttpClient) { }
 
-  public getMediaList(userId: number, rankingId: number, mediaListId: number): Observable<MediaList> {
-    return this.http.get<MediaList>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/${mediaListId}`, { withCredentials: true });
+  public getMediaList(userId: number, rankingId: number): Observable<MediaList> {
+    return this.http.get<MediaList>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist`, { withCredentials: true });
   }
-  public addEntry(userId: number, rankingId: number, mediaListId: number, addRequest: EntryAddRequestDTO): Observable<void> {
-    return this.http.post<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/${mediaListId}/entries`, addRequest, { withCredentials: true });
+  public addEntry(userId: number, rankingId: number, addRequest: EntryAddRequestDTO): Observable<void> {
+    return this.http.post<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries`, addRequest, { withCredentials: true });
   }
-  public moveEntry(userId: number, rankingId: number, mediaListId: number, moveRequest: EntryMoveRequestDTO) {
-    return this.http.put<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/${mediaListId}/entries/{entryId}`, moveRequest, { withCredentials: true });
+  public moveEntry(userId: number, rankingId: number, entryId: number, moveRequest: EntryMoveRequestDTO) {
+    return this.http.put<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries/${entryId}`, moveRequest, { withCredentials: true });
   }
-  public deleteEntry(userId: number, rankingId: number, mediaListId: number, entryId: number): Observable<void> {
-    return this.http.delete<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/${mediaListId}/entries/{entryId}`, { withCredentials: true });
+  public deleteEntry(userId: number, rankingId: number, entryId: number): Observable<void> {
+    return this.http.delete<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries/${entryId}`, { withCredentials: true });
   }
-  public deleteEntries(userId: number, rankingId: number, mediaListId: number, entryIds: number[]): Observable<void> {
-    return this.http.delete<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/${mediaListId}/entries`, { body: entryIds, withCredentials: true });
+  public deleteEntries(userId: number, rankingId: number, entryIds: number[]): Observable<void> {
+    return this.http.delete<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries`, { body: entryIds, withCredentials: true });
   }
 }

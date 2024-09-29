@@ -5,5 +5,5 @@ export interface MediaList {
     id: number;
     mediaType: string;
     mediaListEntryDTOList: MediaListEntry[];
-    ranking: Ranking;
+    numberedRankingDTO: Ranking;
 }
