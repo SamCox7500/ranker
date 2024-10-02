@@ -9,6 +9,9 @@ import { TVShowSearchResultList } from '../tvshow-search-result-list';
 import { MovieSearchResultList } from '../movie-search-result-list';
 import { MediaSearchResult } from '../media-search-result';
 import { MediaSearchResultList } from '../media-search-result-list';
+import { CurrentUserService } from '../services/current-user.service';
+import { User } from '../user';
+import { EntryAddRequestDTO } from '../entry-add-request-dto';
 
 @Component({
   selector: 'app-add-media',
@@ -25,11 +28,19 @@ export class AddMediaComponent implements OnInit {
   query = new FormControl('');
   mediaResults: MediaSearchResult[] = [];
 
-  constructor(private route: ActivatedRoute, private router: Router, private tmdbService: TMDBService, private mediaListService: MediaListService) { }
+  user: User | null = null;
+  addMediaRanking: number | null = null;
+
+  constructor(private route: ActivatedRoute, private router: Router, private tmdbService: TMDBService, private mediaListService: MediaListService, private currentUserService: CurrentUserService) { }
 
   ngOnInit(): void {
     this.rankingId = Number(this.route.snapshot.paramMap.get('rankingId'));
     this.mediaType = this.route.snapshot.paramMap.get('mediaType') || '';
+    this.addMediaRanking = Number(this.route.snapshot.paramMap.get('addMediaRanking'));
+    this.currentUserService.fetchCurrentUser().subscribe();
+    this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
+      this.user = user;
+    });
   }
   onSearch(): void {
     if(this.mediaType == 'FILM') {
@@ -47,5 +58,23 @@ export class AddMediaComponent implements OnInit {
   }
   isTVShowSearchResult(result: MediaSearchResult): result is TVShowSearchResult {
     return (result as TVShowSearchResult).name !== undefined;
+  }
+  addMediaToRanking(mediaId: number): void {
+    if (this.addMediaRanking && this.user && this.rankingId) {
+      const entryAddRequest: EntryAddRequestDTO = {tmdbId: mediaId, ranking: this.addMediaRanking};
+      //console.log('User Id: ' + this.user.id);
+      //console.log('Ranking Id: ' + this.rankingId);
+      //console.log('Ranking: ' + entryAddRequest.ranking);
+      //console.log('TmdbId: ' + entryAddRequest.tmdbId);
+      this.mediaListService.addEntry(this.user.id, this.rankingId, entryAddRequest).subscribe({
+        next: () => this.goToMediaList(),
+        error: err => console.log('Error trying to add media to ranking'),
+      });
+    } else {
+      console.log('Unable to add new entry to ranking list. Invalid ');
+    }
+  }
+  goToMediaList() {
+    this.router.navigate(['/medialist', this.rankingId]);
   }
 }

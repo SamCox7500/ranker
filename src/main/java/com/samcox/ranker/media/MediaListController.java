@@ -4,6 +4,7 @@ import com.samcox.ranker.ranking.NumberedRankingService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
@@ -28,30 +29,31 @@ public class MediaListController {
     return mediaListService.toMediaListDTO(mediaList);
 
   }
-  //todo think about this works in the frontend
   //@PostMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries")
   @PostMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/entries")
   public void addEntryToMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,
-    @PathVariable Long mediaListId,
+    //@PathVariable Long mediaListId,
     @RequestBody @Valid EntryAddRequest entryAddRequest
   ) throws AccessDeniedException {
-    mediaListService.addEntryToList(entryAddRequest, mediaListId);
+    MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
+    mediaListService.addEntryToList(entryAddRequest, mediaList.getId());
   }
   //@PutMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries/{entryId}")
   @PutMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/entries/{entryId}")
   public void moveEntryInMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,
-    @PathVariable Long mediaListId,
+    //@PathVariable Long mediaListId,
     @PathVariable Long entryId,
     @RequestBody @Valid EntryMoveRequest entryMoveRequest
   ) throws AccessDeniedException {
+      MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
       MediaListEntry mediaListEntry = mediaListEntryService.getMediaListEntryById(entryMoveRequest.getEntryId());
       int oldPosition = mediaListEntry.getRanking();
       int newPosition = entryMoveRequest.getNewPosition();
-      mediaListService.moveEntryInList(mediaListId, oldPosition, newPosition);
+      mediaListService.moveEntryInList(mediaList.getId(), oldPosition, newPosition);
       //todo change to be mediaListId, mediaListEntryId, newPosition
   }
   //@DeleteMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries/{entryId}")
@@ -59,19 +61,21 @@ public class MediaListController {
   public void removeEntryFromMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,
-    @PathVariable Long mediaListId,
+    //@PathVariable Long mediaListId,
     @PathVariable Long entryId
   ) throws AccessDeniedException {
-      mediaListService.removeEntryInList(mediaListId, entryId);
+      MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
+      mediaListService.removeEntryInList(mediaList.getId(), entryId);
   }
   //@DeleteMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries")
   @DeleteMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/entries")
   public void removeEntriesFromMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,
-    @PathVariable Long mediaListId,
+    //@PathVariable Long mediaListId,
     @RequestBody List<Long> entryIds
     ) throws AccessDeniedException {
-    mediaListService.removeEntriesInList(mediaListId, entryIds);
+    MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
+    mediaListService.removeEntriesInList(mediaList.getId(), entryIds);
   }
 }

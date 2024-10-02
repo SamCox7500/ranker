@@ -19,14 +19,14 @@
 
 @for (mediaResult of mediaResults; track $index) {
 @if(isMovieSearchResult(mediaResult)) {
-<div class="card">
+<div class="card" (click)="addMediaToRanking(mediaResult.id)">
     <div class="card-title">{{mediaResult.title}}</div>
     <div class="card-body">
         <div class="card-text">{{mediaResult.release_date}}</div>
     </div>
 </div>
 } @else if (isTVShowSearchResult(mediaResult)) {
-<div class="card">
+<div class="card" (click)="addMediaToRanking(mediaResult.id)">
     <div class="card-title">{{mediaResult.name}}</div>
     <div class="card-body">
         <div class="card-text">{{mediaResult.first_air_date}}</div>

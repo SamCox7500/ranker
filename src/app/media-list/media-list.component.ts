@@ -65,6 +65,6 @@ export class MediaListComponent implements OnInit {
     return (entry as TVShowEntry).name !== undefined;
   }
   goToAddMedia() {
-    this.router.navigate(['add-media', this.rankingId, this.mediaType]);
+    this.router.navigate(['add-media', this.rankingId, this.mediaListEntries.length+1, this.mediaType]);
   }
 }

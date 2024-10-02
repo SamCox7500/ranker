@@ -1,6 +1,6 @@
 package com.samcox.ranker.tmdb;
 
-public class TVShowSearchResultDTO {
+public class TVShowSearchResultDTO extends TMDBSearchResultDTO {
   String name;
 
   String first_air_date;
@@ -14,6 +14,7 @@ public class TVShowSearchResultDTO {
   String poster_path;
 
   public TVShowSearchResultDTO(
+    Long id,
     String name,
     String first_air_date,
     //String last_air_date,
@@ -21,6 +22,7 @@ public class TVShowSearchResultDTO {
     //String number_of_episodes,
     String poster_path
   ) {
+    super(id);
     this.name = name;
     this.first_air_date = first_air_date;
     //this.number_of_seasons = number_of_seasons;

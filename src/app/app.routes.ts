@@ -23,5 +23,5 @@ export const routes: Routes = [
   { path: '', component: LandingComponent},
   { path: 'createranking', component: CreateRankingComponent},
   { path: 'medialist/:rankingId', component: MediaListComponent},
-  { path: 'add-media/:rankingId/:mediaType', component: AddMediaComponent},
+  { path: 'add-media/:rankingId/:addMediaRanking/:mediaType', component: AddMediaComponent},
 ];
