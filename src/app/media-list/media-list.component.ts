@@ -64,4 +64,7 @@ export class MediaListComponent implements OnInit {
   isTVShowEntry(entry: MediaListEntry): entry is TVShowEntry {
     return (entry as TVShowEntry).name !== undefined;
   }
+  goToAddMedia() {
+    this.router.navigate(['add-media', this.rankingId, this.mediaType]);
+  }
 }

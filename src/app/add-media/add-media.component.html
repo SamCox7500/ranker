@@ -1,0 +1,36 @@
+<h1>
+    {{rankingId}}
+</h1>
+<h1>
+    {{mediaType}}
+</h1>
+<div class="search-bar">
+    <label for="query">
+        @if(mediaType == 'FILM') {
+        Search Movies
+        } @else if (mediaType == 'TV_SHOW') {
+        Search TV Shows
+        }
+    </label>
+    <input id="query" type="text" [formControl]="query">
+    <button type="submit" (click)="onSearch()">Search</button>
+</div>
+<h3>Search Results</h3>
+
+@for (mediaResult of mediaResults; track $index) {
+@if(isMovieSearchResult(mediaResult)) {
+<div class="card">
+    <div class="card-title">{{mediaResult.title}}</div>
+    <div class="card-body">
+        <div class="card-text">{{mediaResult.release_date}}</div>
+    </div>
+</div>
+} @else if (isTVShowSearchResult(mediaResult)) {
+<div class="card">
+    <div class="card-title">{{mediaResult.name}}</div>
+    <div class="card-body">
+        <div class="card-text">{{mediaResult.first_air_date}}</div>
+    </div>
+</div>
+}
+}

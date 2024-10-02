@@ -6,6 +6,8 @@ import { TVShowDetails } from '../tvshow-details';
 import { MovieSearchResult } from '../movie-search-result';
 import { MovieSearchResultList } from '../movie-search-result-list';
 import { TVShowSearchResultList } from '../tvshow-search-result-list';
+import { MediaSearchResult } from '../media-search-result';
+import { MediaSearchResultList } from '../media-search-result-list';
 
 
 @Injectable({
@@ -24,10 +26,10 @@ export class TMDBService {
   public getTVShowDetails(tvShowID: number) : Observable<TVShowDetails> {
     return this.http.get<TVShowDetails>(`${this.tvShowURL}/${tvShowID}`, {withCredentials: true});
   }
-  public searchMovies(query: string) : Observable<MovieSearchResultList> {
-    return this.http.get<MovieSearchResultList>(`${this.movieURL}/search`, {params: { query: query }, withCredentials : true});
+  public searchMovies(query: string) : Observable<MediaSearchResultList> {
+    return this.http.get<MediaSearchResultList>(`${this.movieURL}/search`, {params: { query: query }, withCredentials : true});
   }
-  public searchTVShows(query: string) : Observable<TVShowSearchResultList> {
-    return this.http.get<TVShowSearchResultList>(`${this.tvShowURL}/search`, {params: { query: query }, withCredentials : true});
+  public searchTVShows(query: string) : Observable<MediaSearchResultList> {
+    return this.http.get<MediaSearchResultList>(`${this.tvShowURL}/search`, {params: { query: query }, withCredentials : true});
   }
 }
