@@ -3,6 +3,7 @@ package com.samcox.ranker.media;
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.ranking.*;
 import com.samcox.ranker.tmdb.TmdbService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -48,6 +49,7 @@ public class MediaListService {
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id " + id));
   }
    */
+  @Transactional
   public void moveEntryInList(Long mediaListId, int oldPosition, int newPosition) throws AccessDeniedException {
     checkOwnership(mediaListId);
 
@@ -61,6 +63,7 @@ public class MediaListService {
       throw new RankingOutOfBoundsException("New position out of bounds");
     }
 
+    //System.out.println("Service layer. Old position: " + oldPosition + " New Position: " + newPosition);
     mediaList.moveEntry(oldPosition, newPosition);
     mediaListRepository.save(mediaList);
   }

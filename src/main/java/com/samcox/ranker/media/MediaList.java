@@ -4,7 +4,9 @@ import com.samcox.ranker.ranking.NumberedRanking;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class MediaList {
@@ -17,6 +19,7 @@ public class MediaList {
   private MediaType mediaType;
 
   @OneToMany(mappedBy = "mediaList", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OrderBy("ranking ASC")
   private List<MediaListEntry> entries = new ArrayList<>();
 
   @OneToOne(mappedBy = "mediaList", cascade = CascadeType.ALL)
@@ -31,6 +34,7 @@ public class MediaList {
   }
 
   public List<MediaListEntry> getEntries() {
+    //return entries.stream().sorted(Comparator.comparingInt(MediaListEntry::getRanking)).collect(Collectors.toList());
     return entries;
   }
 
@@ -65,6 +69,9 @@ public class MediaList {
     reorderEntries();
   }
   public void moveEntry(int oldPosition, int newPosition) {
+
+    //entries.sort(Comparator.comparingInt(MediaListEntry::getRanking));
+
     if (oldPosition < 1 || newPosition < 1 || oldPosition > entries.size() || newPosition > entries.size()) {
       throw new IllegalArgumentException("Invalid positions");
     }

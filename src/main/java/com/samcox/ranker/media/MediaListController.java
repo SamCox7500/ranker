@@ -1,6 +1,7 @@
 package com.samcox.ranker.media;
 
 import com.samcox.ranker.ranking.NumberedRankingService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,7 @@ public class MediaListController {
   }
   //@PutMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries/{entryId}")
   @PutMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/entries/{entryId}")
+  @Transactional
   public void moveEntryInMediaList(
     @PathVariable Long userId,
     @PathVariable Long rankingId,
@@ -51,9 +53,17 @@ public class MediaListController {
   ) throws AccessDeniedException {
       MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
       MediaListEntry mediaListEntry = mediaListEntryService.getMediaListEntryById(entryMoveRequest.getEntryId());
+    //System.out.println("MediaListEntryId: " + mediaListEntry.getId() + " Ranking: " + mediaListEntry.getRanking() + " New ranking: " + entryMoveRequest.getNewPosition());
       int oldPosition = mediaListEntry.getRanking();
       int newPosition = entryMoveRequest.getNewPosition();
+    //System.out.println("Before moving: " + mediaList.getEntries());
+    //System.out.println("Moving entry with id " + entryMoveRequest.getEntryId() + " from position " + oldPosition + " to " + newPosition);
       mediaListService.moveEntryInList(mediaList.getId(), oldPosition, newPosition);
+    //System.out.println("After moving: " + mediaList.getEntries());
+      //System.out.println("OldPosition: " + oldPosition + " New Position: " + newPosition);
+      //System.out.println(mediaList.getEntries());
+
+
       //todo change to be mediaListId, mediaListEntryId, newPosition
   }
   //@DeleteMapping("/users/{userId}/numberedrankings/{rankingId}/medialist/{mediaListId}/entries/{entryId}")

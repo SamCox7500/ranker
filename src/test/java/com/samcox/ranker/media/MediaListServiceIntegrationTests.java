@@ -53,6 +53,9 @@ public class MediaListServiceIntegrationTests {
   @Autowired
   MediaListRepository mediaListRepository;
 
+  @Autowired
+  MediaListEntryRepository mediaListEntryRepository;
+
   private User testUser;
   private User testUser1;
   private NumberedRanking testNumberedRanking;
@@ -116,9 +119,11 @@ public class MediaListServiceIntegrationTests {
     assertEquals(entries.get(1), testMediaList.getEntries().get(1));
     assertEquals(entries.get(2), testMediaList.getEntries().get(2));
 
+    /*
     for(MediaListEntry entry: entries) {
       System.out.println(entry);
     }
+     */
 
   }
   @Test
@@ -152,6 +157,38 @@ public class MediaListServiceIntegrationTests {
 
     assertEquals(mediaList.getEntries().get(1).getRanking(), 2);
     assertEquals(mediaList.getEntries().get(1).getTmdbId(), 7345L);
+    assertEquals(mediaList.getEntries().get(1).getMediaList().getId(), testMediaList.getId());
+
+    assertEquals(mediaList.getEntries().get(2).getRanking(), 3);
+    assertEquals(mediaList.getEntries().get(2).getTmdbId(), 4638L);
+    assertEquals(mediaList.getEntries().get(2).getMediaList().getId(), testMediaList.getId());
+
+    MediaListEntry mediaListEntry = mediaListEntryRepository.findByMediaListAndId(mediaList, mediaList.getEntries().get(0).getId()).orElseThrow();
+    assertEquals(mediaListEntry.getRanking(), 1);
+    assertEquals(mediaListEntry.getTmdbId(), 115L);
+    MediaListEntry mediaListEntry1 = mediaListEntryRepository.findByMediaListAndId(mediaList, mediaList.getEntries().get(1).getId()).orElseThrow();
+    assertEquals(mediaListEntry1.getRanking(), 2);
+    assertEquals(mediaListEntry1.getTmdbId(), 7345L);
+
+  }
+  @Test
+  @WithMockUser("testuser")
+  public void testMoveEntryMultiple_Success() throws AccessDeniedException {
+    System.out.println("Initial media list state: " + testMediaList.getEntries());
+    mediaListService.moveEntryInList(testMediaList.getId(), 1, 2);
+    System.out.println("Media list after swapping 1 and 2: " + testMediaList.getEntries());
+    mediaListService.moveEntryInList(testMediaList.getId(), 1, 2);
+    System.out.println("Media list after swapping 1 and 2 again: " + testMediaList.getEntries());
+
+    //Should be original order
+    MediaList mediaList = mediaListRepository.findById(testMediaList.getId()).orElseThrow();
+
+    assertEquals(mediaList.getEntries().get(0).getRanking(), 1);
+    assertEquals(mediaList.getEntries().get(0).getTmdbId(), 7345L);
+    assertEquals(mediaList.getEntries().get(0).getMediaList().getId(), testMediaList.getId());
+
+    assertEquals(mediaList.getEntries().get(1).getRanking(), 2);
+    assertEquals(mediaList.getEntries().get(1).getTmdbId(), 115L);
     assertEquals(mediaList.getEntries().get(1).getMediaList().getId(), testMediaList.getId());
 
     assertEquals(mediaList.getEntries().get(2).getRanking(), 3);

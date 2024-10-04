@@ -25,7 +25,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.web.context.SecurityContextRepository;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @SpringBootApplication
 public class RankerApplication implements CommandLineRunner {
@@ -52,6 +55,7 @@ public class RankerApplication implements CommandLineRunner {
   @Override
   @Transactional
   public void run(String... args) throws Exception {
+
 
     // Register a default user at startup
     UserCredentials userCredentials = new UserCredentials();
@@ -123,6 +127,14 @@ public class RankerApplication implements CommandLineRunner {
 
     System.out.println(mediaList.getEntries());
 
+    mediaListService.moveEntryInList(1L, 1, 2);
+
+    System.out.println(mediaList.getEntries());
+
+    mediaListService.moveEntryInList(1L, 1, 2);
+
+    System.out.println(mediaList.getEntries());
+
 
 
     //TVShow entries for ranking 2
@@ -143,18 +155,8 @@ public class RankerApplication implements CommandLineRunner {
     mediaListService.addEntryToList(entryAddRequest4, 2L);
     mediaListService.addEntryToList(entryAddRequest5, 2L);
 
-    System.out.println(mediaList1.getEntries());
+    //System.out.println(mediaList1.getEntries());
 
     SecurityContextHolder.clearContext();
-
-    /*
-    FilmDTO filmDTO = tmdbService.getFilmDetails(100L);
-    System.out.println(filmDTO.toString());
-
-    FilmSearchResultListDTO tmdbSearchResultsDTO = tmdbService.searchFilms("There will be blood");
-     for (FilmSearchResultDTO filmSearchResultDTO: tmdbSearchResultsDTO.getResults()) {
-       System.out.println(filmSearchResultDTO);
-     }
-     */
   }
 }

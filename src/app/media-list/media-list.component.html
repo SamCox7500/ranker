@@ -2,9 +2,10 @@
 <h3>Desc: {{ranking?.description}}</h3>
 <p>Media type: {{mediaType}}</p>
 <!--@if(mediaType == 'FILMS') {-->
+<div class="media-list-container" cdkDropList [cdkDropListData]=mediaListEntries (cdkDropListDropped)="drop($event)">
 @for(mediaListEntry of mediaListEntries; track mediaListEntry.ranking) {
 @if(isMovieEntry(mediaListEntry)) {
-<div class="card">
+<div class="card" [cdkDragDisabled]="!isEditMode" cdkDrag>
     <div class="card-body">
         <div class="card-title">
             Title: {{mediaListEntry.title}}
@@ -19,7 +20,7 @@
     </div>
 </div>
 } @else if (isTVShowEntry(mediaListEntry)) {
-    <div class="card">
+    <div class="card" [cdkDragDisabled]="!isEditMode" cdkDrag>
         <div class="card-body">
             <div class="card-title">
                 Name: {{mediaListEntry.name}}
@@ -43,7 +44,11 @@
     </div>
 }
 }
+</div>
 <a class="btn btn-primary btn-lg" (click)="goToAddMedia()">
     Add Ranking
 </a>
+<button class="btn btn-primary" (click)="toggleEditMode()">
+    {{ isEditMode ? 'Lock List' : 'Edit List' }}
+</button>
 <!--}-->

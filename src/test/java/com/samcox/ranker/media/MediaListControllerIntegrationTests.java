@@ -118,7 +118,9 @@ public class MediaListControllerIntegrationTests {
   @Test
   @WithMockUser("testuser")
   public void testGetMediaList_Success() throws Exception {
-    mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + + testMediaList.getId())
+    //mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + + testMediaList.getId())
+        //.contentType(org.springframework.http.MediaType.APPLICATION_JSON))
+    mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.mediaType")
@@ -136,7 +138,7 @@ public class MediaListControllerIntegrationTests {
   @Test
   @WithMockUser("testuser1")
   public void testGetMediaList_NotAuthorized() throws Exception {
-    mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId())
+    mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isForbidden());
   }
@@ -144,14 +146,14 @@ public class MediaListControllerIntegrationTests {
   @Test
   @WithMockUser("testuser")
   public void testGetMediaList_InvalidUserId() throws Exception {
-    mockMvc.perform(get("/users/" + 999L + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId())
+    mockMvc.perform(get("/users/" + 999L + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isForbidden());
   }
   @Test
   @WithMockUser("testuser")
   public void testGetMediaList_InvalidNumberedRankingId() throws Exception {
-    mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + 999L + "/medialist/" + testMediaList.getId())
+    mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + 999L + "/medialist")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isBadRequest());
   }
@@ -164,7 +166,7 @@ public class MediaListControllerIntegrationTests {
     entryAddRequest.setTmdbId(299534L);
     entryAddRequest.setRanking(1);
 
-    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryAddRequest)))
       .andExpect(status().isOk());
@@ -194,11 +196,12 @@ public class MediaListControllerIntegrationTests {
     entryAddRequest.setTmdbId(299534L);
     entryAddRequest.setRanking(1);
 
-    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryAddRequest)))
       .andExpect(status().isForbidden());
   }
+  /*
   @Test
   @WithMockUser("testuser")
   public void testAddEntryToMediaList_InvalidMediaListId() throws Exception {
@@ -211,13 +214,14 @@ public class MediaListControllerIntegrationTests {
         .content(objectMapper.writeValueAsString(entryAddRequest)))
       .andExpect(status().isBadRequest());
   }
+  */
   @Test
   @WithMockUser("testuser")
   public void testAddEntryToMediaList_InvalidTmdb() throws Exception {
     EntryAddRequest entryAddRequest = new EntryAddRequest();
     entryAddRequest.setRanking(1);
 
-    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryAddRequest)))
       .andExpect(status().isBadRequest());
@@ -230,14 +234,14 @@ public class MediaListControllerIntegrationTests {
     entryAddRequest.setTmdbId(299534L);
     entryAddRequest.setRanking(0);
 
-    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryAddRequest)))
       .andExpect(status().isBadRequest());
 
     entryAddRequest.setRanking(5);
 
-    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+    mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" +  "/entries")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryAddRequest)))
       .andExpect(status().isBadRequest());
@@ -252,7 +256,7 @@ public class MediaListControllerIntegrationTests {
 
     EntryMoveRequest entryMoveRequest = new EntryMoveRequest(testMediaListEntry.getId(), 3);
 
-    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries/" + testMediaListEntry.getId())
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + testMediaListEntry.getId())
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryMoveRequest)))
       .andExpect(status().isOk());
@@ -273,15 +277,44 @@ public class MediaListControllerIntegrationTests {
     assertEquals(mediaList.getEntries().get(2).getMediaList().getId(), testMediaList.getId());
   }
   @Test
+  @Transactional
+  @WithMockUser("testuser")
+  public void testMoveEntryInMediaListMultiple_Success() throws Exception {
+    //current order 1: 7345 2: 115 3: 4638
+    MediaList mediaList = mediaListRepository.findById(testMediaList.getId()).orElseThrow();
+    System.out.println("Initial media list state: " + mediaList.getEntries());
+
+    EntryMoveRequest entryMoveRequest = new EntryMoveRequest(10L, 2);
+
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + 10L)
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(entryMoveRequest)))
+      .andExpect(status().isOk());
+
+    System.out.println("Moved entry 1 to rank 2: " + mediaList.getEntries());
+
+    EntryMoveRequest entryMoveRequest1 = new EntryMoveRequest(11L, 2);
+
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + 11L)
+        .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(entryMoveRequest1)))
+      .andExpect(status().isOk());
+
+    System.out.println("Moved entry 1 to rank 2: " + mediaList.getEntries());
+  }
+
+
+  @Test
   @WithMockUser("testuser1")
   public void testMoveEntryInMediaList_NotAuthorized() throws Exception {
     EntryMoveRequest entryMoveRequest = new EntryMoveRequest(testMediaListEntry.getId(), 3);
 
-    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries/" + testMediaListEntry.getId())
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + testMediaListEntry.getId())
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryMoveRequest)))
       .andExpect(status().isForbidden());
   }
+  /*
   @Test
   @WithMockUser("testuser")
   public void testMoveEntryInMediaList_InvalidMediaListId() throws Exception {
@@ -292,20 +325,21 @@ public class MediaListControllerIntegrationTests {
         .content(objectMapper.writeValueAsString(entryMoveRequest)))
       .andExpect(status().isBadRequest());
   }
+   */
   @Test
   @WithMockUser("testuser")
   public void testMoveEntryInMediaList_InvalidRanking() throws Exception {
 
     EntryMoveRequest entryMoveRequest = new EntryMoveRequest(testMediaListEntry.getId(), 4);
 
-    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries/" + testMediaListEntry.getId())
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + testMediaListEntry.getId())
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryMoveRequest)))
       .andExpect(status().isBadRequest());
 
     entryMoveRequest.setNewPosition(0);
 
-    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries/" + testMediaListEntry.getId())
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + testMediaListEntry.getId())
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryMoveRequest)))
       .andExpect(status().isBadRequest());
@@ -314,7 +348,7 @@ public class MediaListControllerIntegrationTests {
   @Transactional
   @WithMockUser("testuser")
   public void testRemoveEntryFromMediaList_Success() throws Exception {
-    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries/" + testMediaListEntry1.getId())
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + testMediaListEntry1.getId())
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isOk());
 
@@ -333,10 +367,11 @@ public class MediaListControllerIntegrationTests {
   @Test
   @WithMockUser("testuser1")
   public void testRemoveEntryFromMediaList_NotAuthorized() throws Exception {
-    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries/" + testMediaListEntry1.getId())
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + testMediaListEntry1.getId())
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isForbidden());
   }
+  /*
   @Test
   @WithMockUser("testuser")
   public void testRemoveEntryFromMediaList_InvalidMediaListId() throws Exception {
@@ -344,10 +379,11 @@ public class MediaListControllerIntegrationTests {
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isBadRequest());
   }
+   */
   @Test
   @WithMockUser("testuser")
   public void testRemoveEntryFromMediaList_InvalidEntryId() throws Exception {
-    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries/" + 999L)
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + 999L)
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isBadRequest());
   }
@@ -359,7 +395,7 @@ public class MediaListControllerIntegrationTests {
     entryIds.add(testMediaListEntry.getId());
     entryIds.add(testMediaListEntry2.getId());
 
-    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
       .content(objectMapper.writeValueAsString(entryIds)))
       .andExpect(status().isOk());
@@ -378,7 +414,7 @@ public class MediaListControllerIntegrationTests {
     entryIds.add(testMediaListEntry.getId());
     entryIds.add(testMediaListEntry2.getId());
 
-    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryIds)))
       .andExpect(status().isForbidden());
@@ -388,15 +424,15 @@ public class MediaListControllerIntegrationTests {
   @WithMockUser("testuser")
   public void testRemoveEntriesFromMediaList_InvalidEntries() throws Exception {
 
-    System.out.println("MediaListEntryID:" + testMediaListEntry.getId());
-    System.out.println("MediaListEntry1ID:" + testMediaListEntry1.getId());
-    System.out.println("MediaListEntry2ID:" + testMediaListEntry2.getId());
+    //System.out.println("MediaListEntryID:" + testMediaListEntry.getId());
+    //System.out.println("MediaListEntry1ID:" + testMediaListEntry1.getId());
+    //System.out.println("MediaListEntry2ID:" + testMediaListEntry2.getId());
 
     List<Long> entryIds = new ArrayList<>();
     entryIds.add(testMediaListEntry.getId());
     entryIds.add(999L);
 
-    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryIds)))
       .andExpect(status().isBadRequest());
@@ -409,9 +445,9 @@ public class MediaListControllerIntegrationTests {
   @WithMockUser("testuser")
   public void testRemoveEntriesFromMediaList_DuplicateEntries() throws Exception {
 
-    System.out.println("MediaListEntryID:" + testMediaListEntry.getId());
-    System.out.println("MediaListEntry1ID:" + testMediaListEntry1.getId());
-    System.out.println("MediaListEntry2ID:" + testMediaListEntry2.getId());
+    //System.out.println("MediaListEntryID:" + testMediaListEntry.getId());
+    //System.out.println("MediaListEntry1ID:" + testMediaListEntry1.getId());
+    //System.out.println("MediaListEntry2ID:" + testMediaListEntry2.getId());
 
     //Duplicate deletion entries should just delete the entry and not throw exceptions
 
@@ -419,7 +455,7 @@ public class MediaListControllerIntegrationTests {
     entryIds.add(testMediaListEntry.getId());
     entryIds.add(testMediaListEntry.getId());
 
-    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + testMediaList.getId() + "/entries")
+    mockMvc.perform(delete("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryIds)))
       .andExpect(status().isOk());
