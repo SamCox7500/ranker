@@ -284,18 +284,18 @@ public class MediaListControllerIntegrationTests {
     MediaList mediaList = mediaListRepository.findById(testMediaList.getId()).orElseThrow();
     System.out.println("Initial media list state: " + mediaList.getEntries());
 
-    EntryMoveRequest entryMoveRequest = new EntryMoveRequest(10L, 2);
+    EntryMoveRequest entryMoveRequest = new EntryMoveRequest(testMediaListEntry.getId(), 2);
 
-    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + 10L)
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + testMediaListEntry.getId())
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryMoveRequest)))
       .andExpect(status().isOk());
 
     System.out.println("Moved entry 1 to rank 2: " + mediaList.getEntries());
 
-    EntryMoveRequest entryMoveRequest1 = new EntryMoveRequest(11L, 2);
+    EntryMoveRequest entryMoveRequest1 = new EntryMoveRequest(testMediaListEntry1.getId(), 2);
 
-    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + 11L)
+    mockMvc.perform(put("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist" + "/entries/" + testMediaListEntry1.getId())
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(entryMoveRequest1)))
       .andExpect(status().isOk());
