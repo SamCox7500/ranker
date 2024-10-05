@@ -16,7 +16,11 @@
         <div class="card-text">
             Ranking: {{mediaListEntry.ranking}}
         </div>
-
+        @if(isEditMode) {
+            <a class="btn-primary" (click)="removeRanking(mediaListEntry.id)">
+                Remove Ranking
+            </a>
+        }
     </div>
 </div>
 } @else if (isTVShowEntry(mediaListEntry)) {
@@ -40,6 +44,11 @@
             <div class="card-text">
                 Ranking: {{mediaListEntry.ranking}}
             </div>
+            @if(isEditMode) {
+                <a class="btn-primary" (click)="removeRanking(mediaListEntry.id)">
+                    Remove Ranking
+                </a>
+            }
         </div>
     </div>
 }

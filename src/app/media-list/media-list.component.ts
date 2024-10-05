@@ -14,7 +14,7 @@ import { EntryMoveRequestDTO } from '../entry-move-request-dto';
 @Component({
   selector: 'app-media-list',
   standalone: true,
-  imports: [ CdkDropList, CdkDrag ],
+  imports: [CdkDropList, CdkDrag],
   templateUrl: './media-list.component.html',
   styleUrl: './media-list.component.css'
 })
@@ -22,7 +22,7 @@ export class MediaListComponent implements OnInit {
 
 
   //mediaList: MediaList;
-  
+
   rankingId: number | null = null;
   mediaType: string = '';
   mediaListEntries: MediaListEntry[] = [];
@@ -92,11 +92,26 @@ export class MediaListComponent implements OnInit {
     return (entry as TVShowEntry).name !== undefined;
   }
   goToAddMedia() {
-    this.router.navigate(['add-media', this.rankingId, this.mediaListEntries.length+1, this.mediaType]);
+    this.router.navigate(['add-media', this.rankingId, this.mediaListEntries.length + 1, this.mediaType]);
   }
   updateRankings(): void {
     this.mediaListEntries.forEach((entry, index) => {
       entry.ranking = index + 1;
     });
+  }
+  removeRanking(entryId: number): void {
+    if (this.user && this.rankingId && entryId) {
+      this.mediaListService.deleteEntry(this.user.id, this.rankingId, entryId).subscribe({
+        next: () => {
+          const entryToRemoveIndex = this.mediaListEntries.findIndex((entry) => entry.id === entryId);
+
+          if (entryToRemoveIndex !== -1) {
+            this.mediaListEntries.splice(entryToRemoveIndex, 1);
+            this.updateRankings();
+          }
+        },
+        error: (err) => console.log(err),
+      });
+    }
   }
 }
