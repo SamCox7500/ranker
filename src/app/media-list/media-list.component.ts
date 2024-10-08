@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MediaListService } from '../services/media-list.service';
 import { MediaList } from '../media-list';
@@ -10,6 +10,7 @@ import { CurrentUserService } from '../services/current-user.service';
 import { MovieEntry } from '../movie-entry';
 import { TVShowEntry } from '../tvshow-entry';
 import { EntryMoveRequestDTO } from '../entry-move-request-dto';
+import { Observable, Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-media-list',
@@ -18,7 +19,7 @@ import { EntryMoveRequestDTO } from '../entry-move-request-dto';
   templateUrl: './media-list.component.html',
   styleUrl: './media-list.component.css'
 })
-export class MediaListComponent implements OnInit {
+export class MediaListComponent implements OnInit, OnDestroy {
 
 
   //mediaList: MediaList;
@@ -27,10 +28,10 @@ export class MediaListComponent implements OnInit {
   mediaType: string = '';
   mediaListEntries: MediaListEntry[] = [];
   ranking: Ranking | null = null;
-
   user: User | null = null;
-
   isEditMode: boolean = false;
+
+  private subscriptions: Subscription = new Subscription();
 
   constructor(private route: ActivatedRoute, private mediaListService: MediaListService, private router: Router, private currentUserService: CurrentUserService) {
   }
@@ -40,29 +41,27 @@ export class MediaListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  
     this.rankingId = Number(this.route.snapshot.paramMap.get('rankingId'));
-    this.currentUserService.fetchCurrentUser().subscribe();
-    this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
+    this.currentUserService.fetchCurrentUser();
+    const userSub = this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
       this.user = user;
-      if (this.user && this.rankingId) {
-        this.mediaListService.getMediaList(this.user.id, this.rankingId).subscribe((mediaList: MediaList) => {
 
-          //console.log(mediaList.mediaListEntryDTOList);
+      if (this.user && this.rankingId) {
+        const mediaListSub = this.mediaListService.getMediaList(this.user.id, this.rankingId).subscribe((mediaList: MediaList) => {
 
           this.mediaType = mediaList.mediaType;
           this.mediaListEntries = mediaList.mediaListEntryDTOList;
           this.ranking = mediaList.numberedRankingDTO;
-
           this.mediaListEntries.sort((a, b) => a.ranking - b.ranking);
         });
+        this.subscriptions.add(mediaListSub);
       } else {
         console.log(this.user?.id);
         console.log(this.rankingId)
       }
-      //}
-      //this.mediaListService.getMediaList(this.user.id, this.rankingId, )
-
     });
+    this.subscriptions.add(userSub);
   }
 
   drop(event: CdkDragDrop<MediaListEntry[]>) {
@@ -72,7 +71,6 @@ export class MediaListComponent implements OnInit {
 
     moveItemInArray(this.mediaListEntries, event.previousIndex, event.currentIndex);
     this.updateRankings();
-    //Update in backend
 
     const movedEntry = this.mediaListEntries[event.currentIndex];
     if (this.user && this.rankingId && movedEntry) {
@@ -99,7 +97,7 @@ export class MediaListComponent implements OnInit {
       entry.ranking = index + 1;
     });
   }
-  removeRanking(entryId: number): void {
+  removeEntry(entryId: number): void {
     if (this.user && this.rankingId && entryId) {
       this.mediaListService.deleteEntry(this.user.id, this.rankingId, entryId).subscribe({
         next: () => {
@@ -113,5 +111,8 @@ export class MediaListComponent implements OnInit {
         error: (err) => console.log(err),
       });
     }
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

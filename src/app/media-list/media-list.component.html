@@ -17,7 +17,7 @@
             Ranking: {{mediaListEntry.ranking}}
         </div>
         @if(isEditMode) {
-            <a class="btn-primary" (click)="removeRanking(mediaListEntry.id)">
+            <a class="btn-primary" (click)="removeEntry(mediaListEntry.id)">
                 Remove Ranking
             </a>
         }
@@ -45,7 +45,7 @@
                 Ranking: {{mediaListEntry.ranking}}
             </div>
             @if(isEditMode) {
-                <a class="btn-primary" (click)="removeRanking(mediaListEntry.id)">
+                <a class="btn-primary" (click)="removeEntry(mediaListEntry.id)">
                     Remove Ranking
                 </a>
             }
