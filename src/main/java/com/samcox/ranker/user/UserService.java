@@ -2,6 +2,7 @@ package com.samcox.ranker.user;
 
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.ranking.RankingRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,7 @@ public class UserService {
     userRepository.save(user);
   }
 
+  @Transactional
   public void deleteUser(Long id) throws AccessDeniedException {
     checkAuthorized(id);
     User user = getUserFromRepoById(id);
