@@ -11,11 +11,13 @@ import { MovieEntry } from '../movie-entry';
 import { TVShowEntry } from '../tvshow-entry';
 import { EntryMoveRequestDTO } from '../entry-move-request-dto';
 import { Observable, Subscription, switchMap } from 'rxjs';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RankingService } from '../services/ranking.service';
 
 @Component({
   selector: 'app-media-list',
   standalone: true,
-  imports: [CdkDropList, CdkDrag],
+  imports: [CdkDropList, CdkDrag, ReactiveFormsModule],
   templateUrl: './media-list.component.html',
   styleUrl: './media-list.component.css'
 })
@@ -31,17 +33,57 @@ export class MediaListComponent implements OnInit, OnDestroy {
   user: User | null = null;
   isEditMode: boolean = false;
 
+  rankingForm: FormGroup;
+
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private route: ActivatedRoute, private mediaListService: MediaListService, private router: Router, private currentUserService: CurrentUserService) {
+  constructor(private route: ActivatedRoute, private mediaListService: MediaListService, private router: Router, private currentUserService: CurrentUserService, private fb: FormBuilder, private rankingService: RankingService) {
+    this.rankingForm = this.fb.group({
+      title: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
+      description: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(150)]],
+    });
   }
 
   toggleEditMode(): void {
-    this.isEditMode = !this.isEditMode;
+
+    if (this.isEditMode) {
+      if (this.rankingForm.valid && this.ranking) {
+        const updatedRanking = {
+          ...this.ranking,
+          title: this.rankingForm.value.title,
+          description: this.rankingForm.value.description
+        };
+
+        if (this.user && this.rankingId) {
+          const updateRankingSub = this.rankingService.updateRanking(this.user.id, this.rankingId, updatedRanking).subscribe({
+            next: (response) => {
+              this.ranking = updatedRanking;
+            },
+            error: (err) => {
+              console.log(err);
+            }
+          });
+          this.subscriptions.add(updateRankingSub);
+        }
+
+      }
+    } else {
+      if (this.ranking) {
+        this.rankingForm.patchValue({
+          title: this.ranking.title,
+          description: this.ranking.description
+        });
+      }
+    }
+
+    if (this.rankingForm.valid) {
+      this.isEditMode = !this.isEditMode;
+    }
   }
 
+
   ngOnInit(): void {
-  
+
     this.rankingId = Number(this.route.snapshot.paramMap.get('rankingId'));
     this.currentUserService.fetchCurrentUser();
     const userSub = this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
@@ -54,6 +96,12 @@ export class MediaListComponent implements OnInit, OnDestroy {
           this.mediaListEntries = mediaList.mediaListEntryDTOList;
           this.ranking = mediaList.numberedRankingDTO;
           this.mediaListEntries.sort((a, b) => a.ranking - b.ranking);
+
+          // Initializing the ranking form
+          this.rankingForm.patchValue({
+            title: this.ranking.title,
+            description: this.ranking.description
+          });
         });
         this.subscriptions.add(mediaListSub);
       } else {
@@ -114,5 +162,11 @@ export class MediaListComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+  }
+  get title() {
+    return this.rankingForm.controls['title'];
+  }
+  get description() {
+    return this.rankingForm.controls['description'];
   }
 }
