@@ -22,6 +22,11 @@
 <div class="card" (click)="addMediaToRanking(mediaResult.id)">
     <div class="card-title">{{mediaResult.title}}</div>
     <div class="card-body">
+        @if(mediaResult.poster_path) {
+        <div class="card-image">
+            <img [src]="getPosterUrl(mediaResult.poster_path)" alt={{mediaResult.title}} />
+        </div>
+        }
         <div class="card-text">{{mediaResult.release_date}}</div>
     </div>
 </div>
@@ -29,6 +34,11 @@
 <div class="card" (click)="addMediaToRanking(mediaResult.id)">
     <div class="card-title">{{mediaResult.name}}</div>
     <div class="card-body">
+        @if(mediaResult.poster_path) {
+        <div class="card-image">
+            <img [src]="getPosterUrl(mediaResult.poster_path)" alt={{mediaResult.name}} />
+        </div>
+        }
         <div class="card-text">{{mediaResult.first_air_date}}</div>
     </div>
 </div>

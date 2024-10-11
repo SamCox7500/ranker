@@ -31,6 +31,9 @@ export class AddMediaComponent implements OnInit {
   user: User | null = null;
   addMediaRanking: number | null = null;
 
+  readonly TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
+  readonly TMDB_IMAGE_SIZE = 'w92';
+
   constructor(private route: ActivatedRoute, private router: Router, private tmdbService: TMDBService, private mediaListService: MediaListService, private currentUserService: CurrentUserService) { }
 
   ngOnInit(): void {
@@ -76,5 +79,8 @@ export class AddMediaComponent implements OnInit {
   }
   goToMediaList() {
     this.router.navigate(['/medialist', this.rankingId]);
+  }
+  getPosterUrl(posterPath: string): string {
+    return `${this.TMDB_IMAGE_BASE_URL}${this.TMDB_IMAGE_SIZE}${posterPath}`;
   }
 }
