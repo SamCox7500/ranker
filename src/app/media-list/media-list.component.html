@@ -50,6 +50,11 @@
     @if(isMovieEntry(mediaListEntry)) {
     <div class="card" [cdkDragDisabled]="!isEditMode" cdkDrag>
         <div class="card-body">
+            @if(mediaListEntry.poster_path) {
+            <div class="card-image">
+                <img [src]="getPosterUrl(mediaListEntry.poster_path)" alt="Poster for {{mediaListEntry.title}}"/>
+            </div>
+            }
             <div class="card-title">
                 Title: {{mediaListEntry.title}}
             </div>
@@ -69,6 +74,11 @@
     } @else if (isTVShowEntry(mediaListEntry)) {
     <div class="card" [cdkDragDisabled]="!isEditMode" cdkDrag>
         <div class="card-body">
+            @if(mediaListEntry.poster_path) {
+            <div class="card-image">
+                <img [src]="getPosterUrl(mediaListEntry.poster_path)" alt="Poster for {{mediaListEntry.name}}"/>
+            </div>
+            }
             <div class="card-title">
                 Name: {{mediaListEntry.name}}
             </div>

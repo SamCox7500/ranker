@@ -37,6 +37,10 @@ export class MediaListComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
+  readonly TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
+  readonly TMDB_IMAGE_SIZE = 'w92';
+
+
   constructor(private route: ActivatedRoute, private mediaListService: MediaListService, private router: Router, private currentUserService: CurrentUserService, private fb: FormBuilder, private rankingService: RankingService) {
     this.rankingForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
@@ -168,5 +172,9 @@ export class MediaListComponent implements OnInit, OnDestroy {
   }
   get description() {
     return this.rankingForm.controls['description'];
+  }
+
+  getPosterUrl(posterPath: string): string {
+    return `${this.TMDB_IMAGE_BASE_URL}${this.TMDB_IMAGE_SIZE}${posterPath}`;
   }
 }
