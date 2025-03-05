@@ -18,20 +18,28 @@
           <label for="password">Password</label>
           <input type="text" class="form-control" id="password" name="password" placeholder="Enter your password"
             formControlName="password" click="usernameTaken=false">
-            @if (password.invalid && password.touched) {
-              <div class="alert alert-danger">
-                Password must be between 8-64 characters
-                and contain at least one of each of the following: One lower case character.
-                One upper case character. One special symbol.
-              </div>
-              }
+          @if (password.invalid && password.touched) {
+          <div class="alert alert-danger">
+            Password must be between 8-64 characters
+            and contain at least one of each of the following: One lower case character.
+            One upper case character. One special symbol.
+          </div>
+          }
+        </div>
+        <div class="form-group mb-3">
+          <label for="verifypassword">Re-enter Password</label>
+          <input type="text" class="form-control" id="verifypassword" name="verifypassword" placeholder="Re-enter password"
+            formControlName="verifypassword" click="passwordMatch=true">
         </div>
         <div class="d-flex justify-content-center">
-        <button type="submit" [disabled]="!registerForm.valid" class="btn btn-primary btn-lg">Create Account</button>
-        @if (usernameTaken) {
+          <button type="submit" [disabled]="!registerForm.valid" class="btn btn-primary btn-lg">Create Account</button>
+          @if (usernameTaken) {
           <div class="alert alert-danger">Username is already taken</div>
-        }
-      </div>
+          }
+          @if (!passwordsMatch) {
+          <div class="alert alert-danger">Passwords do not match.</div>
+          }
+        </div>
       </form>
     </div>
   </div>
