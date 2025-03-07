@@ -31,12 +31,12 @@ export class LoginFormComponent {
     this.userCredentials.password = this.loginForm.value.password || '';
 
     this.loginService.login(this.userCredentials).subscribe({
-      next: () => this.goToHome(),
+      next: () => this.goToLanding(),
       error: err => this.loginFailed = true,
     });
   }
-  goToHome() {
-    this.router.navigate(['/home']);
+  goToLanding() {
+    this.router.navigate(['/']);
   }
 
   get username() {
