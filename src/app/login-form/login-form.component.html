@@ -1,37 +1,31 @@
-<div class="card my-5">
-  <div class="card-body">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text"
-               class="form-control"
-               id="username"
-               name="username"
-               placeholder="Enter your username"
-               formControlName="username"
-               (click)="loginFailed=false">
-      </div>
-      @if (username.invalid && username.touched) {
-      <div class="alert alert-danger">Username is required</div>
-      }
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="text"
-               class="form-control"
-               id="password"
-               name="password"
-               placeholder="Enter your password"
-               formControlName="password"
-               (click)="loginFailed=false">
-      </div>
-      @if (password.invalid && password.touched) {
-      <div class="alert alert-danger">Password is required</div>
-      }
-      <button type="submit" [disabled]="!loginForm.valid"
-              class="btn btn-info">Submit</button>
-      @if (loginFailed) {
-      <div class="alert alert-danger">Incorrect username or password</div>
-      }
-    </form>
+<div class="d-flex justify-content-center border-bottom border-secondary-subtle" style="height: 70%;">
+  <div class="card my-5 border border-1" style="width: 40rem; height: 70%;">
+    <div class="card-body">
+      <h1 class="card-title fw-medium">Sign In</h1>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group mb-3">
+          <label for="username" class="fw-medium">Username</label>
+          <input type="text" class="form-control border border-2" id="username" name="username"
+            placeholder="Enter your username" formControlName="username" (click)="loginFailed=false">
+        </div>
+        @if (username.invalid && username.touched) {
+        <div class="alert alert-danger">Username is required</div>
+        }
+        <div class="form-group mb-3">
+          <label for="password" class="fw-medium">Password</label>
+          <input type="password" class="form-control border border-2" id="password" name="password"
+            placeholder="Enter your password" formControlName="password" (click)="loginFailed=false">
+        </div>
+        @if (password.invalid && password.touched) {
+        <div class="alert alert-danger">Password is required</div>
+        }
+        <div class="d-flex justify-content-center">
+          <button type="submit" [disabled]="!loginForm.valid" class="btn btn-primary btn-lg">Submit</button>
+        </div>
+        @if (loginFailed) {
+        <div class="alert alert-danger">Incorrect username or password</div>
+        }
+      </form>
+    </div>
   </div>
 </div>

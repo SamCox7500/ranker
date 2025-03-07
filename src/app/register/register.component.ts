@@ -45,13 +45,11 @@ export class RegisterComponent {
     this.secondpassword = this.registerForm.value.verifypassword || '';
 
     //check passwords match
-    if (this.userCredentials.password === this.secondpassword) {
+    if (!this.passwordsDoNotMatch) {
       this.userService.createUser(this.userCredentials).subscribe({
         next: () => this.goToLogin(),
         error: err => this.usernameTaken = true,
       });
-    } else {
-      this.passwordsMatch = false;
     }
   }
 
@@ -64,5 +62,14 @@ export class RegisterComponent {
   }
   get password() {
     return this.registerForm.controls['password'];
+  }
+  get passwordsDoNotMatch() {
+    return this.registerForm.value.password !== this.registerForm.value.verifypassword;
+  }
+  get isUsernameTaken(): boolean {
+    return this.usernameTaken && this.username.touched && this.username.dirty;
+  }
+  resetUsernameTaken() {
+    this.usernameTaken = false;
   }
 }

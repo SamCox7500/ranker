@@ -1,12 +1,12 @@
-<div class="d-flex justify-content-center border-bottom border-secondary-subtle" style="height: 50%;">
-  <div class="card my-5" style="width: 40rem; height: 70%">
+<div class="d-flex justify-content-center border-bottom border-secondary-subtle" style="height: 70%;">
+  <div class="card my-5 border border-1" style="width: 40rem; height: 70%">
     <div class="card-body">
-      <h1 class="card-title">Create Account</h1>
+      <h1 class="card-title fw-medium">Create Account</h1>
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-group mb-3">
-          <label for="username">Username</label>
-          <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username"
-            formControlName="username" click="usernameTaken=false">
+          <label for="username" class="fw-medium">Username</label>
+          <input type="text" class="form-control border border-2" id="username" name="username" placeholder="Enter your username"
+            formControlName="username" (input)="resetUsernameTaken()">
           @if (username.touched && username.hasError('required')) {
           <div class="alert alert-danger">Username is required</div>
           }
@@ -15,9 +15,9 @@
           }
         </div>
         <div class="form-group mb-3">
-          <label for="password">Password</label>
-          <input type="text" class="form-control" id="password" name="password" placeholder="Enter your password"
-            formControlName="password" click="usernameTaken=false">
+          <label for="password" class="fw-medium">Password</label>
+          <input type="password" class="form-control border border-2" id="password" name="password" placeholder="Enter your password"
+            formControlName="password">
           @if (password.invalid && password.touched) {
           <div class="alert alert-danger">
             Password must be between 8-64 characters
@@ -27,19 +27,19 @@
           }
         </div>
         <div class="form-group mb-3">
-          <label for="verifypassword">Re-enter Password</label>
-          <input type="text" class="form-control" id="verifypassword" name="verifypassword" placeholder="Re-enter password"
-            formControlName="verifypassword" click="passwordMatch=true">
+          <label for="verifypassword" class="fw-medium">Re-enter Password</label>
+          <input type="password" class="form-control border border-2" id="verifypassword" name="verifypassword" placeholder="Re-enter password"
+            formControlName="verifypassword">
         </div>
+        @if (passwordsDoNotMatch) {
+          <div class="alert alert-danger">Passwords do not match.</div>
+        }
         <div class="d-flex justify-content-center">
           <button type="submit" [disabled]="!registerForm.valid" class="btn btn-primary btn-lg">Create Account</button>
-          @if (usernameTaken) {
-          <div class="alert alert-danger">Username is already taken</div>
-          }
-          @if (!passwordsMatch) {
-          <div class="alert alert-danger">Passwords do not match.</div>
-          }
         </div>
+        @if (isUsernameTaken) {
+          <div class="alert alert-danger">Username is already taken</div>
+        }
       </form>
     </div>
   </div>
