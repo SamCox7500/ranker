@@ -2,11 +2,14 @@
     border-bottom: 2px solid #444;
 }
 .navbar-nav .nav-link.create-ranking {
-    background-color: rgb(2, 2, 128);
+    background-color: #007bff;
     color: white !important;
     border-radius: 5px;
     padding-left: 1rem;
     padding-right: 1rem;
+}
+.navbar-nav .nav-link.create-ranking:hover {
+    background-color: #0056b3;
 }
 .navbar-nav .nav-link.dropdown-toggle {
     padding-right: 1rem;

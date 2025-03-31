@@ -6,28 +6,36 @@
     Create New Ranking
   </a>
 </div>
-<div class="container align-items-center">
-  @for (ranking of rankings; track ranking.id) {
-    <div class="card" (click)="goToMediaList(ranking.id)">
-      <!--<div class="card-header">
-        {{ranking.title}}
-      </div>-->
-      <div class="card-body">
-        <h5 class="card-title">
+@if (rankings.length === 0) {
+  <div class="no-rankings-container">
+      <h3>You have no rankings</h3>
+      <button class="btn btn-primary" (click)="goToCreateRanking()">Create A Ranking</button>
+  </div>
+} @else {
+  <div class="rankings-container">
+    @for (ranking of rankings; track ranking.id) {
+      <div class="card" (click)="goToMediaList(ranking.id)">
+        <!--<div class="card-header">
           {{ranking.title}}
-        </h5>
-        <p class="card-text">
-          {{ranking.description}}
-        </p>
-      </div>
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="$event.stopPropagation()">
-          ...
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" (click)="$event.stopPropagation(); deleteRanking(ranking.id)">Delete Ranking List</a>
+        </div>-->
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ranking.title}}
+          </h5>
+          <p class="card-text">
+            {{ranking.description}}
+          </p>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-display="static" aria-haspopup="true" aria-expanded="false" (click)="$event.stopPropagation()">
+            ...
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" (click)="$event.stopPropagation(); deleteRanking(ranking.id)">Delete Ranking List</a>
+          </div>
         </div>
       </div>
-    </div>
-  }
-</div>
+    }
+  </div>
+}
+

@@ -1,0 +1,94 @@
+/* Container for rankings */
+.rankings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+    overflow: visible !important;
+}
+/* Ranking Cards */
+.card {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    position: relative;
+    z-index: auto;
+}
+.card:hover {
+    background-color: #f8f9fa;
+    transform: translateY(-2px);
+    z-index: 10;
+}
+
+/* Card Text */
+.card-body {
+    flex-grow: 1;
+    padding: 0 15px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+.card-text {
+    color: #555;
+}
+
+.dropdown {
+    margin-left: auto;
+    position: relative;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    font-size: 20px;
+    padding: 5px 10px;
+}
+
+.dropdown-menu {
+    z-index: 99999 !important;
+    position: absolute;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+}
+
+/*Empty rankings container*/
+.no-rankings-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px;
+    border-radius: 12px;
+}
+.no-rankings-container h3 {
+    color: #333;
+}
+.no-rankings-container p {
+    color: #555;
+}
+.no-rankings-container button {
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.no-rankings-container button:hover {
+    background-color: #0056b3;
+}
