@@ -83,3 +83,41 @@
 .btn-primary:hover {
     background-color: #0056b3;
 }
+
+.ranking-header {
+    background-color: #1c1c1c;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+.ranking-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #f5c518;
+    margin-bottom: 5px;
+}
+.ranking-description {
+    font-size: 16px;
+    color: #bbb;
+}
+.form-group label {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 5px;
+}
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: none;
+    background-color: #333;
+    color: white;
+}
+.form-control::placeholder {
+    color: #888;
+}
+.form-control:focus {
+    outline: none;
+    border: 1px solid #f5c518
+}
