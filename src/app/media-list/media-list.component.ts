@@ -173,7 +173,6 @@ export class MediaListComponent implements OnInit, OnDestroy {
   get description() {
     return this.rankingForm.controls['description'];
   }
-
   getPosterUrl(posterPath: string): string {
     return `${this.TMDB_IMAGE_BASE_URL}${this.TMDB_IMAGE_SIZE}${posterPath}`;
   }

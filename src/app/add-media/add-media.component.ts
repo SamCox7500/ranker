@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TMDBService } from '../services/tmdb.service';
 import { MediaListService } from '../services/media-list.service';
@@ -12,11 +12,12 @@ import { MediaSearchResultList } from '../media-search-result-list';
 import { CurrentUserService } from '../services/current-user.service';
 import { User } from '../user';
 import { EntryAddRequestDTO } from '../entry-add-request-dto';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-media',
   standalone: true,
-  imports: [ ReactiveFormsModule ],
+  imports: [ReactiveFormsModule],
   templateUrl: './add-media.component.html',
   styleUrl: './add-media.component.css'
 })
@@ -34,26 +35,32 @@ export class AddMediaComponent implements OnInit {
   readonly TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
   readonly TMDB_IMAGE_SIZE = 'w92';
 
+  private subscriptions : Subscription = new Subscription();
+
   constructor(private route: ActivatedRoute, private router: Router, private tmdbService: TMDBService, private mediaListService: MediaListService, private currentUserService: CurrentUserService) { }
 
   ngOnInit(): void {
     this.rankingId = Number(this.route.snapshot.paramMap.get('rankingId'));
     this.mediaType = this.route.snapshot.paramMap.get('mediaType') || '';
     this.addMediaRanking = Number(this.route.snapshot.paramMap.get('addMediaRanking'));
-    this.currentUserService.fetchCurrentUser().subscribe();
-    this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
+    const fetchUserSub = this.currentUserService.fetchCurrentUser().subscribe();
+    const currentUserSub = this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
       this.user = user;
     });
+    this.subscriptions.add(fetchUserSub);
+    this.subscriptions.add(currentUserSub);
   }
   onSearch(): void {
-    if(this.mediaType == 'FILM') {
-      this.tmdbService.searchMovies(this.query.value || '').subscribe((mediaSearchResultList: MediaSearchResultList) => {
+    if (this.mediaType == 'FILM') {
+      const movieSub = this.tmdbService.searchMovies(this.query.value || '').subscribe((mediaSearchResultList: MediaSearchResultList) => {
         this.mediaResults = mediaSearchResultList.results;
       });
-    } else if(this.mediaType == 'TV_SHOW') {
-      this.tmdbService.searchTVShows(this.query.value || '').subscribe((mediaSearchResultList: MediaSearchResultList) => {
+      this.subscriptions.add(movieSub);
+    } else if (this.mediaType == 'TV_SHOW') {
+      const tvShowSub = this.tmdbService.searchTVShows(this.query.value || '').subscribe((mediaSearchResultList: MediaSearchResultList) => {
         this.mediaResults = mediaSearchResultList.results;
       });
+      this.subscriptions.add(tvShowSub);
     }
   }
   isMovieSearchResult(result: MediaSearchResult): result is MovieSearchResult {
@@ -64,15 +71,16 @@ export class AddMediaComponent implements OnInit {
   }
   addMediaToRanking(mediaId: number): void {
     if (this.addMediaRanking && this.user && this.rankingId) {
-      const entryAddRequest: EntryAddRequestDTO = {tmdbId: mediaId, ranking: this.addMediaRanking};
+      const entryAddRequest: EntryAddRequestDTO = { tmdbId: mediaId, ranking: this.addMediaRanking };
       //console.log('User Id: ' + this.user.id);
       //console.log('Ranking Id: ' + this.rankingId);
       //console.log('Ranking: ' + entryAddRequest.ranking);
       //console.log('TmdbId: ' + entryAddRequest.tmdbId);
-      this.mediaListService.addEntry(this.user.id, this.rankingId, entryAddRequest).subscribe({
+      const addMediaSub = this.mediaListService.addEntry(this.user.id, this.rankingId, entryAddRequest).subscribe({
         next: () => this.goToMediaList(),
         error: err => console.log('Error trying to add media to ranking'),
       });
+      this.subscriptions.add(addMediaSub);
     } else {
       console.log('Unable to add new entry to ranking list. Invalid ');
     }
@@ -82,5 +90,8 @@ export class AddMediaComponent implements OnInit {
   }
   getPosterUrl(posterPath: string): string {
     return `${this.TMDB_IMAGE_BASE_URL}${this.TMDB_IMAGE_SIZE}${posterPath}`;
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

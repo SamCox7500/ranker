@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../user';
 import { Ranking } from '../ranking';
 import { error } from 'node:console';
+import { Subscription } from 'rxjs';
+import { OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-ranking-list',
@@ -18,16 +20,20 @@ export class RankingListComponent {
   user: User | null = null;
   rankings: Ranking[] = [];
 
+  private subscriptions: Subscription = new Subscription();
+
   constructor(private route: ActivatedRoute, private router: Router, private rankingService: RankingService, private currentUserService: CurrentUserService) { }
 
   ngOnInit(): void {
-    this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
+    const currentUserSub = this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
       this.user = user;
       if (!user) {
-        this.currentUserService.fetchCurrentUser().subscribe();
+        const fetchUserSub = this.currentUserService.fetchCurrentUser().subscribe();
+        this.subscriptions.add(fetchUserSub);
       }
       this.refreshRanking();
     });
+    this.subscriptions.add(currentUserSub);
   }
   goToCreateRanking(): void {
     this.router.navigate(['createranking']);
@@ -39,20 +45,25 @@ export class RankingListComponent {
   }
   deleteRanking(rankingId: number | null): void {
     if (rankingId && this.user) {
-      this.rankingService.deleteRanking(this.user.id, rankingId).subscribe({
+      const deleteRankingSub = this.rankingService.deleteRanking(this.user.id, rankingId).subscribe({
         next: () => {
           this.rankings = this.rankings.filter(ranking => ranking.id !== rankingId);
           this.refreshRanking();
         },
         error: err => console.log(err)
       });
+      this.subscriptions.add(deleteRankingSub);
     }
   }
   refreshRanking(): void {
     if (this.user) {
-      this.rankingService.getAllRankings(this.user.id).subscribe((data: Ranking[]) => {
+      const getRankingsSub = this.rankingService.getAllRankings(this.user.id).subscribe((data: Ranking[]) => {
         this.rankings = data;
       });
+      this.subscriptions.add(getRankingsSub);
     }
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }
