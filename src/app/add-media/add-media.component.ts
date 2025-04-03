@@ -13,6 +13,7 @@ import { CurrentUserService } from '../services/current-user.service';
 import { User } from '../user';
 import { EntryAddRequestDTO } from '../entry-add-request-dto';
 import { Subscription } from 'rxjs';
+import { MediaList } from '../media-list';
 
 @Component({
   selector: 'app-add-media',
@@ -28,6 +29,7 @@ export class AddMediaComponent implements OnInit {
 
   query = new FormControl('');
   mediaResults: MediaSearchResult[] = [];
+  //existingMediaIds = new Set<number>();
 
   user: User | null = null;
   addMediaRanking: number | null = null;
@@ -72,17 +74,13 @@ export class AddMediaComponent implements OnInit {
   addMediaToRanking(mediaId: number): void {
     if (this.addMediaRanking && this.user && this.rankingId) {
       const entryAddRequest: EntryAddRequestDTO = { tmdbId: mediaId, ranking: this.addMediaRanking };
-      //console.log('User Id: ' + this.user.id);
-      //console.log('Ranking Id: ' + this.rankingId);
-      //console.log('Ranking: ' + entryAddRequest.ranking);
-      //console.log('TmdbId: ' + entryAddRequest.tmdbId);
       const addMediaSub = this.mediaListService.addEntry(this.user.id, this.rankingId, entryAddRequest).subscribe({
         next: () => this.goToMediaList(),
         error: err => console.log('Error trying to add media to ranking'),
       });
       this.subscriptions.add(addMediaSub);
     } else {
-      console.log('Unable to add new entry to ranking list. Invalid ');
+      console.log('Unable to add new entry to ranking list. Invalid parameters');
     }
   }
   goToMediaList() {
@@ -94,4 +92,18 @@ export class AddMediaComponent implements OnInit {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+  /*
+  loadExistingMediaList(): void {
+    if (this.user && this.rankingId) {
+      const mediaListSub = this.mediaListService.getMediaList(this.user.id, this.rankingId).subscribe((mediaList: MediaList) => {
+        console.log(mediaList);
+        this.existingMediaIds = new Set(mediaList.mediaListEntryDTOList.map(mediaListEntry => mediaListEntry.id));
+      });
+      this.subscriptions.add(mediaListSub);
+    }
+  }
+  filterResults(results: MediaSearchResult[]): void {
+    this.mediaResults = results.filter(result => !this.existingMediaIds.has(result.id));
+  }
+  */
 }

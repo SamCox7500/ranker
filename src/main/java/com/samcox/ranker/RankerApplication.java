@@ -57,7 +57,7 @@ public class RankerApplication implements CommandLineRunner {
   public void run(String... args) throws Exception {
 
 
-    // Register a default user at startupng bui
+    // Register a default user at startup
     UserCredentials userCredentials = new UserCredentials();
     userCredentials.setUsername("steve");
     userCredentials.setPassword("Stevesteve1!");
