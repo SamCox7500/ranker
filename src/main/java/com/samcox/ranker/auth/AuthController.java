@@ -22,19 +22,46 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controller for handling authentication operations.
+ */
 @RestController
 public class AuthController {
 
+  /**
+   * Manages current authentication
+   */
   private final AuthenticationManager authenticationManager;
+  /**
+   * Repository for accessing current security context.
+   */
   private final SecurityContextRepository securityContextRepository;
   //private final UserService userService;
+  /**
+   * Service for performing authentication and authorisation related operations.
+   */
   private final AuthService authService;
+
+  /**
+   * Constructor for auth controller.
+   * @param authenticationManager manages current authentication
+   * @param securityContextRepository provides access to security context
+   * @param authService service for performing authentication related operations
+   */
   public AuthController(AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository, AuthService authService) {
     this.authenticationManager = authenticationManager;
     this.securityContextRepository = securityContextRepository;
     //this.userService = userService;
     this.authService = authService;
   }
+
+  /**
+   * Authenticates a user using their credentials.
+   * @param userCredentials username and password for authentication
+   * @param request request for authentication
+   * @param response response from request for authentication
+   * @return the response entity representing the response from the request for authentication
+   */
   @PostMapping("/login")
   public ResponseEntity<Map<String, String>> login(@RequestBody UserCredentials userCredentials, HttpServletRequest request, HttpServletResponse response) {
     Map<String, String> loginResponse = new HashMap<>();
@@ -57,6 +84,11 @@ public class AuthController {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginResponse);
     }
   }
+
+  /**
+   * Returns the current authenticated user.
+   * @return the current authenticated user as DTO
+   */
   @GetMapping("/authuser")
   public UserDTO getAuthUser() {
     //Authentication currentAuth = SecurityContextHolder.getContext().getAuthentication();
