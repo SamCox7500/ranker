@@ -12,7 +12,6 @@ import java.util.Objects;
  * <p>This entity is mapped to the "user" table in the database. A user has a username, password and role.
  * All attributes have validation constraints.</p>
  *
- * @author Samuel Cox
  */
 @Entity
 @Table(name = "\"user\"")

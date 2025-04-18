@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+/**
+ *
+ */
 public class MediaListDTO {
   private Long id;
 
