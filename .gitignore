@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-tmdb.env
+backend/src/main/resources/tmdb.env
 
 ### STS ###
 .apt_generated
@@ -37,7 +37,8 @@ build/
 /bazel-out
 
 # Node
-/node_modules
+frontend/node_modules
+frontend/dist
 npm-debug.log
 yarn-error.log
 
