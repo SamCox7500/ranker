@@ -4,7 +4,6 @@ import { RankingService } from '../services/ranking.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { User } from '../user';
 import { Ranking } from '../ranking';
-import { error } from 'node:console';
 import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 
