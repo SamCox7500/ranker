@@ -5,13 +5,14 @@ import { MediaListEntry } from '../media-list-entry';
 import { EntryAddRequestDTO } from '../entry-add-request-dto';
 import { EntryMoveRequestDTO } from '../entry-move-request-dto';
 import { MediaList } from '../media-list';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MediaListService {
 
-  private usersUrl: string = 'http://localhost:8080/users';
+  private usersUrl: string = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) { }
 

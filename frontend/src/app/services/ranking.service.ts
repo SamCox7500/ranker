@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Ranking } from '../ranking';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RankingService {
 
-  private usersUrl: string = 'http://localhost:8080/users';
+  private usersUrl: string = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) { }
 

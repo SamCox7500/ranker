@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { User } from '../user';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class CurrentUserService {
   constructor(private http: HttpClient) {}
 
   fetchCurrentUser(): Observable<User> {
-    return this.http.get<User>('http://localhost:8080/authuser', {withCredentials: true}).pipe(
+    return this.http.get<User>(`${environment.apiUrl}/authuser`, {withCredentials: true}).pipe(
       tap(user => this.userSubject.next(user))
     );
   }

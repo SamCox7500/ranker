@@ -8,15 +8,15 @@ import { MovieSearchResultList } from '../movie-search-result-list';
 import { TVShowSearchResultList } from '../tvshow-search-result-list';
 import { MediaSearchResult } from '../media-search-result';
 import { MediaSearchResultList } from '../media-search-result-list';
-
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TMDBService {
 
-  private movieURL: string = 'http://localhost:8080/tmdb/movies';
-  private tvShowURL: string = 'http://localhost:8080/tmdb/tv';
+  private movieURL: string = `${environment.apiUrl}/tmdb/movies`;
+  private tvShowURL: string = `${environment.apiUrl}/tmdb/tv`;
 
   constructor(private http: HttpClient) {}
 

@@ -3,14 +3,15 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserCredentials } from '../user-credentials';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { CurrentUserService } from './current-user.service';
+import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  private loginUrl: string = 'http://localhost:8080/login';
-  private logoutUrl: string = 'http://localhost:8080/logout';
+  private loginUrl: string = `${environment.apiUrl}/login`;
+  private logoutUrl: string = `${environment.apiUrl}/logout`;
   private authenticatedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   authenticated$: Observable<boolean> = this.authenticatedSubject.asObservable();
 
