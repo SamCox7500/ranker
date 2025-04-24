@@ -74,6 +74,11 @@ public class SecurityConfig {
           .allowedMethods("*")
           .allowedHeaders("*")
           .allowCredentials(true);
+        registry.addMapping("/**")
+         .allowedOrigins("https://ranker-frontend.onrender.com")
+          .allowedMethods("*")
+          .allowedHeaders("*")
+          .allowCredentials(true);
       }
     };
   }
