@@ -28,6 +28,7 @@ public class SecurityConfig {
     http.csrf((csrf) -> csrf.disable())
       .authorizeHttpRequests((authorize) -> authorize
         .requestMatchers(HttpMethod.POST, "/users").permitAll()
+        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
         .requestMatchers("/login", "/resources/**", "/static/**", "/templates/**", "/authuser").permitAll()
         .requestMatchers("/users", "/users/*").permitAll()
         .requestMatchers("/tmdb/**").permitAll()
@@ -70,12 +71,7 @@ public class SecurityConfig {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-          .allowedOrigins("http://localhost:4200")
-          .allowedMethods("*")
-          .allowedHeaders("*")
-          .allowCredentials(true);
-        registry.addMapping("/**")
-         .allowedOrigins("https://ranker-frontend.onrender.com")
+          .allowedOrigins("http://localhost:4200", "https://ranker-frontend.onrender.com")
           .allowedMethods("*")
           .allowedHeaders("*")
           .allowCredentials(true);
