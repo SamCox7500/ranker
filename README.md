@@ -21,13 +21,8 @@ A full-stack web application that allows users to create, manage, and share rank
 - **Version Control:** Git & GitHub
 
 ## 📦 Setup Instructions (Local Development)
-- frontend:
-    cd frontend
-    npm install
-    ng serve
--backend:
-  cd backend
-  ./mvnw spring-boot:run
+- **frontend:** cd frontend, npm install, ng serve
+- **backend:** cd backend, ./mvnw spring-boot:run
   
 ### Prerequisites
 - Node.js
