@@ -1,27 +1,39 @@
-# Client
+# Film & TV Ranking Web App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.7.
+A full-stack web application that allows users to create, manage, and share ranked lists of films and TV shows.
 
-## Development server
+## 🚀 Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- User authentication and session management
+- Create/edit personal ranking lists (with titles and descriptions)
+- Add movies/TV shows via TheMovieDB API
+- Drag-and-drop to reorder items in a ranking
+- Responsive Angular frontend with clean UI
+- Backend built with RESTful Spring Boot API and PostgreSQL
+- Integration tests for backend services using JUnit and MockMvc
 
-## Code scaffolding
+## 🛠️ Tech Stack
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Frontend:** Angular, TypeScript, Bootstrap
+- **Backend:** Java, Spring Boot, Spring Security, JPA, PostgreSQL
+- **APIs:** TheMovieDB API
+- **Testing:** JUnit, MockMvc
+- **Version Control:** Git & GitHub
 
-## Build
+## 📦 Setup Instructions (Local Development)
+- **frontend:** cd frontend, npm install, ng serve
+- **backend:** cd backend, ./mvnw spring-boot:run
+  
+### Prerequisites
+- Node.js
+- Angular CLI
+- Java 17
+- Maven
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Demo available at: https://ranker-frontend.onrender.com/
 
-## Running unit tests
+### Clone
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+git clone https://github.com/YourUsername/ranker.git
+cd ranker
