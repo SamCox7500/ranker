@@ -24,7 +24,7 @@ jobs:
         working-directory: backend
       
       - name: Build backend
-        run: ./mvnw clean install
+        run: ./mvnw clean verify
         working-directory: backend
 
       - name: Set up Node.js
