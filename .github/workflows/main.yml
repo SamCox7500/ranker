@@ -18,11 +18,14 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          
+
+      - name: Make mvnw executable
+        run: chmod +x mvnw
+        working-directory: backend
+      
       - name: Build backend
-        run: |
-          cd backend
-          ./mvnw clean verify
+        run: ./mvnw clean install
+        working-directory: backend
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
