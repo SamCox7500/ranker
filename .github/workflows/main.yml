@@ -21,7 +21,7 @@ jobs:
           
       - name: Build backend
         run: |
-          cd backend/src/main
+          cd src/main
           ./mvnw clean verify
 
       - name: Set up Node.js
@@ -34,7 +34,7 @@ jobs:
 
       - name: Build frontend
         run: |
-          cd frontend/src/app
+          cd src/app
           npm install
           ng build --configuration production
           
