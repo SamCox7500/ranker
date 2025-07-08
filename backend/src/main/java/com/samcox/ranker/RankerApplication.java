@@ -13,9 +13,11 @@ import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -55,6 +57,7 @@ public class RankerApplication implements CommandLineRunner {
   @Transactional
   public void run(String... args) throws Exception {
 
+    /*
     // Register a default user at startup
     UserCredentials userCredentials = new UserCredentials();
     userCredentials.setUsername("steve");
@@ -156,5 +159,6 @@ public class RankerApplication implements CommandLineRunner {
     //System.out.println(mediaList1.getEntries());
 
     SecurityContextHolder.clearContext();
+     */
   }
 }

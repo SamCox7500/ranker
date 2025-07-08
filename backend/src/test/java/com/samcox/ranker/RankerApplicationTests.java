@@ -9,5 +9,4 @@ class RankerApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
