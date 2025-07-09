@@ -23,8 +23,8 @@ jobs:
         run: chmod +x mvnw
         working-directory: backend
       
-      - name: Build backend
-        run: ./mvnw clean verify
+      - name: Run backend tests with prod profile
+        run: ./mvnw test -Dspring.profiles.active=prod
         working-directory: backend
 
       - name: Set up Node.js
