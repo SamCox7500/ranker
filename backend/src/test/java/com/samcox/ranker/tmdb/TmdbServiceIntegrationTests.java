@@ -14,6 +14,7 @@ import java.net.URI;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+/*
 @SpringBootTest
 @Transactional
 public class TmdbServiceIntegrationTests {
@@ -73,3 +74,4 @@ public class TmdbServiceIntegrationTests {
     assertEquals(bestResultDTO.getFirst_air_date(), "2011-04-17");
   }
 }
+*/

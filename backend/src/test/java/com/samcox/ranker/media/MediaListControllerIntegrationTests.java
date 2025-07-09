@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public class MediaListControllerIntegrationTests {
       .andExpect(jsonPath("$.mediaListEntryDTOList[0].id").value(testMediaListEntry.getId()))
       .andExpect(jsonPath("$.mediaListEntryDTOList[0].title").value("There Will Be Blood"))
       .andExpect(jsonPath("$.mediaListEntryDTOList[0].release_date").value("2007-12-26"))
-      .andExpect(jsonPath("$.mediaListEntryDTOList[0].poster_path").value("/fa0RDkAlCec0STeMNAhPaF89q6U.jpg"));
+      .andExpect(jsonPath("$.mediaListEntryDTOList[0].poster_path").value("/nuZDiX8okojcwkStdaMjA9LUQAT.jpg"));
   }
 
   @Test

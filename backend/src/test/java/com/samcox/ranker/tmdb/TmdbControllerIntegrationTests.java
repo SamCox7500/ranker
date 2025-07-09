@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/*
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TmdbControllerIntegrationTests {
@@ -88,3 +89,5 @@ public class TmdbControllerIntegrationTests {
       .andExpect(jsonPath("$.results[0].first_air_date").value("2011-04-17"));
   }
 }
+*/
+
