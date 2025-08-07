@@ -56,7 +56,7 @@ public class RankerApplication implements CommandLineRunner {
   @Override
   @Transactional
   public void run(String... args) throws Exception {
-    /*
+
     // Register a default user at startup
     UserCredentials userCredentials = new UserCredentials();
     userCredentials.setUsername("steve");
@@ -121,17 +121,17 @@ public class RankerApplication implements CommandLineRunner {
     //Film entries for ranking 1
 
 
-    mediaListService.addEntryToList(entryAddRequest, 1L);
-    mediaListService.addEntryToList(entryAddRequest1, 1L);
-    mediaListService.addEntryToList(entryAddRequest2, 1L);
+    mediaListService.addEntryToList(1L,entryAddRequest, 1L);
+    mediaListService.addEntryToList(1L,entryAddRequest1, 1L);
+    mediaListService.addEntryToList(1L,entryAddRequest2, 1L);
 
     System.out.println(mediaList.getEntries());
 
-    mediaListService.moveEntryInList(1L, 1, 2);
+    mediaListService.moveEntryInList(1L,1L, 1, 2);
 
     System.out.println(mediaList.getEntries());
 
-    mediaListService.moveEntryInList(1L, 1, 2);
+    mediaListService.moveEntryInList(1L,1L, 1, 2);
 
     System.out.println(mediaList.getEntries());
 
@@ -151,13 +151,13 @@ public class RankerApplication implements CommandLineRunner {
     entryAddRequest5.setTmdbId(40008L);
     entryAddRequest5.setRanking(3);
 
-    mediaListService.addEntryToList(entryAddRequest3, 2L);
-    mediaListService.addEntryToList(entryAddRequest4, 2L);
-    mediaListService.addEntryToList(entryAddRequest5, 2L);
+    mediaListService.addEntryToList(1L,entryAddRequest3, 2L);
+    mediaListService.addEntryToList(1L,entryAddRequest4, 2L);
+    mediaListService.addEntryToList(1L,entryAddRequest5, 2L);
 
     //System.out.println(mediaList1.getEntries());
 
     SecurityContextHolder.clearContext();
-    */
+
   }
 }

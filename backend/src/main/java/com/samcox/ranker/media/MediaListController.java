@@ -80,7 +80,7 @@ public class MediaListController {
     @RequestBody @Valid EntryAddRequest entryAddRequest
   ) throws AccessDeniedException {
     MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
-    mediaListService.addEntryToList(entryAddRequest, mediaList.getId());
+    mediaListService.addEntryToList(userId,entryAddRequest, mediaList.getId());
   }
 
   /**
@@ -102,12 +102,10 @@ public class MediaListController {
     @RequestBody @Valid EntryMoveRequest entryMoveRequest
   ) throws AccessDeniedException {
       MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
-      MediaListEntry mediaListEntry = mediaListEntryService.getMediaListEntryById(entryMoveRequest.getEntryId());
+      MediaListEntry mediaListEntry = mediaListEntryService.getMediaListEntryById(userId,entryMoveRequest.getEntryId());
       int oldPosition = mediaListEntry.getRanking();
       int newPosition = entryMoveRequest.getNewPosition();
-      mediaListService.moveEntryInList(mediaList.getId(), oldPosition, newPosition);
-
-      //todo change to be mediaListId, mediaListEntryId, newPosition
+      mediaListService.moveEntryInList(userId,mediaList.getId(), oldPosition, newPosition);
   }
 
   /**
@@ -126,7 +124,7 @@ public class MediaListController {
     @PathVariable Long entryId
   ) throws AccessDeniedException {
       MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
-      mediaListService.removeEntryInList(mediaList.getId(), entryId);
+      mediaListService.removeEntryInList(userId,mediaList.getId(), entryId);
   }
 
   /**
@@ -145,6 +143,6 @@ public class MediaListController {
     @RequestBody List<Long> entryIds
     ) throws AccessDeniedException {
     MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
-    mediaListService.removeEntriesInList(mediaList.getId(), entryIds);
+    mediaListService.removeEntriesInList(userId,mediaList.getId(), entryIds);
   }
 }

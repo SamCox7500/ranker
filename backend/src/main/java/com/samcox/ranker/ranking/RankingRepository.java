@@ -2,6 +2,7 @@ package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.Optional;
  *
  * @see User
  */
+@Repository
 public interface RankingRepository extends JpaRepository<Ranking, Long> {
   /**
    * Deletes all ranking belonging to the user.

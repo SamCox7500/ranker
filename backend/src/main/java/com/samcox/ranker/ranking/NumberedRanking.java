@@ -62,7 +62,6 @@ public class NumberedRanking extends Ranking {
     this.isReverseOrder = isReverseOrder;
     this.mediaType = mediaType;
     this.mediaList = mediaList;
-    mediaList.setNumberedRanking(this);
   }
 
   /**
@@ -95,7 +94,6 @@ public class NumberedRanking extends Ranking {
    */
   public void setMediaList(MediaList mediaList) {
     this.mediaList = mediaList;
-    mediaList.setNumberedRanking(this);
   }
 
   /**

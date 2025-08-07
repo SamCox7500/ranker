@@ -23,7 +23,8 @@ export class MediaListService {
     return this.http.post<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries`, addRequest, { withCredentials: true });
   }
   public moveEntry(userId: number, rankingId: number, entryId: number, moveRequest: EntryMoveRequestDTO) {
-    return this.http.put<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries/${entryId}`, moveRequest, { withCredentials: true });
+    return this.http.put<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries/${entryId}`,
+      moveRequest, { withCredentials: true });
   }
   public deleteEntry(userId: number, rankingId: number, entryId: number): Observable<void> {
     return this.http.delete<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries/${entryId}`, { withCredentials: true });

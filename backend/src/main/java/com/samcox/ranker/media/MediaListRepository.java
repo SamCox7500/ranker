@@ -4,6 +4,7 @@ import com.samcox.ranker.ranking.NumberedRanking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.print.attribute.standard.Media;
 import java.util.Optional;
 
 /**
@@ -16,5 +17,5 @@ import java.util.Optional;
  */
 @Repository
 public interface MediaListRepository extends JpaRepository<MediaList, Long> {
-  Optional<MediaList> findByNumberedRanking(NumberedRanking numberedRanking);
+  //Optional<MediaList> findByNumberedRanking(NumberedRanking numberedRanking);
 }

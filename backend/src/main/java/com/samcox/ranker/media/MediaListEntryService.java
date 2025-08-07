@@ -41,8 +41,8 @@ public class MediaListEntryService {
    * @return the media list entry with the specified id
    * @throws AccessDeniedException if the user trying to access the entry does not have permission
    */
-  public MediaListEntry getMediaListEntryById(Long id) throws AccessDeniedException {
-    checkOwnership(id);
+  public MediaListEntry getMediaListEntryById(Long userId, Long id) throws AccessDeniedException {
+    checkOwnership(userId, id);
     return mediaListEntryRepository.findById(id)
       .orElseThrow(() -> new MediaListEntryNotFoundException("MediaListEntry not found with id: " + id));
   }
@@ -64,11 +64,11 @@ public class MediaListEntryService {
    * @param mediaListEntryId the id of the entry attempting to be accessed
    * @throws AccessDeniedException if the user does not have permission to access the entry
    */
-  public void checkOwnership(Long mediaListEntryId) throws AccessDeniedException {
+  public void checkOwnership(Long userId, Long mediaListEntryId) throws AccessDeniedException {
     Long authUserId = authService.getAuthenticatedUser().getId();
     MediaListEntry mediaListEntry = mediaListEntryRepository.findById(mediaListEntryId)
       .orElseThrow(() -> new MediaListEntryNotFoundException("Could not check ownership as mediaListEntry does not exist with id: " + mediaListEntryId));
-    if (!mediaListEntry.getMediaList().getNumberedRanking().getUser().getId().equals(authUserId)) {
+    if (!userId.equals(authUserId)) {
       throw new AccessDeniedException("You do not have permission to access that resource");
     }
   }

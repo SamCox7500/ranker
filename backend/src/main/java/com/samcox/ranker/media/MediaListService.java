@@ -82,9 +82,12 @@ public class MediaListService {
    */
   public MediaList getMediaListByNumberedRankingAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
     NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(numberedRankingId, userId);
+    return numberedRanking.getMediaList();
+    /*
     return mediaListRepository.findByNumberedRanking(numberedRanking)
       .orElseThrow(() -> new MediaListNotFoundException("Media list cannot be found for numbered ranking: "
         + numberedRankingId));
+     */
   }
 
   /**
@@ -95,8 +98,8 @@ public class MediaListService {
    * @throws AccessDeniedException if the user trying to move the entry does not have permission
    */
   @Transactional
-  public void moveEntryInList(Long mediaListId, int oldPosition, int newPosition) throws AccessDeniedException {
-    checkOwnership(mediaListId);
+  public void moveEntryInList(Long userId, Long mediaListId, int oldPosition, int newPosition) throws AccessDeniedException {
+    checkOwnership(userId, mediaListId);
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
@@ -118,13 +121,13 @@ public class MediaListService {
    * @param entryId the id of the entry to be removed
    * @throws AccessDeniedException if the user trying to remove the entry does not have permission
    */
-  public void removeEntryInList(Long mediaListId, Long entryId) throws AccessDeniedException {
-    checkOwnership(mediaListId);
+  public void removeEntryInList(Long userId, Long mediaListId, Long entryId) throws AccessDeniedException {
+    checkOwnership(userId, mediaListId);
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("Media list not found with id: " + mediaListId));
 
-    MediaListEntry entry = mediaListEntryService.getMediaListEntryById(entryId);
+    MediaListEntry entry = mediaListEntryService.getMediaListEntryById(userId,entryId);
     mediaList.removeEntry(entry);
     mediaListRepository.save(mediaList);
   }
@@ -135,8 +138,8 @@ public class MediaListService {
    * @param mediaListEntryIds the list of ids of the entries to be removed
    * @throws AccessDeniedException if the user trying to remove the entries does not have permission
    */
-  public void removeEntriesInList(Long mediaListId, List<Long> mediaListEntryIds) throws AccessDeniedException {
-    checkOwnership(mediaListId);
+  public void removeEntriesInList(Long userId, Long mediaListId, List<Long> mediaListEntryIds) throws AccessDeniedException {
+    checkOwnership(userId, mediaListId);
     if (mediaListEntryIds.isEmpty()) {
       throw new MediaListEntryNotFoundException("No media lists could be found to be deleted because no IDs were provided");
     }
@@ -159,8 +162,8 @@ public class MediaListService {
    * @param mediaListId the id of the media list to which the entry is to be added
    * @throws AccessDeniedException if the user trying to add the entry does not have permission to do so
    */
-  public void addEntryToList(@Valid EntryAddRequest entryAddRequest, Long mediaListId) throws AccessDeniedException {
-    checkOwnership(mediaListId);
+  public void addEntryToList(Long userId, @Valid EntryAddRequest entryAddRequest, Long mediaListId) throws AccessDeniedException {
+    checkOwnership(userId, mediaListId);
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
       .orElseThrow(() -> new MediaListNotFoundException("MediaList not found with id: " + mediaListId));
@@ -187,12 +190,13 @@ public class MediaListService {
    * @param mediaListId the id of the media list the user is trying to access
    * @throws AccessDeniedException if the user does not have permission to access the media list
    */
-  public void checkOwnership(Long mediaListId) throws AccessDeniedException {
+  public void checkOwnership(Long userId, Long mediaListId) throws AccessDeniedException {
     Long authUserId = authService.getAuthenticatedUser().getId();
 
     MediaList mediaList = mediaListRepository.findById(mediaListId)
-      .orElseThrow(() -> new MediaListNotFoundException("Could not check ownership as mediaList does not exist with id: " + mediaListId));
-    if (!mediaList.getNumberedRanking().getUser().getId().equals(authUserId)) {
+      .orElseThrow(() ->
+        new MediaListNotFoundException("Could not check ownership as mediaList does not exist with id: " + mediaListId));
+    if (!userId.equals(authUserId)) {
       throw new AccessDeniedException("You do not have permission to access that resource");
     }
   }
@@ -209,9 +213,8 @@ public class MediaListService {
 
     mediaListEntryDTOS = toMediaDTO(mediaList.getEntries(), mediaList.getMediaType());
 
-    NumberedRankingDTO numberedRankingDTO = NumberedRankingDTOMapper.toNumberedRankingDTO(mediaList.getNumberedRanking());
 
-    return new MediaListDTO(mediaList.getId(), mediaList.getMediaType(), mediaListEntryDTOS, numberedRankingDTO);
+    return new MediaListDTO(mediaList.getId(), mediaList.getMediaType(), mediaListEntryDTOS);
   }
 
   /**
