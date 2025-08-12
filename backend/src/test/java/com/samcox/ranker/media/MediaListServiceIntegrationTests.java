@@ -108,13 +108,13 @@ public class MediaListServiceIntegrationTests {
     MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(testNumberedRanking.getId(), testUser.getId());
     assertNotNull(mediaList);
 
-    assertEquals(mediaList.getNumberedRanking().getId(), testNumberedRanking.getId());
+    assertEquals(mediaList.getId(), testNumberedRanking.getMediaList().getId());
 
     assertEquals(testMediaList.getMediaType(), mediaList.getMediaType());
 
 
     List<MediaListEntry> entries = mediaList.getEntries();
-    assertEquals(entries.size(), 3);
+    assertEquals(3, entries.size());
     assertEquals(entries.get(0), testMediaList.getEntries().get(0));
     assertEquals(entries.get(1), testMediaList.getEntries().get(1));
     assertEquals(entries.get(2), testMediaList.getEntries().get(2));

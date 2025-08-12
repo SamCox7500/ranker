@@ -31,4 +31,12 @@ public interface RankingRepository extends JpaRepository<Ranking, Long> {
    * Empty if they have no rankings or the user does not exist in the database.
    */
   Optional<List<Ranking>> findByUser(User user);
+
+  /**
+   * Returns a numbered ranking by id and user.
+   * @param id the id of the user
+   * @param user the user to whom the numbered ranking belongs
+   * @return an optional numbered ranking. Will be empty if no numbered ranking exists with that id and user.
+   */
+  Optional<Ranking> findByIdAndUser(Long id, User user);
 }
