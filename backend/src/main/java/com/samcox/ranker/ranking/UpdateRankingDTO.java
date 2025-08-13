@@ -1,30 +1,21 @@
 package com.samcox.ranker.ranking;
 
-import com.samcox.ranker.user.User;
 import com.samcox.ranker.user.UserDTO;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 /**
- * DTO for {@link Ranking}.
+ * DTO for updating a {@link Ranking}.
  *
  * @see Ranking
  * @see UserDTO
  * @see com.samcox.ranker.user.User
  */
-public class RankingDTO {
-
+public class UpdateRankingDTO {
   /**
    * Unique identifier for the ranking.
    */
   private Long id;
-
-  /**
-   * DTO for the {@link com.samcox.ranker.user.User} that owns the ranking. Must not be null.
-   */
-  @NotNull(message = "RankingDTO must have a user assigned to it")
-  private UserDTO userDTO;
 
   /**
    * The title of the ranking. Must be between 1 and 30 characters.
@@ -48,13 +39,12 @@ public class RankingDTO {
   /**
    * Default constructor as required by JPA.
    */
-  public RankingDTO() {}
+  public UpdateRankingDTO() {}
   /**
-   * Constructor for creating Ranking objects
+   * Constructor for creating update ranking DTO.
    */
-  public RankingDTO(Long id, UserDTO userDTO, String title, String desc, boolean isPublic) {
+  public UpdateRankingDTO(Long id, UserDTO userDTO, String title, String desc, boolean isPublic) {
     this.id = id;
-    this.userDTO = userDTO;
     this.title = title;
     this.description = desc;
     this.isPublic = isPublic;
@@ -76,20 +66,6 @@ public class RankingDTO {
     this.id = id;
   }
 
-  /**
-   * Returns the {@link UserDTO} of the user that owns the ranking.
-   * @return the UserDTO of the user that owns the ranking
-   */
-  public UserDTO getUserDTO() {
-    return userDTO;
-  }
-  /**
-   * Sets the UserDTO for the ranking DTO.
-   * @param userDTO the userDTO of the user to be set as the owner of the ranking
-   */
-  public void setUserDTO(UserDTO userDTO) {
-    this.userDTO = userDTO;
-  }
   /**
    * Returns the title of the ranking.
    * @return the title of the ranking
@@ -140,7 +116,6 @@ public class RankingDTO {
   public String toString() {
     return "RankingDTO{" +
       "id=" + id +
-      ", userDTO=" + userDTO +
       ", title='" + title + '\'' +
       ", description='" + description + '\'' +
       ", isPublic=" + isPublic +
