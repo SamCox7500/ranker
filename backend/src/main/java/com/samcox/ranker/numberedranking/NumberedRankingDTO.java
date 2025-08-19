@@ -1,10 +1,9 @@
-package com.samcox.ranker.ranking;
+package com.samcox.ranker.numberedranking;
 
 import com.samcox.ranker.user.UserDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.validation.annotation.Validated;
 
 /**
  * DTO for {@link NumberedRanking}.

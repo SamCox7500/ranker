@@ -1,35 +1,27 @@
 package com.samcox.ranker;
 
 import com.samcox.ranker.media.EntryAddRequest;
-import com.samcox.ranker.media.FilmDTO;
 import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.media.MediaListService;
-import com.samcox.ranker.ranking.NumberedRanking;
-import com.samcox.ranker.ranking.NumberedRankingDTO;
-import com.samcox.ranker.ranking.NumberedRankingService;
+import com.samcox.ranker.numberedranking.NumberedRanking;
+import com.samcox.ranker.numberedranking.NumberedRankingDTO;
+import com.samcox.ranker.numberedranking.NumberedRankingService;
 import com.samcox.ranker.tmdb.*;
 import com.samcox.ranker.user.UserCredentials;
 import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.context.SecurityContextHolderStrategy;
-import org.springframework.security.web.context.SecurityContextRepository;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 @SpringBootApplication
 public class RankerApplication implements CommandLineRunner {

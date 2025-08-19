@@ -1,18 +1,14 @@
 package com.samcox.ranker.user;
 
 
-import com.samcox.ranker.ranking.NumberedRanking;
-import com.samcox.ranker.ranking.NumberedRankingRepository;
-import com.samcox.ranker.ranking.Ranking;
-import com.samcox.ranker.ranking.RankingNotFoundException;
-import com.samcox.ranker.user.*;
+import com.samcox.ranker.numberedranking.NumberedRanking;
+import com.samcox.ranker.numberedranking.NumberedRankingRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,10 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.nio.file.AccessDeniedException;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;

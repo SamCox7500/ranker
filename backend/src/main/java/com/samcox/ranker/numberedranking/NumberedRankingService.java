@@ -1,9 +1,10 @@
-package com.samcox.ranker.ranking;
+package com.samcox.ranker.numberedranking;
 
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.media.InvalidMediaTypeException;
 import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.media.MediaType;
+import com.samcox.ranker.ranking.RankingNotFoundException;
 import com.samcox.ranker.user.User;
 import com.samcox.ranker.user.UserNotFoundException;
 import com.samcox.ranker.user.UserService;
@@ -11,7 +12,6 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import javax.print.attribute.standard.Media;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 

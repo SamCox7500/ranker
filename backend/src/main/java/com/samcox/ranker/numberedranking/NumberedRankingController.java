@@ -1,4 +1,4 @@
-package com.samcox.ranker.ranking;
+package com.samcox.ranker.numberedranking;
 
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;

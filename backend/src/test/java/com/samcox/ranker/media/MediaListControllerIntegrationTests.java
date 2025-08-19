@@ -2,13 +2,10 @@ package com.samcox.ranker.media;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samcox.ranker.auth.AuthService;
-import com.samcox.ranker.ranking.NumberedRanking;
-import com.samcox.ranker.ranking.NumberedRankingDTO;
-import com.samcox.ranker.ranking.NumberedRankingRepository;
+import com.samcox.ranker.numberedranking.NumberedRanking;
+import com.samcox.ranker.numberedranking.NumberedRankingRepository;
 import com.samcox.ranker.user.User;
-import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserRepository;
-import jakarta.transaction.TransactionScoped;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -1,5 +1,4 @@
-package com.samcox.ranker.ranking;
-import com.samcox.ranker.media.MediaType;
+package com.samcox.ranker.numberedranking;
 import com.samcox.ranker.user.UserDTOMapper;
 
 import java.util.List;

@@ -1,12 +1,11 @@
 package com.samcox.ranker.media;
 
-import com.samcox.ranker.ranking.NumberedRanking;
-import com.samcox.ranker.ranking.NumberedRankingService;
+import com.samcox.ranker.numberedranking.NumberedRanking;
+import com.samcox.ranker.numberedranking.NumberedRankingService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 

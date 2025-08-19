@@ -1,6 +1,5 @@
 package com.samcox.ranker.media;
 
-import com.samcox.ranker.ranking.NumberedRankingDTO;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;

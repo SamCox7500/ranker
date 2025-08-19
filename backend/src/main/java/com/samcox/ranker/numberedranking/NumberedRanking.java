@@ -1,12 +1,10 @@
-package com.samcox.ranker.ranking;
+package com.samcox.ranker.numberedranking;
 
 import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.media.MediaType;
+import com.samcox.ranker.ranking.Ranking;
 import com.samcox.ranker.user.User;
 import jakarta.persistence.*;
-import org.springframework.validation.annotation.Validated;
-
-import javax.print.attribute.standard.Media;
 
 /**
  * Represents a numbered ranking entity in the system.

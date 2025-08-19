@@ -1,4 +1,4 @@
-package com.samcox.ranker.ranking;
+package com.samcox.ranker.numberedranking;
 
 import com.samcox.ranker.user.User;
 import jakarta.transaction.Transactional;

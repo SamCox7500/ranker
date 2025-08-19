@@ -1,12 +1,9 @@
 package com.samcox.ranker.media;
 
-import com.samcox.ranker.ranking.NumberedRanking;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Represents a list of {@link MediaListEntry} of a specific {@link MediaType}.

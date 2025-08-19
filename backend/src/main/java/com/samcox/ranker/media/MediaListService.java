@@ -1,7 +1,8 @@
 package com.samcox.ranker.media;
 
 import com.samcox.ranker.auth.AuthService;
-import com.samcox.ranker.ranking.*;
+import com.samcox.ranker.numberedranking.NumberedRanking;
+import com.samcox.ranker.numberedranking.NumberedRankingService;
 import com.samcox.ranker.tmdb.TmdbService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
