@@ -34,7 +34,7 @@ public class NumberedRankingController {
   }
 
   /**
-   * Returns a list of all numbered rankings belonging to a user
+   * Returns a list of all numbered rankings belonging to a user.
    * @param userId the id of the user used to fetch all numbered rankings for
    * @return the list of all numbered rankings as DTOs
    * @throws AccessDeniedException if the authenticated user does not have authorisation to access rankings for that user.
