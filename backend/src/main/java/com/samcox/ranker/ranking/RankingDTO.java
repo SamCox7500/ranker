@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Size;
  * @see UserDTO
  * @see com.samcox.ranker.user.User
  */
-public class RankingResponseDTO {
+public class RankingDTO {
 
   /**
    * Unique identifier for the ranking.
@@ -47,11 +47,11 @@ public class RankingResponseDTO {
   /**
    * Default constructor as required by JPA.
    */
-  public RankingResponseDTO() {}
+  public RankingDTO() {}
   /**
    * Constructor for creating Ranking objects
    */
-  public RankingResponseDTO(Long id, UserDTO userDTO, String title, String desc, boolean isPublic) {
+  public RankingDTO(Long id, UserDTO userDTO, String title, String desc, boolean isPublic) {
     this.id = id;
     this.userDTO = userDTO;
     this.title = title;

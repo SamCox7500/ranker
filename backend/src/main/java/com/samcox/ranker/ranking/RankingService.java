@@ -36,15 +36,6 @@ public class RankingService {
     return rankingRepository.findByUser(user)
       .orElseThrow(() -> new RankingNotFoundException("No rankings found for user " + userId));
   }
-  public void createRanking(@Valid RankingResponseDTO rankingResponseDTO) {
-    checkPermission(rankingResponseDTO.getUserDTO().getId());
-  }
-  public void updateRanking(@Valid RankingResponseDTO rankingResponseDTO) {
-
-  }
-  public void deleteRankingByIdAndUser(Long rankingId, Long userId) {
-
-  }
   public void checkPermission(Long userId) throws AccessDeniedException {
     UserDTO authUser = authService.getAuthenticatedUser();
     if (!authUser.getId().equals(userId)) {
