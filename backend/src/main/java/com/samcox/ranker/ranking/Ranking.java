@@ -1,10 +1,13 @@
 package com.samcox.ranker.ranking;
 
+import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import javax.print.attribute.standard.Media;
 
 /**
  * Abstract class for a ranking created by a user.
@@ -51,7 +54,15 @@ public abstract class Ranking {
    */
   private boolean isPublic;
 
-  //todo type?
+  /**
+   * The type of ranking. E.g. Numbered Ranking, Tier List.
+   */
+  private RankingType rankingType;
+
+  /**
+   * The type of media the ranking contains. E.g. Movies, TV Shows.
+   */
+  private MediaType mediaType;
 
   /**
    * Default constructor as required by JPA.
@@ -64,17 +75,21 @@ public abstract class Ranking {
    * @param title the title of the ranking
    * @param desc the description of the ranking
    * @param isPublic whether the ranking can be accessed by all user or just the owner
+   * @param rankingType the type of ranking E.g. Numbered Ranking, Tier List
+   * @param mediaType the type of media the ranking contains E.g. Movies, TV Shows
    */
-  protected Ranking(User user, String title, String desc, boolean isPublic) {
+  protected Ranking(User user, String title, String desc, boolean isPublic, RankingType rankingType, MediaType mediaType) {
     this.user = user;
     this.title = title;
     this.description = desc;
     this.isPublic = isPublic;
+    this.rankingType = rankingType;
+    this.mediaType = mediaType;
   }
 
   /**
    * Returns the ID of the ranking.
-   * @return
+   * @return the id of the ranking
    */
   public Long getId() {
     return id;
@@ -151,6 +166,37 @@ public abstract class Ranking {
   }
 
   /**
+   * Returns the type of ranking. E.g. Numbered Ranking, Tier List.
+   * @return the type of ranking as an enum
+   */
+  public RankingType getRankingType() {
+    return rankingType;
+  }
+
+  /**
+   * Sets the type of the ranking.
+   * @param rankingType the enum type of the ranking
+   */
+  public void setRankingType(RankingType rankingType) {
+    this.rankingType = rankingType;
+  }
+
+  /**
+   * Returns the media type of the ranking. E.g. Movies, TV Shows.
+   * @return the media type of the ranking
+   */
+  public MediaType getMediaType() {
+    return mediaType;
+  }
+
+  /**
+   * Sets the media type of the ranking.
+   * @param mediaType the enum media type of the ranking
+   */
+  public void setMediaType(MediaType mediaType) {
+    this.mediaType = mediaType;
+  }
+  /**
    * Returns the ranking as a string.
    * @return the string representation of the ranking
    */
@@ -162,6 +208,8 @@ public abstract class Ranking {
       ", title='" + title + '\'' +
       ", description='" + description + '\'' +
       ", isPublic=" + isPublic +
+      ", rankingType=" + rankingType +
+      ", mediaType=" + mediaType +
       '}';
   }
 }
