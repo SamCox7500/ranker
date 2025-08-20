@@ -54,37 +54,31 @@ public class NumberedRankingController {
    */
   @GetMapping("/users/{userId}/numberedrankings/{rankingId}")
   public NumberedRankingDTO getRanking(@PathVariable("rankingId") Long rankingId, @PathVariable("userId") Long userId) throws AccessDeniedException {
-    return NumberedRankingDTOMapper.toNumberedRankingDTO(numberedRankingService.getNumberedRankingByUserAndId(rankingId, userId));
+    return NumberedRankingDTOMapper.toNumberedRankingDTO(numberedRankingService.getNumberedRankingByIdAndUser(rankingId, userId));
   }
 
   /**
    * Creates a new numbered ranking.
    * @param userId the id of the user creating the ranking
-   * @param rankingDTO the DTO of ranking information used to create the numbered ranking. See {@link NumberedRankingDTO}.
+   * @param createNumberedRankingDTO the DTO of ranking information used to create the numbered ranking. See {@link CreateNumberedRankingDTO}.
    * @throws AccessDeniedException if the currently authenticated user does not have permission to create a numbered ranking.
    * Either because they are not authenticated or because they are trying to create a ranking for a different user.
    */
   //todo should service method have id seperate as well?
   @PostMapping("/users/{userId}/numberedrankings")
-  public void createRanking(@PathVariable("userId") Long userId, @RequestBody @Valid NumberedRankingDTO rankingDTO) throws AccessDeniedException {
-    if (!userId.equals(rankingDTO.getUserDTO().getId())) {
-      throw new AccessDeniedException("User ID mismatch");
-    }
-    numberedRankingService.createNumberedRanking(rankingDTO);
+  public void createNumberedRanking(@PathVariable("userId") Long userId, @RequestBody @Valid CreateNumberedRankingDTO createNumberedRankingDTO) throws AccessDeniedException {
+    numberedRankingService.createNumberedRanking(userId, createNumberedRankingDTO);
   }
 
   /**
    * Updates a numbered ranking.
    * @param userId the id of the user that the ranking belongs to
-   * @param rankingDTO the new data used to update the numbered ranking. See {@link NumberedRankingDTO}.
+   * @param updateNumberedRankingDTO the new data used to update the numbered ranking. See {@link UpdateNumberedRankingDTO}.
    * @throws AccessDeniedException if the currently authenticated user does not have permission to update this ranking
    */
   @PutMapping("/users/{userId}/numberedrankings/{rankingId}")
-  public void updateRanking(@PathVariable("userId") Long userId, @RequestBody @Valid NumberedRankingDTO rankingDTO) throws AccessDeniedException {
-    if (!userId.equals(rankingDTO.getUserDTO().getId())) {
-      throw new AccessDeniedException("UserId Mismatch");
-    }
-    numberedRankingService.updateNumberedRanking(rankingDTO);
+  public void updateRanking(@PathVariable("userId") Long userId, @PathVariable("rankingId") Long rankingId, @RequestBody @Valid UpdateNumberedRankingDTO updateNumberedRankingDTO) throws AccessDeniedException {
+    numberedRankingService.updateNumberedRanking(rankingId, userId, updateNumberedRankingDTO);
   }
 
   /**

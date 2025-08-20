@@ -25,18 +25,18 @@ public class RankingService {
     this.authService = authService;
   }
   public Ranking getRankingByIdAndUser(Long rankingId, Long userId) throws AccessDeniedException {
-    checkPermission(userId);
+    checkPermissions(userId);
     User user = userService.getUserByID(userId);
     return rankingRepository.findByIdAndUser(rankingId, user)
       .orElseThrow(() -> new RankingNotFoundException("Ranking not found for ranking " + rankingId + " and user " + userId));
   }
   public List<Ranking> getAllRankingsByUser(Long userId) throws AccessDeniedException {
-    checkPermission(userId);
+    checkPermissions(userId);
     User user = userService.getUserByID(userId);
     return rankingRepository.findByUser(user)
       .orElseThrow(() -> new RankingNotFoundException("No rankings found for user " + userId));
   }
-  public void checkPermission(Long userId) throws AccessDeniedException {
+  public void checkPermissions(Long userId) throws AccessDeniedException {
     UserDTO authUser = authService.getAuthenticatedUser();
     if (!authUser.getId().equals(userId)) {
       throw new AccessDeniedException("You do not have permission to view this ranking");

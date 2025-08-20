@@ -5,7 +5,9 @@ import com.samcox.ranker.media.InvalidMediaTypeException;
 import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.ranking.RankingNotFoundException;
+import com.samcox.ranker.ranking.UpdateRankingDTO;
 import com.samcox.ranker.user.User;
+import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserNotFoundException;
 import com.samcox.ranker.user.UserService;
 import jakarta.validation.Valid;
@@ -66,8 +68,8 @@ public class NumberedRankingService {
    * @return the numbered ranking belonging to that user and id.
    * @throws AccessDeniedException if the currently authenticated user does not have permission to access this numbered ranking.
    */
-  public NumberedRanking getNumberedRankingByUserAndId(Long numberedRankingId, Long userId) throws AccessDeniedException {
-    checkOwnership(numberedRankingId);
+  public NumberedRanking getNumberedRankingByIdAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
+    checkPermissions(numberedRankingId);
     User user = userService.getUserByID(userId);
     return numberedRankingRepository.findByIdAndUser(numberedRankingId, user)
       .orElseThrow(
@@ -90,32 +92,33 @@ public class NumberedRankingService {
 
   /**
    * Creates a new numbered ranking from a numbered ranking DTO.
-   * @param numberedRankingDTO the dto that holds the data used to create the new numbered ranking
+   * @param createNumberedRankingDTO the dto that holds the data used to create the new numbered ranking
    * @throws AccessDeniedException if the current authenticated user does not have permission to create a numbered ranking with the data in this DTO.
    * E.g. creating a ranking for a different user.
    */
-  public void createNumberedRanking(@Valid NumberedRankingDTO numberedRankingDTO) throws AccessDeniedException {
+  public void createNumberedRanking(Long userId, @Valid CreateNumberedRankingDTO createNumberedRankingDTO) throws AccessDeniedException {
 
+    checkPermissions(userId);
     /*
     The media type must be a known media type e.g., "FILM", "TV_SHOW"
      */
     try {
-      MediaType mediaType = MediaType.valueOf(numberedRankingDTO.getMediaType());
+      MediaType mediaType = MediaType.valueOf(createNumberedRankingDTO.getMediaType());
     } catch (IllegalArgumentException e) {
-      throw new InvalidMediaTypeException("Invalid media type: " + numberedRankingDTO.getMediaType());
+      throw new InvalidMediaTypeException("Invalid media type: " + createNumberedRankingDTO.getMediaType());
     }
 
-    User user = userService.getUserByID(numberedRankingDTO.getUserDTO().getId());
+    User user = userService.getUserByID(userId);
 
     MediaList mediaList = new MediaList();
-    mediaList.setMediaType(MediaType.valueOf(numberedRankingDTO.getMediaType()));
+    mediaList.setMediaType(MediaType.valueOf(createNumberedRankingDTO.getMediaType()));
 
     NumberedRanking numberedRanking = new NumberedRanking();
     numberedRanking.setUser(user);
-    numberedRanking.setTitle(numberedRankingDTO.getTitle());
-    numberedRanking.setDescription(numberedRankingDTO.getDescription());
+    numberedRanking.setTitle(createNumberedRankingDTO.getTitle());
+    numberedRanking.setDescription(createNumberedRankingDTO.getDescription());
     numberedRanking.setPrivate(); //todo not yet implemented
-    numberedRanking.setReverseOrder(numberedRankingDTO.isReverseOrder());
+    numberedRanking.setReverseOrder(createNumberedRankingDTO.isReverseOrder());
     numberedRanking.setMediaType(mediaList.getMediaType());
 
     numberedRanking.setMediaList(mediaList);
@@ -125,24 +128,21 @@ public class NumberedRankingService {
 
   /**
    * Updates the numbered ranking with the data from the NumberedRankingDTO
-   * @param newNumberedRanking the new data to be used to update the numbered ranking
+   * @param updateNumberedRankingDTO the new data to be used to update the numbered ranking
    * @throws AccessDeniedException if the currently authenticated user does not have permission to access this user
    */
-  public void updateNumberedRanking(@Valid NumberedRankingDTO newNumberedRanking) throws AccessDeniedException {
-    if (newNumberedRanking.getId() == null) {
+  public void updateNumberedRanking(Long rankingId, Long userId, @Valid UpdateNumberedRankingDTO updateNumberedRankingDTO) throws AccessDeniedException {
+    checkPermissions(userId);
+    if (rankingId == null) {
       throw new RankingNotFoundException("Ranking could not be found because ID is null");
     }
 
-    checkOwnership(newNumberedRanking.getId());
-
-    Long id = newNumberedRanking.getId();
-
-    NumberedRanking oldNumberedRanking = numberedRankingRepository.findById(newNumberedRanking.getId())
-      .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + id));
-    oldNumberedRanking.setTitle(newNumberedRanking.getTitle());
-    oldNumberedRanking.setDescription(newNumberedRanking.getDescription());
+    NumberedRanking oldNumberedRanking = numberedRankingRepository.findById(rankingId)
+      .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + rankingId));
+    oldNumberedRanking.setTitle(updateNumberedRankingDTO.getTitle());
+    oldNumberedRanking.setDescription(updateNumberedRankingDTO.getDescription());
     oldNumberedRanking.setPrivate(); //todo
-    oldNumberedRanking.setReverseOrder(newNumberedRanking.isReverseOrder());
+    oldNumberedRanking.setReverseOrder(updateNumberedRankingDTO.isReverseOrder());
     numberedRankingRepository.save(oldNumberedRanking);
   }
 
@@ -153,7 +153,7 @@ public class NumberedRankingService {
    * @throws AccessDeniedException if the user trying to delete the ranking does not have permission
    */
   public void deleteNumberedRankingByIdAndUser(Long rankingId, Long userId) throws AccessDeniedException {
-    checkOwnership(rankingId);
+    checkPermissions(userId);
     if (numberedRankingRepository.findById(rankingId).isEmpty()) {
       throw new RankingNotFoundException("Cannot delete ranking. Ranking does not exist");
     }
@@ -163,29 +163,13 @@ public class NumberedRankingService {
 
   /**
    * Checks if the currently authenticated user has access to a numbered ranking
-   * @param rankingId the id of the numbered ranking to be checked
+   * @param userId the id of the user to be checked for authorisation
    * @throws AccessDeniedException if the current authenticated user does not have permission to access this ranking
    */
-  public void checkOwnership(Long rankingId) throws AccessDeniedException {
-    Long authUserId = authService.getAuthenticatedUser().getId();
-    NumberedRanking ranking = numberedRankingRepository.findById(rankingId)
-      .orElseThrow(() -> new RankingNotFoundException("Could not check ownership as ranking does not exist with id: " + rankingId));
-    if (!ranking.getUser().getId().equals(authUserId)) {
-      throw new AccessDeniedException("You do not have permission to access that resource");
+  public void checkPermissions(Long userId) throws AccessDeniedException {
+    UserDTO authUser = authService.getAuthenticatedUser();
+    if (!authUser.getId().equals(userId)) {
+      throw new AccessDeniedException("You do not have permission to view this ranking");
     }
   }
-    /*
-  public NumberedRanking getNumberedRankingById(long id) {
-    return numberedRankingRepository.findById(id)
-      .orElseThrow(() -> new RankingNotFoundException("Numbered ranking does not exist with id: " + id));
-  }
-   */
-    /*
-  public void deleteAllNumberedRankingsByUser(User user) {
-    if (numberedRankingRepository.findByUser(user).isEmpty()) {
-      throw new RankingNotFoundException("Failed to delete rankings. User has not rankings.");
-    }
-    numberedRankingRepository.deleteByUser(user);
-  }
-   */
 }

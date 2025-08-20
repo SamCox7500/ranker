@@ -49,6 +49,7 @@ public class RankerApplication implements CommandLineRunner {
   @Transactional
   public void run(String... args) throws Exception {
 
+    /*
     // Register a default user at startup
     UserCredentials userCredentials = new UserCredentials();
     userCredentials.setUsername("steve");
@@ -150,6 +151,7 @@ public class RankerApplication implements CommandLineRunner {
     //System.out.println(mediaList1.getEntries());
 
     SecurityContextHolder.clearContext();
+    */
 
   }
 }
