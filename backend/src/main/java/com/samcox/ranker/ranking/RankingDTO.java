@@ -1,9 +1,12 @@
 package com.samcox.ranker.ranking;
 
+import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.user.UserDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import javax.print.attribute.standard.Media;
 
 /**
  * DTO for {@link Ranking}.
@@ -45,18 +48,27 @@ public class RankingDTO {
   private boolean isPublic;
 
   /**
+   * tHE
+   */
+  private String rankingType;
+
+  private String mediaType;
+
+  /**
    * Default constructor as required by JPA.
    */
   public RankingDTO() {}
   /**
    * Constructor for creating Ranking objects
    */
-  public RankingDTO(Long id, UserDTO userDTO, String title, String desc, boolean isPublic) {
+  public RankingDTO(Long id, UserDTO userDTO, String title, String desc, boolean isPublic, String rankingType, String mediaType) {
     this.id = id;
     this.userDTO = userDTO;
     this.title = title;
     this.description = desc;
     this.isPublic = isPublic;
+    this.rankingType = rankingType;
+    this.mediaType = mediaType;
   }
 
   /**
@@ -131,6 +143,38 @@ public class RankingDTO {
   public void setPublic(boolean isPublic) {
     this.isPublic = isPublic;
   }
+
+  /**
+   * Returns ranking type. E.g. Numbered Ranking, Tier List.
+   * @return the type of the ranking
+   */
+  public String getRankingType() {
+    return rankingType;
+  }
+
+  /**
+   * Sets the type of the ranking
+   * @param rankingType the enum type of the ranking
+   */
+  public void setRankingType(String rankingType) {
+    this.rankingType = rankingType;
+  }
+
+  /**
+   * Returns the media type that the ranking contains. E.g. Movies, TV Shows.
+   * @return the media type of the ranking
+   */
+  public String getMediaType() {
+    return mediaType;
+  }
+
+  /**
+   * Sets the media type of the ranking.
+   * @param mediaType the media type of the ranking
+   */
+  public void setMediaType(String mediaType) {
+    this.mediaType = mediaType;
+  }
   /**
    * Returns the ranking dto as a string
    * @return the string representation of the ranking dto
@@ -143,6 +187,8 @@ public class RankingDTO {
       ", title='" + title + '\'' +
       ", description='" + description + '\'' +
       ", isPublic=" + isPublic +
+      ", rankingType=" + rankingType +
+      ", mediaType=" + mediaType +
       '}';
   }
 }

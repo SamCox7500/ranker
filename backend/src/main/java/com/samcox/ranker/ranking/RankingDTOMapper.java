@@ -22,7 +22,9 @@ public class RankingDTOMapper {
       UserDTOMapper.toUserDTO(ranking.getUser()),
       ranking.getTitle(),
       ranking.getDescription(),
-      ranking.getIsPublic());
+      ranking.getIsPublic(),
+      ranking.getRankingType().toString(),
+      ranking.getMediaType().toString());
   }
   /**
    * Static method for converting a list of {@link Ranking} to a list of {@link RankingDTO}.

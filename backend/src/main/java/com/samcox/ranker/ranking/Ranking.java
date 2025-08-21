@@ -57,11 +57,13 @@ public abstract class Ranking {
   /**
    * The type of ranking. E.g. Numbered Ranking, Tier List.
    */
+  @Enumerated(EnumType.STRING)
   private RankingType rankingType;
 
   /**
    * The type of media the ranking contains. E.g. Movies, TV Shows.
    */
+  @Enumerated(EnumType.STRING)
   private MediaType mediaType;
 
   /**
@@ -152,10 +154,10 @@ public abstract class Ranking {
   }
 
   /**
-   * Sets the ranking to public. Making it open to all users.
+   * Sets the ranking to public or private.
    */
-  public void setPublic() {
-    isPublic = true;
+  public void setIsPublic(boolean isPublic) {
+    this.isPublic = isPublic;
   }
 
   /**

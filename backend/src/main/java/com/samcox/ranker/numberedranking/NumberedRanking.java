@@ -3,6 +3,7 @@ package com.samcox.ranker.numberedranking;
 import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.ranking.Ranking;
+import com.samcox.ranker.ranking.RankingType;
 import com.samcox.ranker.user.User;
 import jakarta.persistence.*;
 
@@ -35,12 +36,6 @@ public class NumberedRanking extends Ranking {
   private MediaList mediaList;
 
   /**
-   * The type of media that the numbered ranking contains. See {@link MediaType}.
-   */
-  @Enumerated(EnumType.STRING)
-  private MediaType mediaType;
-
-  /**
    * Default constructor required by JPA.
    */
   public NumberedRanking() {}
@@ -55,10 +50,9 @@ public class NumberedRanking extends Ranking {
    * @param mediaType the type of media the numbered ranking contains
    * @param mediaList the media list of ranked entries belonging to the numbered ranking
    */
-  public NumberedRanking(User user, String title, String desc, boolean isPublic, boolean isReverseOrder, MediaType mediaType, MediaList mediaList) {
-    super(user, title, desc, isPublic);
+  public NumberedRanking(User user, String title, String desc, boolean isPublic, RankingType rankingType, MediaType mediaType, boolean isReverseOrder, MediaList mediaList) {
+    super(user, title, desc, isPublic, rankingType, mediaType);
     this.isReverseOrder = isReverseOrder;
-    this.mediaType = mediaType;
     this.mediaList = mediaList;
   }
 
@@ -92,21 +86,5 @@ public class NumberedRanking extends Ranking {
    */
   public void setMediaList(MediaList mediaList) {
     this.mediaList = mediaList;
-  }
-
-  /**
-   * Returns the media type of the numbered ranking
-   * @return the {@link MediaType of the numbered ranking}
-   */
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-
-  /**
-   * Sets the media type of the numbered ranking
-   * @param mediaType the media type for the numbered ranking
-   */
-  public void setMediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
   }
 }

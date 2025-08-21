@@ -14,11 +14,6 @@ import jakarta.validation.constraints.Size;
  */
 public class UpdateRankingDTO {
   /**
-   * Unique identifier for the ranking.
-   */
-  private Long id;
-
-  /**
    * The title of the ranking. Must be between 1 and 30 characters.
    */
   @NotBlank(message = "Ranking must have a title")
@@ -44,29 +39,11 @@ public class UpdateRankingDTO {
   /**
    * Constructor for creating update ranking DTO.
    */
-  public UpdateRankingDTO(Long id, UserDTO userDTO, String title, String desc, boolean isPublic) {
-    this.id = id;
+  public UpdateRankingDTO(String title, String desc, boolean isPublic) {
     this.title = title;
     this.description = desc;
     this.isPublic = isPublic;
   }
-
-  /**
-   * Returns the unique identifier of the ranking.
-   * @return the id of the ranking
-   */
-  public Long getId() {
-    return id;
-  }
-
-  /**
-   * Sets the unique identifier for the ranking
-   * @param id the id of the ranking to be set
-   */
-  public void setId(Long id) {
-    this.id = id;
-  }
-
   /**
    * Returns the title of the ranking.
    * @return the title of the ranking
@@ -116,7 +93,6 @@ public class UpdateRankingDTO {
   @Override
   public String toString() {
     return "RankingDTO{" +
-      "id=" + id +
       ", title='" + title + '\'' +
       ", description='" + description + '\'' +
       ", isPublic=" + isPublic +
