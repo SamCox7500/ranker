@@ -82,7 +82,7 @@ public class MediaListService {
    * @throws AccessDeniedException if the user trying to access the media list does not have permission
    */
   public MediaList getMediaListByNumberedRankingAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
-    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(numberedRankingId, userId);
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByIdAndUser(numberedRankingId, userId);
     return numberedRanking.getMediaList();
     /*
     return mediaListRepository.findByNumberedRanking(numberedRanking)
