@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.numberedranking.NumberedRanking;
 import com.samcox.ranker.numberedranking.NumberedRankingRepository;
+import com.samcox.ranker.ranking.MediaType;
 import com.samcox.ranker.user.User;
 import com.samcox.ranker.user.UserRepository;
 import jakarta.transaction.Transactional;

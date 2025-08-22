@@ -2,7 +2,6 @@ package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.media.MediaList;
-import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.numberedranking.NumberedRanking;
 import com.samcox.ranker.numberedranking.NumberedRankingDTO;
 import com.samcox.ranker.numberedranking.NumberedRankingRepository;

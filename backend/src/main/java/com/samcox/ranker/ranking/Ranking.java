@@ -1,13 +1,10 @@
 package com.samcox.ranker.ranking;
 
-import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import javax.print.attribute.standard.Media;
 
 /**
  * Abstract class for a ranking created by a user.

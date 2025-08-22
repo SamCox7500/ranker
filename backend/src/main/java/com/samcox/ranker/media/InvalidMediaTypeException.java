@@ -1,5 +1,6 @@
 package com.samcox.ranker.media;
 
+import com.samcox.ranker.ranking.MediaType;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

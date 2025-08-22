@@ -1,7 +1,7 @@
 package com.samcox.ranker.numberedranking;
 
 import com.samcox.ranker.media.MediaList;
-import com.samcox.ranker.media.MediaType;
+import com.samcox.ranker.ranking.MediaType;
 import com.samcox.ranker.ranking.Ranking;
 import com.samcox.ranker.ranking.RankingType;
 import com.samcox.ranker.user.User;

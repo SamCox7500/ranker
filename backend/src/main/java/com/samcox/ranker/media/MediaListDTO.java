@@ -1,5 +1,6 @@
 package com.samcox.ranker.media;
 
+import com.samcox.ranker.ranking.MediaType;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;

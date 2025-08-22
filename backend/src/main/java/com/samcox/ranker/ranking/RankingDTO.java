@@ -1,12 +1,9 @@
 package com.samcox.ranker.ranking;
 
-import com.samcox.ranker.media.MediaType;
 import com.samcox.ranker.user.UserDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import javax.print.attribute.standard.Media;
 
 /**
  * DTO for {@link Ranking}.
