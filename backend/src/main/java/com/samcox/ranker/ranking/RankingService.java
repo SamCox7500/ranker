@@ -49,7 +49,7 @@ public class RankingService {
     oldRanking.setIsPublic(updateRankingDTO.isPublic());
     rankingRepository.save(oldRanking);
   }
-  public void checkPermissions(Long userId) throws AccessDeniedException {
+  private void checkPermissions(Long userId) throws AccessDeniedException {
     UserDTO authUser = authService.getAuthenticatedUser();
     if (!authUser.getId().equals(userId)) {
       throw new AccessDeniedException("You do not have permission to view this ranking");

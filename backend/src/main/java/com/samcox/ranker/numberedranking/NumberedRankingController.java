@@ -3,6 +3,7 @@ package com.samcox.ranker.numberedranking;
 import com.samcox.ranker.media.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;

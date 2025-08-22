@@ -188,7 +188,7 @@ public class MediaListService {
    * @param userId id of the user trying to access the media list
    * @throws AccessDeniedException if the user does not have permission to access the media list
    */
-  public void checkPermissions(Long userId) throws AccessDeniedException {
+  private void checkPermissions(Long userId) throws AccessDeniedException {
     Long authUserId = authService.getAuthenticatedUser().getId();
     if (!authUserId.equals(userId)) {
       throw new AccessDeniedException("You do not have permission to access that resource");

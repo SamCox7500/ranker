@@ -1,4 +1,4 @@
-package com.samcox.ranker.ranking;
+package com.samcox.ranker.numberedranking;
 
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.media.MediaList;
@@ -265,6 +265,6 @@ public class NumberedRankingServiceIntegrationTests {
   @WithMockUser("testuser1")
   public void testDeleteNumberedRankingByIdAndUser_NotAuthorized() throws AccessDeniedException {
     assertThrows(AccessDeniedException.class, () -> numberedRankingService.deleteNumberedRankingByIdAndUser(testNumberedRanking.getId(), testUser.getId()));
-    assertThrows(AccessDeniedException.class, () -> numberedRankingService.deleteNumberedRankingByIdAndUser(testNumberedRanking.getId(), testUser1.getId()));
+    assertThrows(RankingNotFoundException.class, () -> numberedRankingService.deleteNumberedRankingByIdAndUser(testNumberedRanking.getId(), testUser1.getId()));
   }
 }

@@ -114,8 +114,6 @@ public class MediaListControllerIntegrationTests {
   @Test
   @WithMockUser("testuser")
   public void testGetMediaList_Success() throws Exception {
-    //mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist/" + + testMediaList.getId())
-        //.contentType(org.springframework.http.MediaType.APPLICATION_JSON))
     mockMvc.perform(get("/users/" + testUser.getId() + "/numberedrankings/" + testNumberedRanking.getId() + "/medialist")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())

@@ -68,7 +68,7 @@ public class NumberedRankingService {
    * @throws AccessDeniedException if the currently authenticated user does not have permission to access this numbered ranking.
    */
   public NumberedRanking getNumberedRankingByIdAndUser(Long numberedRankingId, Long userId) throws AccessDeniedException {
-    checkPermissions(numberedRankingId);
+    checkPermissions(userId);
     User user = userService.getUserByID(userId);
     return numberedRankingRepository.findByIdAndUser(numberedRankingId, user)
       .orElseThrow(
@@ -84,6 +84,7 @@ public class NumberedRankingService {
    * @throws AccessDeniedException if the currently authenticated user does not have permission to access this user's rankings.
    */
   public List<NumberedRanking> getAllNumberedRankingsByUser(Long userId) throws AccessDeniedException {
+    checkPermissions(userId);
     User user = userService.getUserByID(userId);
     return numberedRankingRepository.findByUser(user)
       .orElseThrow(() -> new UserNotFoundException("Cannot retrieve numbered rankings because user does not exist"));
@@ -157,6 +158,8 @@ public class NumberedRankingService {
       throw new RankingNotFoundException("Cannot delete ranking. Ranking does not exist");
     }
     User user = userService.getUserByID(userId);
+    numberedRankingRepository.findByIdAndUser(rankingId,user)
+      .orElseThrow(() -> new RankingNotFoundException("Ranking does not exist for user " + userId + " ranking " + rankingId));
     numberedRankingRepository.deleteByIdAndUser(rankingId, user);
   }
 
@@ -165,7 +168,7 @@ public class NumberedRankingService {
    * @param userId the id of the user to be checked for authorisation
    * @throws AccessDeniedException if the current authenticated user does not have permission to access this ranking
    */
-  public void checkPermissions(Long userId) throws AccessDeniedException {
+  private void checkPermissions(Long userId) throws AccessDeniedException {
     UserDTO authUser = authService.getAuthenticatedUser();
     if (!authUser.getId().equals(userId)) {
       throw new AccessDeniedException("You do not have permission to view this ranking");

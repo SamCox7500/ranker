@@ -247,15 +247,4 @@ public class UserServiceIntegrationTests {
     assertTrue(deletedUser.isEmpty());
 
   }
-  @Test
-  public void testCheckAuthorized_Success() throws AccessDeniedException {
-    //Checking authenticated user id matches the id to be checked for authorisation
-    //No exception should be thrown
-    userService.checkAuthorized(testUser.getId());
-  }
-  @Test
-  public void testCheckAuthorized_NotAuthorized() throws AccessDeniedException {
-    //Id to be checked does not match authenticated user, therefore exception should be thrown
-    assertThrows(AccessDeniedException.class, () -> userService.checkAuthorized(testUser1.getId()));
-  }
 }
