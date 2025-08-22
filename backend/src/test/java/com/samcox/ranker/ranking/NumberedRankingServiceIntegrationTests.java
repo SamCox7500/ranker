@@ -2,10 +2,7 @@ package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.media.MediaList;
-import com.samcox.ranker.numberedranking.NumberedRanking;
-import com.samcox.ranker.numberedranking.NumberedRankingDTO;
-import com.samcox.ranker.numberedranking.NumberedRankingRepository;
-import com.samcox.ranker.numberedranking.NumberedRankingService;
+import com.samcox.ranker.numberedranking.*;
 import com.samcox.ranker.user.*;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,7 +83,7 @@ public class NumberedRankingServiceIntegrationTests {
   @Test
   @WithMockUser("testuser")
   public void testGetNumberedRankingByUserAndId_Success() throws AccessDeniedException {
-    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByUserAndId(testNumberedRanking.getId(), testUser.getId());
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByIdAndUser(testNumberedRanking.getId(), testUser.getId());
 
     assertNotNull(numberedRanking);
     assertEquals(testNumberedRanking.getId(), numberedRanking.getId());
@@ -101,13 +98,13 @@ public class NumberedRankingServiceIntegrationTests {
   public void testGetNumberedRankingByUserAndId_NotAuthorized() throws AccessDeniedException {
     //A user attempting to gain access to a different user's ranking.
     assertThrows(AccessDeniedException.class,
-      () -> numberedRankingService.getNumberedRankingByUserAndId(testNumberedRanking.getId(), testUser.getId()));
+      () -> numberedRankingService.getNumberedRankingByIdAndUser(testNumberedRanking.getId(), testUser.getId()));
   }
   @Test
   @WithMockUser("testuser")
   public void testGetNumberedRankingByUserAndId_InvalidRanking() throws AccessDeniedException {
     assertThrows(RankingNotFoundException.class,
-      () -> numberedRankingService.getNumberedRankingByUserAndId(900L, testUser.getId()));
+      () -> numberedRankingService.getNumberedRankingByIdAndUser(900L, testUser.getId()));
   }
   @Test
   @WithMockUser("testuser")
@@ -131,94 +128,86 @@ public class NumberedRankingServiceIntegrationTests {
   @Test
   @WithMockUser("testuser")
   public void testCreateNumberedRanking_Success() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), testUser.getUsername());
+    Long userId = testUser.getId();
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("Test title");
-    numberedRankingDTO.setDescription("Test description");
-    numberedRankingDTO.setMediaType("FILM");
+    CreateNumberedRankingDTO createNumberedRankingDTO = new CreateNumberedRankingDTO();
+    createNumberedRankingDTO.setTitle("Test title");
+    createNumberedRankingDTO.setDescription("Test description");
+    createNumberedRankingDTO.setMediaType("FILM");
 
-    numberedRankingService.createNumberedRanking(numberedRankingDTO);
+    numberedRankingService.createNumberedRanking(userId, createNumberedRankingDTO);
 
     List<NumberedRanking> numberedRankings = numberedRankingRepository.findByUser(testUser).orElseThrow();
     NumberedRanking createdNumberedRanking = numberedRankings.get(1);
 
-    assertEquals(createdNumberedRanking.getUser().getId(), numberedRankingDTO.getUserDTO().getId());
-    assertEquals(createdNumberedRanking.getUser().getUsername(), numberedRankingDTO.getUserDTO().getUsername());
-    assertEquals(createdNumberedRanking.getTitle(), numberedRankingDTO.getTitle());
-    assertEquals(createdNumberedRanking.getDescription(), numberedRankingDTO.getDescription());
-    assertEquals(createdNumberedRanking.getMediaType().toString(), numberedRankingDTO.getMediaType());
+    assertEquals(createdNumberedRanking.getUser().getId(), userId);
+    assertEquals(createdNumberedRanking.getTitle(), createNumberedRankingDTO.getTitle());
+    assertEquals(createdNumberedRanking.getDescription(), createNumberedRankingDTO.getDescription());
+    assertEquals(createdNumberedRanking.getMediaType().toString(), createNumberedRankingDTO.getMediaType());
   }
   @Test
   @WithMockUser("testuser1")
   public void testCreateNumberedRanking_NotAuthorized() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), testUser.getUsername());
+    Long testUserId = testUser.getId();
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("Test title");
-    numberedRankingDTO.setDescription("Test description");
-    numberedRankingDTO.setMediaType("FILM");
+    CreateNumberedRankingDTO createNumberedRankingDTO = new CreateNumberedRankingDTO();
+    createNumberedRankingDTO.setTitle("Test title");
+    createNumberedRankingDTO.setDescription("Test description");
+    createNumberedRankingDTO.setMediaType("FILM");
 
     assertThrows(AccessDeniedException.class,
-      () -> numberedRankingService.createNumberedRanking(numberedRankingDTO));
+      () -> numberedRankingService.createNumberedRanking(testUserId, createNumberedRankingDTO));
   }
   @Test
   @WithMockUser("testuser")
   public void testCreateNumberedRanking_InvalidTitle() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), "testuser");
+    Long testUserId = testUser.getId();
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("");
-    numberedRankingDTO.setDescription("Test description");
-    numberedRankingDTO.setMediaType("FILM");
+    CreateNumberedRankingDTO createNumberedRankingDTO = new CreateNumberedRankingDTO();
+    createNumberedRankingDTO.setTitle("");
+    createNumberedRankingDTO.setDescription("Test description");
+    createNumberedRankingDTO.setMediaType("FILM");
 
     assertThrows(RuntimeException.class,
-      () -> numberedRankingService.createNumberedRanking(numberedRankingDTO));
+      () -> numberedRankingService.createNumberedRanking(testUserId, createNumberedRankingDTO));
   }
   @Test
   @WithMockUser("testuser")
   public void testCreateNumberedRanking_InvalidDesc() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), "testuser");
+    Long testUserId = testUser.getId();
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("This is a title");
-    numberedRankingDTO.setDescription("");
-    numberedRankingDTO.setMediaType("FILM");
+    CreateNumberedRankingDTO createNumberedRankingDTO = new CreateNumberedRankingDTO();
+    createNumberedRankingDTO.setTitle("Test title");
+    createNumberedRankingDTO.setDescription("");
+    createNumberedRankingDTO.setMediaType("FILM");
 
     assertThrows(RuntimeException.class,
-      () -> numberedRankingService.createNumberedRanking(numberedRankingDTO));
+      () -> numberedRankingService.createNumberedRanking(testUserId, createNumberedRankingDTO));
   }
   @Test
   @WithMockUser("testuser")
   public void testCreateNumberedRanking_InvalidMediaType() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), "testuser");
+    Long testUserId = testUser.getId();
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("This is a title");
-    numberedRankingDTO.setDescription("This is a test desc");
-    numberedRankingDTO.setMediaType("BOOK");
+    CreateNumberedRankingDTO createNumberedRankingDTO = new CreateNumberedRankingDTO();
+    createNumberedRankingDTO.setTitle("Test title");
+    createNumberedRankingDTO.setDescription("Test description");
+    createNumberedRankingDTO.setMediaType("invalid");
 
     assertThrows(RuntimeException.class,
-      () -> numberedRankingService.createNumberedRanking(numberedRankingDTO));
+      () -> numberedRankingService.createNumberedRanking(testUserId, createNumberedRankingDTO));
   }
   @Test
   @WithMockUser("testuser")
   public void testUpdateNumberedRanking_Success() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), "testuser");
+    Long testUserId = testUser.getId();
+    Long rankingId = testNumberedRanking.getId();
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setId(testNumberedRanking.getId());
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("This is a new valid title");
-    numberedRankingDTO.setDescription("This is a new description");
-    numberedRankingDTO.setMediaType("FILM");
+    UpdateNumberedRankingDTO updateNumberedRankingDTO = new UpdateNumberedRankingDTO();
+    updateNumberedRankingDTO.setTitle("This is a new valid title");
+    updateNumberedRankingDTO.setDescription("This is a new valid title");
 
-    numberedRankingService.updateNumberedRanking(numberedRankingDTO);
+    numberedRankingService.updateNumberedRanking(rankingId, testUserId, updateNumberedRankingDTO);
 
     NumberedRanking changedNumberedRanking = numberedRankingRepository.findById(testNumberedRanking.getId()).orElseThrow();
     assertEquals(changedNumberedRanking, testNumberedRanking);
@@ -226,67 +215,45 @@ public class NumberedRankingServiceIntegrationTests {
   @Test
   @WithMockUser("testuser1")
   public void testUpdateNumberedRanking_NotAuthorized() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), "testuser");
+    Long userId = testUser.getId();
+    Long rankingId = testNumberedRanking.getId();
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setId(testNumberedRanking.getId());
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("This is a new valid title");
-    numberedRankingDTO.setDescription("This is a new description");
-    numberedRankingDTO.setMediaType("FILM");
-
+    UpdateNumberedRankingDTO updateNumberedRankingDTO = new UpdateNumberedRankingDTO();
+    updateNumberedRankingDTO.setTitle("This is a new valid title");
+    updateNumberedRankingDTO.setDescription("This is a new description");
 
     assertThrows(AccessDeniedException.class,
-      () -> numberedRankingService.updateNumberedRanking(numberedRankingDTO));
+      () -> numberedRankingService.updateNumberedRanking(rankingId, userId, updateNumberedRankingDTO));
   }
   @Test
   @WithMockUser("testuser")
   public void testUpdateNumberedRanking_InvalidTitle() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), "testuser");
+    Long userId = testUser.getId();
+    Long rankingId = testNumberedRanking.getId();
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setId(testNumberedRanking.getId());
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("");
-    numberedRankingDTO.setDescription("This is a new description");
-    numberedRankingDTO.setMediaType("FILM");
+    UpdateNumberedRankingDTO updateNumberedRankingDTO = new UpdateNumberedRankingDTO();
+    updateNumberedRankingDTO.setTitle("");
+    updateNumberedRankingDTO.setDescription("This is a new description");
 
 
     assertThrows(RuntimeException.class,
-      () -> numberedRankingService.updateNumberedRanking(numberedRankingDTO));
+      () -> numberedRankingService.updateNumberedRanking(rankingId, userId, updateNumberedRankingDTO));
   }
   @Test
   @WithMockUser("testuser")
   public void tesUpdateNumberedRanking_InvalidDesc() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), "testuser");
+    Long userId = testUser.getId();
+    Long rankingId = testNumberedRanking.getId();
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setId(testNumberedRanking.getId());
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("Valid title");
-    numberedRankingDTO.setDescription("");
-    numberedRankingDTO.setMediaType("FILM");
+    UpdateNumberedRankingDTO updateNumberedRankingDTO = new UpdateNumberedRankingDTO();
+    updateNumberedRankingDTO.setTitle("This is a new valid title");
+    updateNumberedRankingDTO.setDescription("");
 
 
     assertThrows(RuntimeException.class,
-      () -> numberedRankingService.updateNumberedRanking(numberedRankingDTO));
+      () -> numberedRankingService.updateNumberedRanking(rankingId, userId, updateNumberedRankingDTO));
   }
-  @Test
-  @WithMockUser("testuser")
-  public void testUpdateNumberedRanking_MediaTypeNotChanged() throws AccessDeniedException {
-    UserDTO userDTO = new UserDTO(testUser.getId(), "testuser");
 
-    NumberedRankingDTO numberedRankingDTO = new NumberedRankingDTO();
-    numberedRankingDTO.setId(testNumberedRanking.getId());
-    numberedRankingDTO.setUserDTO(userDTO);
-    numberedRankingDTO.setTitle("Valid title");
-    numberedRankingDTO.setDescription("Valid desc");
-    numberedRankingDTO.setMediaType("TVSHOW");
-
-    numberedRankingService.updateNumberedRanking(numberedRankingDTO);
-    //Checking the media type was not changed despite different media type in DTO
-    assert(testNumberedRanking.getMediaType().equals(MediaType.FILM));
-  }
   @Test
   @WithMockUser("testuser")
   public void testDeleteNumberedRankingByIdAndUser_Success() throws AccessDeniedException {
@@ -299,17 +266,5 @@ public class NumberedRankingServiceIntegrationTests {
   public void testDeleteNumberedRankingByIdAndUser_NotAuthorized() throws AccessDeniedException {
     assertThrows(AccessDeniedException.class, () -> numberedRankingService.deleteNumberedRankingByIdAndUser(testNumberedRanking.getId(), testUser.getId()));
     assertThrows(AccessDeniedException.class, () -> numberedRankingService.deleteNumberedRankingByIdAndUser(testNumberedRanking.getId(), testUser1.getId()));
-  }
-  @Test
-  @WithMockUser("testuser")
-  public void testCheckAuthorized_Success() throws AccessDeniedException {
-    //Id of owner of ranking matches id of logged in, so no exception is thrown
-    numberedRankingService.checkOwnership(testNumberedRanking.getId());
-  }
-  @Test
-  @WithMockUser("testuser1")
-  public void testCheckAuthorized_NotAuthorized() throws AccessDeniedException {
-    //Id of user that owns ranking does not match logged in user so exception should be thrown
-    assertThrows(AccessDeniedException.class, () -> numberedRankingService.checkOwnership(testNumberedRanking.getId()));
   }
 }

@@ -114,7 +114,8 @@ public class NumberedRankingController {
     @PathVariable Long rankingId,
     @RequestBody @Valid EntryAddRequest entryAddRequest
   ) throws AccessDeniedException {
-    MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByIdAndUser(rankingId, userId);
+    MediaList mediaList = numberedRanking.getMediaList();
     mediaListService.addEntryToList(userId,entryAddRequest, mediaList.getId());
   }
   /**
@@ -134,7 +135,8 @@ public class NumberedRankingController {
     @PathVariable Long entryId,
     @RequestBody @Valid EntryMoveRequest entryMoveRequest
   ) throws AccessDeniedException {
-    MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByIdAndUser(rankingId, userId);
+    MediaList mediaList = numberedRanking.getMediaList();
     MediaListEntry mediaListEntry = mediaListEntryService.getMediaListEntryById(userId,entryMoveRequest.getEntryId());
     int oldPosition = mediaListEntry.getRanking();
     int newPosition = entryMoveRequest.getNewPosition();
@@ -153,7 +155,8 @@ public class NumberedRankingController {
     @PathVariable Long rankingId,
     @PathVariable Long entryId
   ) throws AccessDeniedException {
-    MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByIdAndUser(rankingId, userId);
+    MediaList mediaList = numberedRanking.getMediaList();
     mediaListService.removeEntryInList(userId,mediaList.getId(), entryId);
   }
   /**
@@ -169,7 +172,8 @@ public class NumberedRankingController {
     @PathVariable Long rankingId,
     @RequestBody List<Long> entryIds
   ) throws AccessDeniedException {
-    MediaList mediaList = mediaListService.getMediaListByNumberedRankingAndUser(rankingId, userId);
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByIdAndUser(rankingId, userId);
+    MediaList mediaList = numberedRanking.getMediaList();
     mediaListService.removeEntriesInList(userId,mediaList.getId(), entryIds);
   }
 }
