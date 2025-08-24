@@ -26,42 +26,11 @@ public class MediaList {
   private Long id;
 
   /**
-   * The type of media that is ranked by the entries in the media list.
-   */
-  @Enumerated(EnumType.STRING)
-  private MediaType mediaType;
-
-  /**
    * The ranked list of media.
    */
   @OneToMany(mappedBy = "mediaList", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("ranking ASC")
   private List<MediaListEntry> entries = new ArrayList<>();
-
-
-  /**
-   * The overarching data on the media list, such as the title, desc, etc.
-   */
-  /*
-  @OneToOne(mappedBy = "mediaList", cascade = CascadeType.ALL)
-  private NumberedRanking numberedRanking;
-  */
-
-  /**
-   * The type of media that the media list contains
-   * @return the MediaType of the media list.
-   */
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-
-  /**
-   * Sets the media type of the media list
-   * @param mediaType thge media type of the media list
-   */
-  public void setMediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
-  }
 
   /**
    * Returns the list of all media list entries contained within the list
@@ -182,9 +151,7 @@ public class MediaList {
   public String toString() {
     return "MediaList{" +
       "id=" + id +
-      ", mediaType=" + mediaType +
       ", entries=" + entries +
-      //", numberedRanking=" + numberedRanking +
       '}';
   }
 }
