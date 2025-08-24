@@ -25,15 +25,4 @@ public class NumberedRankingDTOMapper {
       numberedRanking.getIsReverseOrder(),
       numberedRanking.getMediaType().toString());
   }
-
-  /**
-   * Static method for converting a list of {@link NumberedRanking} to a list of {@link NumberedRankingDTO}.
-   * @param rankings the list of numbered rankings to be converted
-   * @return the list of {@code NumberedRankingDTO}
-   */
-  public static List<NumberedRankingDTO> toNumberedRankingDTOs(List<NumberedRanking> rankings) {
-    return rankings.stream()
-      .map(NumberedRankingDTOMapper::toNumberedRankingDTO)
-      .collect(Collectors.toList());
-  }
 }

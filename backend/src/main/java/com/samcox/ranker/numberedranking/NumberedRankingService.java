@@ -111,7 +111,6 @@ public class NumberedRankingService {
     User user = userService.getUserByID(userId);
 
     MediaList mediaList = new MediaList();
-    mediaList.setMediaType(MediaType.valueOf(createNumberedRankingDTO.getMediaType()));
 
     NumberedRanking numberedRanking = new NumberedRanking();
     numberedRanking.setUser(user);
@@ -119,7 +118,7 @@ public class NumberedRankingService {
     numberedRanking.setDescription(createNumberedRankingDTO.getDescription());
     numberedRanking.setPrivate(); //todo not yet implemented
     numberedRanking.setReverseOrder(createNumberedRankingDTO.isReverseOrder());
-    numberedRanking.setMediaType(mediaList.getMediaType());
+    numberedRanking.setMediaType(MediaType.valueOf(createNumberedRankingDTO.getMediaType()));
 
     numberedRanking.setMediaList(mediaList);
 

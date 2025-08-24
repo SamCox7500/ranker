@@ -48,11 +48,13 @@ public class NumberedRankingController {
    * @return the list of all numbered rankings as DTOs
    * @throws AccessDeniedException if the authenticated user does not have authorisation to access rankings for that user.
    */
+  /*
   @GetMapping("/users/{userId}/numberedrankings")
   public List<NumberedRankingDTO> getAllRankings(@PathVariable("userId") Long userId) throws AccessDeniedException {
     return NumberedRankingDTOMapper.toNumberedRankingDTOs(numberedRankingService
       .getAllNumberedRankingsByUser(userId));
   }
+   */
 
   /**
    * Returns a numbered ranking by id and userId.
@@ -62,8 +64,14 @@ public class NumberedRankingController {
    * @throws AccessDeniedException if the current authenticated user is not authorised to access this numbered ranking
    */
   @GetMapping("/users/{userId}/numberedrankings/{rankingId}")
-  public NumberedRankingDTO getRanking(@PathVariable("rankingId") Long rankingId, @PathVariable("userId") Long userId) throws AccessDeniedException {
-    return NumberedRankingDTOMapper.toNumberedRankingDTO(numberedRankingService.getNumberedRankingByIdAndUser(rankingId, userId));
+  public NumberedRankingDTO getNumberedRanking(@PathVariable("rankingId") Long rankingId, @PathVariable("userId") Long userId) throws AccessDeniedException {
+
+    NumberedRanking numberedRanking = numberedRankingService.getNumberedRankingByIdAndUser(rankingId, userId);
+
+    NumberedRankingDTO numberedRankingDTO = NumberedRankingDTOMapper.toNumberedRankingDTO(numberedRanking);
+
+    numberedRankingDTO.setMediaListDTO(mediaListService.toMediaListDTO(numberedRanking.getMediaList(), numberedRanking.getMediaType()));
+    return numberedRankingDTO;
   }
 
   /**

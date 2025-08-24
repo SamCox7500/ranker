@@ -1,9 +1,12 @@
 package com.samcox.ranker.numberedranking;
 
+import com.samcox.ranker.media.MediaListDTO;
 import com.samcox.ranker.user.UserDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import javax.print.attribute.standard.Media;
 
 /**
  * DTO for {@link NumberedRanking}.
@@ -50,7 +53,11 @@ public class NumberedRankingDTO {
   /**
    * The media type of the numbered ranking. E.g., MOVIES, TV_SHOWS.
    */
+  @NotBlank(message = "Numbered ranking must have a media type")
   private String mediaType;
+
+  @NotNull(message = "NumberedRankingDTO must have a MediaListDTO")
+  private MediaListDTO mediaListDTO;
 
   /**
    * Default constructor required by JPA.
@@ -187,6 +194,22 @@ public class NumberedRankingDTO {
    */
   public void setMediaType(String mediaType) {
     this.mediaType = mediaType;
+  }
+
+  /**
+   * Returns the media list as a dto
+   * @return the media list of the numbered ranking as a dto
+   */
+  public MediaListDTO getMediaListDTO() {
+    return mediaListDTO;
+  }
+
+  /**
+   * Sets the media list dto of the numbered ranking dto.
+   * @param mediaListDTO the dto representation of the media list belonging to the numbered ranking
+   */
+  public void setMediaListDTO(MediaListDTO mediaListDTO) {
+    this.mediaListDTO = mediaListDTO;
   }
 
   /**

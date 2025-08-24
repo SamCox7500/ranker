@@ -194,21 +194,20 @@ public class MediaListService {
       throw new AccessDeniedException("You do not have permission to access that resource");
     }
   }
-
   /**
    * Returns a {@link MediaList} as a {@link MediaListEntryDTO}
    * @param mediaList the media list to be represented as a dto
    * @return the DTO representation of the media list
    */
-  public MediaListDTO toMediaListDTO(MediaList mediaList) {
+  public MediaListDTO toMediaListDTO(MediaList mediaList, MediaType mediaType) {
 
     //Creating list of DTOs depending on the media type
     List<MediaListEntryDTO> mediaListEntryDTOS = null;
 
-    mediaListEntryDTOS = toMediaDTO(mediaList.getEntries(), mediaList.getMediaType());
+    mediaListEntryDTOS = toMediaDTO(mediaList.getEntries(), mediaType);
 
 
-    return new MediaListDTO(mediaList.getId(), mediaList.getMediaType(), mediaListEntryDTOS);
+    return new MediaListDTO(mediaList.getId(), mediaType, mediaListEntryDTOS);
   }
 
   /**
@@ -218,6 +217,7 @@ public class MediaListService {
    * @return a list of DTO representations of media list entries
    */
   private List<MediaListEntryDTO> toMediaDTO(List<MediaListEntry> mediaListEntries, MediaType mediaType) {
+
     List<MediaListEntryDTO> mediaDTOList = new ArrayList<>();
 
     for (MediaListEntry entry: mediaListEntries) {

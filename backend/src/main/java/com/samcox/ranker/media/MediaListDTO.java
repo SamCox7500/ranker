@@ -48,15 +48,6 @@ public class MediaListDTO {
   public void setMediaListEntryDTOList(List<MediaListEntryDTO> mediaListEntryDTOList) {
     this.mediaListEntryDTOList = mediaListEntryDTOList;
   }
-
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-
-  public void setMediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
-  }
-
   /*
   public NumberedRankingDTO getNumberedRankingDTO() {
     return numberedRankingDTO;
