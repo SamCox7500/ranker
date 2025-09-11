@@ -36,7 +36,7 @@ public class RankingService {
     return rankingRepository.findByUser(user)
       .orElseThrow(() -> new RankingNotFoundException("No rankings found for user " + userId));
   }
-  public void updateRanking(Long rankingId, Long userId, UpdateRankingDTO updateRankingDTO) throws AccessDeniedException {
+  public void updateRanking(Long rankingId, Long userId, @Valid UpdateRankingDTO updateRankingDTO) throws AccessDeniedException {
     checkPermissions(userId);
     if (rankingId == null) {
       throw new RankingNotFoundException("Ranking could not be found because the ID is null");

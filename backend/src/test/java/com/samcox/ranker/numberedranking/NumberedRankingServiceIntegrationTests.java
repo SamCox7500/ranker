@@ -3,6 +3,8 @@ package com.samcox.ranker.numberedranking;
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.numberedranking.*;
+import com.samcox.ranker.ranking.MediaType;
+import com.samcox.ranker.ranking.RankingNotFoundException;
 import com.samcox.ranker.user.*;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;

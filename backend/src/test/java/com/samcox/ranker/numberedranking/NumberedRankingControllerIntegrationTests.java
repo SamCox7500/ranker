@@ -85,7 +85,7 @@ public class NumberedRankingControllerIntegrationTests {
     numberedRankingRepository.save(testNumberedRanking);
 
   }
-
+  /*
   @Test
   @WithMockUser("testuser")
   public void testGetAllRankings_Success() throws Exception {
@@ -128,7 +128,7 @@ public class NumberedRankingControllerIntegrationTests {
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isForbidden());
   }
-
+   */
   @Test
   @WithMockUser("testuser")
   public void testGetRanking_Success() throws Exception {

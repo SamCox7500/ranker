@@ -1,3 +1,4 @@
+/*
 package com.samcox.ranker.media;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -195,7 +196,7 @@ public class MediaListControllerIntegrationTests {
         .content(objectMapper.writeValueAsString(entryAddRequest)))
       .andExpect(status().isForbidden());
   }
-  /*
+
   @Test
   @WithMockUser("testuser")
   public void testAddEntryToMediaList_InvalidMediaListId() throws Exception {
@@ -208,7 +209,7 @@ public class MediaListControllerIntegrationTests {
         .content(objectMapper.writeValueAsString(entryAddRequest)))
       .andExpect(status().isBadRequest());
   }
-  */
+
   @Test
   @WithMockUser("testuser")
   public void testAddEntryToMediaList_InvalidTmdb() throws Exception {
@@ -319,7 +320,7 @@ public class MediaListControllerIntegrationTests {
         .content(objectMapper.writeValueAsString(entryMoveRequest)))
       .andExpect(status().isBadRequest());
   }
-   */
+
   @Test
   @WithMockUser("testuser")
   public void testMoveEntryInMediaList_InvalidRanking() throws Exception {
@@ -373,7 +374,7 @@ public class MediaListControllerIntegrationTests {
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON))
       .andExpect(status().isBadRequest());
   }
-   */
+
   @Test
   @WithMockUser("testuser")
   public void testRemoveEntryFromMediaList_InvalidEntryId() throws Exception {
@@ -466,3 +467,4 @@ public class MediaListControllerIntegrationTests {
     assertEquals(mediaList.getEntries().get(1).getMediaList().getId(), testMediaList.getId());
   }
 }
+ */

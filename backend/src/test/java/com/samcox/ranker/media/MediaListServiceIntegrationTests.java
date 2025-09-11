@@ -90,7 +90,6 @@ public class MediaListServiceIntegrationTests {
 
 
     testMediaList = new MediaList();
-    testMediaList.setMediaType(MediaType.FILM);
     testMediaList.addEntry(testMediaListEntry);
     testMediaList.addEntry(testMediaListEntry1);
     testMediaList.addEntry(testMediaListEntry2);
