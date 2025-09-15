@@ -1,7 +1,10 @@
 package com.samcox.ranker.numberedranking;
 
 import com.samcox.ranker.auth.AuthService;
+import com.samcox.ranker.media.EntryAddRequest;
 import com.samcox.ranker.media.MediaList;
+import com.samcox.ranker.media.MediaListEntry;
+import com.samcox.ranker.media.MediaListService;
 import com.samcox.ranker.numberedranking.*;
 import com.samcox.ranker.ranking.MediaType;
 import com.samcox.ranker.ranking.RankingNotFoundException;
@@ -15,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 
+import javax.print.attribute.standard.Media;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +38,9 @@ public class NumberedRankingServiceIntegrationTests {
   AuthService authService;
 
   @Autowired
+  MediaListService mediaListService;
+
+  @Autowired
   NumberedRankingRepository numberedRankingRepository;
 
   @Autowired
@@ -49,10 +56,15 @@ public class NumberedRankingServiceIntegrationTests {
   private User testUser1;
   private NumberedRanking testNumberedRanking;
 
-  private MediaList mediaList = new MediaList();
+  private MediaList mediaList;
+
+  private MediaListEntry mediaListEntry;
+  private MediaListEntry mediaListEntry1;
+  private MediaListEntry mediaListEntry2;
 
   @BeforeEach
   public void setUp() {
+
     testUser = new User("testuser", passwordEncoder.encode("Validpassword1!"), "USER");
     userRepository.save(testUser);
 
@@ -64,23 +76,32 @@ public class NumberedRankingServiceIntegrationTests {
     testNumberedRanking.setTitle("This is a test title");
     testNumberedRanking.setDescription("This is a test desc of a numbered ranking");
     testNumberedRanking.setMediaType(MediaType.FILM);
-    testNumberedRanking.setMediaList(mediaList);
 
+    mediaList = new MediaList();
+
+    mediaListEntry = new MediaListEntry();
+    mediaListEntry.setRanking(1);
+    mediaListEntry.setTmdbId(1078605L);
+    mediaListEntry.setMediaList(mediaList);
+
+    mediaListEntry1 = new MediaListEntry();
+    mediaListEntry1.setRanking(2);
+    mediaListEntry1.setTmdbId(550L);
+    mediaListEntry1.setMediaList(mediaList);
+
+    mediaListEntry2 = new MediaListEntry();
+    mediaListEntry2.setRanking(3);
+    mediaListEntry2.setTmdbId(105L);
+    mediaListEntry2.setMediaList(mediaList);
+
+    mediaList.addEntry(mediaListEntry);
+    mediaList.addEntry(mediaListEntry1);
+    mediaList.addEntry(mediaListEntry2);
+
+    testNumberedRanking.setMediaList(mediaList);
     numberedRankingRepository.save(testNumberedRanking);
 
-    //UserCredentials userCredentials = new UserCredentials();
-    //userCredentials.setUsername("testuser");
-    //userCredentials.setPassword("Validpassword1!");
 
-    //Authenticating user for testing methods that require authentication
-    /*
-    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-      userCredentials.getUsername(), userCredentials.getPassword());
-    Authentication authentication = authenticationManager.authenticate(authToken);
-    SecurityContext context = SecurityContextHolder.createEmptyContext();
-    context.setAuthentication(authentication);
-    SecurityContextHolder.setContext(context);
-     */
   }
   @Test
   @WithMockUser("testuser")
@@ -94,6 +115,13 @@ public class NumberedRankingServiceIntegrationTests {
     assertEquals(testNumberedRanking.getMediaList(), numberedRanking.getMediaList());
     assertEquals(testNumberedRanking.getTitle(), numberedRanking.getTitle());
     assertEquals(testNumberedRanking.getDescription(), numberedRanking.getDescription());
+
+    //check media list contents
+    List<MediaListEntry> testEntries = testNumberedRanking.getMediaList().getEntries();
+    List<MediaListEntry> retrievedEntries = numberedRanking.getMediaList().getEntries();
+    assertEquals(testEntries.get(0), retrievedEntries.get(0));
+    assertEquals(testEntries.get(1), retrievedEntries.get(1));
+    assertEquals(testEntries.get(2), retrievedEntries.get(2));
   }
   @Test
   @WithMockUser("testuser1")
