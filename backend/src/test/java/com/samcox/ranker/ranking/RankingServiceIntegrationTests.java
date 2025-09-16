@@ -64,7 +64,7 @@ public class RankingServiceIntegrationTests {
     testNumberedRanking.setUser(testUser);
     testNumberedRanking.setTitle("This is a test title");
     testNumberedRanking.setDescription("This is a test desc of a numbered ranking");
-    testNumberedRanking.setMediaType(MediaType.FILM);
+    testNumberedRanking.setMediaType(MediaType.MOVIE);
     testNumberedRanking.setMediaList(mediaList);
 
     numberedRankingRepository.save(testNumberedRanking);

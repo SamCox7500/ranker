@@ -75,7 +75,7 @@ public class NumberedRankingServiceIntegrationTests {
     testNumberedRanking.setUser(testUser);
     testNumberedRanking.setTitle("This is a test title");
     testNumberedRanking.setDescription("This is a test desc of a numbered ranking");
-    testNumberedRanking.setMediaType(MediaType.FILM);
+    testNumberedRanking.setMediaType(MediaType.MOVIE);
 
     mediaList = new MediaList();
 
@@ -163,7 +163,7 @@ public class NumberedRankingServiceIntegrationTests {
     CreateNumberedRankingDTO createNumberedRankingDTO = new CreateNumberedRankingDTO();
     createNumberedRankingDTO.setTitle("Test title");
     createNumberedRankingDTO.setDescription("Test description");
-    createNumberedRankingDTO.setMediaType("FILM");
+    createNumberedRankingDTO.setMediaType("MOVIE");
 
     numberedRankingService.createNumberedRanking(userId, createNumberedRankingDTO);
 

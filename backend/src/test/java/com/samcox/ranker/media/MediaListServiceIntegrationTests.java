@@ -98,7 +98,7 @@ public class MediaListServiceIntegrationTests {
     testNumberedRanking.setUser(testUser);
     testNumberedRanking.setTitle("This is a test title");
     testNumberedRanking.setDescription("This is a test desc of a numbered ranking");
-    testNumberedRanking.setMediaType(MediaType.FILM);
+    testNumberedRanking.setMediaType(MediaType.MOVIE);
     testNumberedRanking.setMediaList(testMediaList);
 
     numberedRankingRepository.save(testNumberedRanking);

@@ -1,6 +1,6 @@
 package com.samcox.ranker.tmdb;
 
-import com.samcox.ranker.media.FilmDTO;
+import com.samcox.ranker.media.MovieDTO;
 import com.samcox.ranker.media.TVShowDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -45,14 +45,14 @@ public class TmdbService {
    * @param tmdbId the id of the film in the TMDB API
    * @return the film dto of the TMDB film
    */
-  public FilmDTO getFilmDetails(Long tmdbId) {
+  public MovieDTO getMovieDetails(Long tmdbId) {
     URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
       .pathSegment("movie", tmdbId.toString())
       .queryParam("api_key", apiKey)
       .build()
       .toUri();
 
-    return restTemplate.getForObject(uri, FilmDTO.class);
+    return restTemplate.getForObject(uri, MovieDTO.class);
   }
 
   /**
@@ -60,7 +60,7 @@ public class TmdbService {
    * @param query the search term used for querying TMDB API
    * @return the DTO of movie search results
    */
-  public FilmSearchResultListDTO searchFilms(String query) {
+  public MovieSearchResultListDTO searchMovies(String query) {
     URI uri = UriComponentsBuilder.fromHttpUrl(tmdbApiURL)
       .pathSegment("search", "movie")
       .queryParam("api_key", apiKey)
@@ -68,7 +68,7 @@ public class TmdbService {
       .build()
       .toUri();
 
-    return restTemplate.getForObject(uri, FilmSearchResultListDTO.class);
+    return restTemplate.getForObject(uri, MovieSearchResultListDTO.class);
   }
 
   /**

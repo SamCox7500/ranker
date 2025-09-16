@@ -77,7 +77,7 @@ public class RankingControllerIntegrationTests {
     testNumberedRanking.setTitle("Valid title");
     testNumberedRanking.setDescription("Valid description");
     testNumberedRanking.setMediaList(mediaList);
-    testNumberedRanking.setMediaType(MediaType.FILM);
+    testNumberedRanking.setMediaType(MediaType.MOVIE);
     testNumberedRanking.setRankingType(RankingType.NUMBERED_RANKING);
 
     numberedRankingRepository.save(testNumberedRanking);
@@ -94,7 +94,7 @@ public class RankingControllerIntegrationTests {
       .andExpect(jsonPath("$.description")
         .value("Valid description"))
       .andExpect(jsonPath("$.mediaType")
-        .value("FILM"))
+        .value("MOVIE"))
       .andExpect(jsonPath("$.rankingType")
         .value("NUMBERED_RANKING"))
       .andExpect(jsonPath("$.userDTO.username")
@@ -128,7 +128,7 @@ public class RankingControllerIntegrationTests {
       .andExpect(jsonPath("$[0].description")
         .value("Valid description"))
       .andExpect(jsonPath("$[0].mediaType")
-        .value("FILM"))
+        .value("MOVIE"))
       .andExpect(jsonPath("$[0].rankingType")
         .value("NUMBERED_RANKING"))
       .andExpect(jsonPath("$[0].userDTO.username")

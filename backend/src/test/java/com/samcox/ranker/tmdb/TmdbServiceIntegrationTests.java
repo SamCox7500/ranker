@@ -1,16 +1,5 @@
 package com.samcox.ranker.tmdb;
 
-import com.samcox.ranker.media.FilmDTO;
-import com.samcox.ranker.media.TVShowDTO;
-import jakarta.transaction.Transactional;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -24,7 +13,7 @@ public class TmdbServiceIntegrationTests {
   @Test
   public void testGetFilmDetails_Success() {
     Long thereWillBeBloodId = 7345L;
-    FilmDTO filmDTO = tmdbService.getFilmDetails(thereWillBeBloodId);
+    MovieDTO filmDTO = tmdbService.getFilmDetails(thereWillBeBloodId);
 
     assertEquals(filmDTO.getTitle(),"There Will Be Blood");
     assertEquals(filmDTO.getPoster_path(), "/fa0RDkAlCec0STeMNAhPaF89q6U.jpg");
@@ -55,9 +44,9 @@ public class TmdbServiceIntegrationTests {
   @Test
   public void testSearchFilms() {
     String query = "There Will Be Bloo";
-    FilmSearchResultListDTO searchResultListDTO = tmdbService.searchFilms(query);
+    MovieSearchResultListDTO searchResultListDTO = tmdbService.searchMovies(query);
 
-    FilmSearchResultDTO bestResultDTO = searchResultListDTO.getResults().get(0);
+    MovieSearchResultDTO bestResultDTO = searchResultListDTO.getResults().get(0);
     assertEquals(bestResultDTO.title, "There Will Be Blood");
     assertEquals(bestResultDTO.getPoster_path(), "/fa0RDkAlCec0STeMNAhPaF89q6U.jpg");
     assertEquals(bestResultDTO.getRelease_date(), "2007-12-26");

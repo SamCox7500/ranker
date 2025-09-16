@@ -1,7 +1,6 @@
 package com.samcox.ranker.media;
 
 import com.samcox.ranker.auth.AuthService;
-import com.samcox.ranker.numberedranking.NumberedRanking;
 import com.samcox.ranker.numberedranking.NumberedRankingService;
 import com.samcox.ranker.ranking.MediaType;
 import com.samcox.ranker.tmdb.TmdbService;
@@ -221,11 +220,11 @@ public class MediaListService {
     List<MediaListEntryDTO> mediaDTOList = new ArrayList<>();
 
     for (MediaListEntry entry: mediaListEntries) {
-      if (mediaType.equals(MediaType.FILM)) {
-        FilmDTO filmDTO = tmdbService.getFilmDetails(entry.getTmdbId());
-        filmDTO.setId(entry.getId());
-        filmDTO.setRanking(entry.getRanking());
-        mediaDTOList.add(filmDTO);
+      if (mediaType.equals(MediaType.MOVIE)) {
+        MovieDTO movieDTO = tmdbService.getMovieDetails(entry.getTmdbId());
+        movieDTO.setId(entry.getId());
+        movieDTO.setRanking(entry.getRanking());
+        mediaDTOList.add(movieDTO);
       } else if (mediaType.equals(MediaType.TV_SHOW)) {
         TVShowDTO tvShowDTO = tmdbService.getTVShowDetails(entry.getTmdbId());
         tvShowDTO.setId(entry.getId());

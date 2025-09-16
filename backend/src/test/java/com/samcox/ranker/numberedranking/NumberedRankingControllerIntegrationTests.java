@@ -87,7 +87,7 @@ public class NumberedRankingControllerIntegrationTests {
     testNumberedRanking.setUser(testUser);
     testNumberedRanking.setTitle("Valid title");
     testNumberedRanking.setDescription("Valid description");
-    testNumberedRanking.setMediaType(MediaType.FILM);
+    testNumberedRanking.setMediaType(MediaType.MOVIE);
 
     mediaListEntry = new MediaListEntry();
     mediaListEntry.setRanking(1);
@@ -124,7 +124,7 @@ public class NumberedRankingControllerIntegrationTests {
       .andExpect(jsonPath("$.description")
         .value("Valid description"))
       .andExpect(jsonPath("$.mediaType")
-        .value("FILM"))
+        .value("MOVIE"))
       .andExpect(jsonPath("$.userDTO.username")
         .value("testuser"))
       .andExpect(jsonPath("$.userDTO.id")
@@ -187,7 +187,7 @@ public class NumberedRankingControllerIntegrationTests {
     CreateNumberedRankingDTO createNumberedRankingDTO = new CreateNumberedRankingDTO();
     createNumberedRankingDTO.setTitle("New ranking");
     createNumberedRankingDTO.setDescription("New desc");
-    createNumberedRankingDTO.setMediaType("FILM");
+    createNumberedRankingDTO.setMediaType("MOVIE");
 
     mockMvc.perform(post("/users/" + testUser.getId() + "/numberedrankings")
         .contentType(org.springframework.http.MediaType.APPLICATION_JSON)

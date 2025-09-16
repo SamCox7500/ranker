@@ -5,7 +5,7 @@ package com.samcox.ranker.tmdb;
  *
  * @see TMDBSearchResultDTO
  */
-public class FilmSearchResultDTO extends TMDBSearchResultDTO {
+public class MovieSearchResultDTO extends TMDBSearchResultDTO {
 
   /**
    * The title of the movie
@@ -23,7 +23,7 @@ public class FilmSearchResultDTO extends TMDBSearchResultDTO {
   /**
    * Default constructor as required by JPA
    */
-  public FilmSearchResultDTO() {
+  public MovieSearchResultDTO() {
       super();
   }
 
@@ -36,7 +36,7 @@ public class FilmSearchResultDTO extends TMDBSearchResultDTO {
    * @param release_date the release date of the movie
    * @param poster_path the poster path of the movie
    */
-  public FilmSearchResultDTO(Long id, String title, String release_date, String poster_path) {
+  public MovieSearchResultDTO(Long id, String title, String release_date, String poster_path) {
     super(id);
     this.title = title;
     this.release_date = release_date;
@@ -97,7 +97,7 @@ public class FilmSearchResultDTO extends TMDBSearchResultDTO {
    */
   @Override
   public String toString() {
-    return "FilmSearchResultDTO{" +
+    return "MovieSearchResultDTO{" +
       "title='" + title + '\'' +
       ", release_date='" + release_date + '\'' +
       ", poster_path='" + poster_path + '\'' +

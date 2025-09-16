@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @see MediaList
  * @see MediaListEntry
  */
-public class FilmDTO extends MediaListEntryDTO {
+public class MovieDTO extends MediaListEntryDTO {
 
   /**
    * Title of the film in TMDB API.
@@ -27,19 +27,19 @@ public class FilmDTO extends MediaListEntryDTO {
   /**
    * Default constructor required by JPA.
    */
-  public FilmDTO() {
+  public MovieDTO() {
 
   }
 
   /**
-   * Constructor for FilmDTO.
+   * Constructor for MovieDTO.
    * @param id the id of the film in TMDB API
    * @param ranking the number ranking of the film with respect to all other films in the media list.
    * @param title the title of the film
    * @param releaseDate the release date of the film
    * @param poster_path the file path of the poster of the film
    */
-  public FilmDTO(Long id, int ranking, String title, String releaseDate, String poster_path) {
+  public MovieDTO(Long id, int ranking, String title, String releaseDate, String poster_path) {
     super(id, ranking);
     this.title = title;
     this.releaseDate = releaseDate;
@@ -95,12 +95,12 @@ public class FilmDTO extends MediaListEntryDTO {
   }
 
   /**
-   * Returns the FilmDTO as a string.
-   * @return the string representation of the FilmDTO
+   * Returns the MovieDTO as a string.
+   * @return the string representation of the MovieDTO
    */
   @Override
   public String toString() {
-    return "FilmDTO{" +
+    return "MovieDTO{" +
       "title='" + title + '\'' +
       ", releaseDate='" + releaseDate + '\'' +
       '}';
