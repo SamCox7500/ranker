@@ -3,18 +3,19 @@ import { ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular
 import { Ranking } from '../ranking';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RankingService } from '../services/ranking.service';
-import { CreateRankingDTO } from '../create-ranking-dto';
 import { User } from '../user';
 import { CurrentUserService } from '../services/current-user.service';
+import { CreateNumberedRankingDTO } from '../create-numbered-ranking-dto';
+import { NumberedRankingService } from '../services/numbered-ranking.service';
 
 @Component({
-  selector: 'app-create-ranking',
+  selector: 'app-create-numbered-ranking',
   standalone: true,
   imports: [ ReactiveFormsModule ],
-  templateUrl: './create-ranking.component.html',
-  styleUrl: './create-ranking.component.css'
+  templateUrl: './create-numbered-ranking.component.html',
+  styleUrl: './create-numbered-ranking.component.css'
 })
-export class CreateRankingComponent {
+export class CreateNumberedRankingComponent {
   createRankingForm = new FormGroup({
     title: new FormControl('', [
       Validators.required,
@@ -31,28 +32,20 @@ export class CreateRankingComponent {
 
   user: User | null = null;
 
-  ranking: Ranking = {
-    id: null,
+  createNumRankingDTO: CreateNumberedRankingDTO = {
     title: '',
     description: '',
     mediaType: '',
     isReverseOrder: false,
     isPublic: false,
-    userDTO: null,
   };
-  //change to ranking
 
-  constructor(private route: ActivatedRoute, private router: Router, private rankingService: RankingService, private currentUserService: CurrentUserService) {
-    //this.createRankingDTO
+  constructor(private route: ActivatedRoute, private router: Router, private numberedRankingService: NumberedRankingService, private currentUserService: CurrentUserService) {
     this.currentUserService.fetchCurrentUser().subscribe();
     this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
       this.user = user;
-      this.updateCreateRankingDTO();
     });
 
-  }
-  updateCreateRankingDTO() {
-    this.ranking.userDTO = this.user;
   }
   get title() {
     return this.createRankingForm.controls['title'];
@@ -65,15 +58,14 @@ export class CreateRankingComponent {
   }
   onSubmit() {
     if (this.createRankingForm.valid && this.user) {
-      this.ranking = {
-        ...this.ranking,
+      this.createNumRankingDTO = {
+        ...this.createNumRankingDTO,
         title: this.title.value || '',
         description: this.description.value || '',
         mediaType: this.mediaType.value || '',
-        userDTO: this.user,
       };
 
-      this.rankingService.createRanking(this.user.id, this.ranking).subscribe({
+      this.numberedRankingService.createRanking(this.user.id, this.createNumRankingDTO).subscribe({
         next: () => this.goToRankings(),
         error: err => console.log(err),
       });

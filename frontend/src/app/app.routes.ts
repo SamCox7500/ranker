@@ -7,8 +7,6 @@ import { RegisterComponent } from './register/register.component';
 import { ManageAccountComponent } from './manage-account/manage-account.component';
 import { RankingListComponent } from './ranking-list/ranking-list.component';
 import { LandingComponent } from './landing/landing.component';
-import { CreateRankingComponent } from './create-ranking/create-ranking.component';
-import { MediaListComponent } from './media-list/media-list.component';
 import { AddMediaComponent } from './add-media/add-media.component';
 
 
@@ -21,7 +19,5 @@ export const routes: Routes = [
   { path: 'manageuser', component: ManageAccountComponent },
   { path: 'rankings', component: RankingListComponent },
   { path: '', component: LandingComponent},
-  { path: 'createranking', component: CreateRankingComponent},
-  { path: 'medialist/:rankingId', component: MediaListComponent},
   { path: 'add-media/:rankingId/:addMediaRanking/:mediaType', component: AddMediaComponent},
 ];

@@ -15,7 +15,7 @@ public class MediaListDTO {
   private MediaType mediaType;
 
   @NotNull
-  private List<MediaListEntryDTO> mediaListEntryDTOList;
+  private List<MediaListEntryDTO> entries;
 
   /*
   @NotNull
@@ -26,10 +26,10 @@ public class MediaListDTO {
 
   }
 
-  public MediaListDTO(Long id, MediaType mediaType, List<MediaListEntryDTO> mediaListEntryDTOList) {
+  public MediaListDTO(Long id, MediaType mediaType, List<MediaListEntryDTO> entries) {
     this.id = id;
     this.mediaType = mediaType;
-    this.mediaListEntryDTOList = mediaListEntryDTOList;
+    this.entries = entries;
     //this.numberedRankingDTO = numberedRankingDTO;
   }
 
@@ -41,12 +41,12 @@ public class MediaListDTO {
     this.id = id;
   }
 
-  public List<MediaListEntryDTO> getMediaListEntryDTOList() {
-    return mediaListEntryDTOList;
+  public List<MediaListEntryDTO> getEntries() {
+    return entries;
   }
 
-  public void setMediaListEntryDTOList(List<MediaListEntryDTO> mediaListEntryDTOList) {
-    this.mediaListEntryDTOList = mediaListEntryDTOList;
+  public void setEntries(List<MediaListEntryDTO> entries) {
+    this.entries = entries;
   }
   /*
   public NumberedRankingDTO getNumberedRankingDTO() {

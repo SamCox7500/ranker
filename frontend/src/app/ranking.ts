@@ -1,3 +1,4 @@
+import { MediaList } from './media-list';
 import { User } from './user';
 
 export interface Ranking {
@@ -6,6 +7,6 @@ export interface Ranking {
   title: string;
   description: string;
   isPublic: boolean;
-  isReverseOrder: boolean;
   mediaType: string;
+  rankingType: string;
 }

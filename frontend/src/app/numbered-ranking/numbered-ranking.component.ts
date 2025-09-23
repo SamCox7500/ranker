@@ -4,7 +4,7 @@ import { MediaListService } from '../services/media-list.service';
 import { MediaList } from '../media-list';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop'
 import { MediaListEntry } from '../media-list-entry';
-import { Ranking } from '../ranking';
+import { NumberedRanking } from '../numbered-ranking';
 import { User } from '../user';
 import { CurrentUserService } from '../services/current-user.service';
 import { MovieEntry } from '../movie-entry';
@@ -12,25 +12,22 @@ import { TVShowEntry } from '../tvshow-entry';
 import { EntryMoveRequestDTO } from '../entry-move-request-dto';
 import { Observable, Subscription, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RankingService } from '../services/ranking.service';
+import { NumberedRankingService } from '../services/numbered-ranking.service';
 
 @Component({
-  selector: 'app-media-list',
+  selector: 'app-numbered-ranking',
   standalone: true,
   imports: [CdkDropList, CdkDrag, ReactiveFormsModule],
-  templateUrl: './media-list.component.html',
-  styleUrl: './media-list.component.css'
+  templateUrl: './numbered-ranking.component.html',
+  styleUrl: './numbered-ranking.component.css'
 })
-export class MediaListComponent implements OnInit, OnDestroy {
-
-
+export class NumberedRankingComponent {
   //mediaList: MediaList;
 
   rankingId: number | null = null;
-  mediaType: string = '';
-  mediaListEntries: MediaListEntry[] = [];
-  ranking: Ranking | null = null;
+  ranking: NumberedRanking | null = null;
   user: User | null = null;
+
   isEditMode: boolean = false;
 
   rankingForm: FormGroup;
@@ -41,7 +38,7 @@ export class MediaListComponent implements OnInit, OnDestroy {
   readonly TMDB_IMAGE_SIZE = 'w92';
 
 
-  constructor(private route: ActivatedRoute, private mediaListService: MediaListService, private router: Router, private currentUserService: CurrentUserService, private fb: FormBuilder, private rankingService: RankingService) {
+  constructor(private route: ActivatedRoute, private router: Router, private currentUserService: CurrentUserService, private fb: FormBuilder, private rankingService: NumberedRankingService) {
     this.rankingForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
       description: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(150)]],
@@ -94,12 +91,9 @@ export class MediaListComponent implements OnInit, OnDestroy {
       this.user = user;
 
       if (this.user && this.rankingId) {
-        const mediaListSub = this.mediaListService.getMediaList(this.user.id, this.rankingId).subscribe((mediaList: MediaList) => {
+        const numRankingSub = this.rankingService.getRanking(this.user.id, this.rankingId).subscribe((numRanking: NumberedRanking) => {
 
-          this.mediaType = mediaList.mediaType;
-          this.mediaListEntries = mediaList.mediaListEntryDTOList;
-          this.ranking = mediaList.numberedRankingDTO;
-          this.mediaListEntries.sort((a, b) => a.ranking - b.ranking);
+          this.ranking = numRanking;
 
           // Initializing the ranking form
           this.rankingForm.patchValue({
@@ -107,7 +101,7 @@ export class MediaListComponent implements OnInit, OnDestroy {
             description: this.ranking.description
           });
         });
-        this.subscriptions.add(mediaListSub);
+        this.subscriptions.add(numRankingSub);
       } else {
         console.log(this.user?.id);
         console.log(this.rankingId)
@@ -117,18 +111,23 @@ export class MediaListComponent implements OnInit, OnDestroy {
   }
 
   drop(event: CdkDragDrop<MediaListEntry[]>) {
-    if (!this.isEditMode) {
+    if (!this.isEditMode || !this.ranking?.mediaListDTO?.entries) {
       return;
     }
 
-    moveItemInArray(this.mediaListEntries, event.previousIndex, event.currentIndex);
+    const entries = this.ranking.mediaListDTO.entries;
+
+    moveItemInArray(entries, event.previousIndex, event.currentIndex);
     this.updateRankings();
 
-    const movedEntry = this.mediaListEntries[event.currentIndex];
+    const movedEntry = entries[event.currentIndex];
     if (this.user && this.rankingId && movedEntry) {
-      const moveRequest: EntryMoveRequestDTO = { entryId: movedEntry.id, newPosition: movedEntry.ranking };
+      const moveRequest: EntryMoveRequestDTO = { 
+        entryId: movedEntry.id,
+        newPosition: movedEntry.ranking
+      };
       console.log(moveRequest);
-      this.mediaListService.moveEntry(this.user.id, this.rankingId, movedEntry.id, moveRequest).subscribe({
+      this.rankingService.moveEntry(this.user.id, this.rankingId, movedEntry.id, moveRequest).subscribe({
         next: () => console.log('Ranking updated successfully'),
         error: err => console.log(err),
       });
@@ -142,27 +141,35 @@ export class MediaListComponent implements OnInit, OnDestroy {
     return (entry as TVShowEntry).name !== undefined;
   }
   goToAddMedia() {
-    this.router.navigate(['add-media', this.rankingId, this.mediaListEntries.length + 1, this.mediaType]);
+    if (!this.ranking) {
+      return;
+    }
+    this.router.navigate(['add-media', this.rankingId, this.ranking?.mediaListDTO.entries.length + 1, this.ranking?.mediaType]);
   }
   updateRankings(): void {
-    this.mediaListEntries.forEach((entry, index) => {
+    if (!this.ranking?.mediaListDTO?.entries) return;
+
+    this.ranking.mediaListDTO.entries.forEach((entry, index) => {
       entry.ranking = index + 1;
     });
   }
   removeEntry(entryId: number): void {
-    if (this.user && this.rankingId && entryId) {
-      this.mediaListService.deleteEntry(this.user.id, this.rankingId, entryId).subscribe({
+    if (!this.user || !this.rankingId || !entryId) {
+      return;
+    }
+    this.rankingService
+      .deleteEntry(this.user.id, this.rankingId, entryId)
+      .subscribe({
         next: () => {
-          const entryToRemoveIndex = this.mediaListEntries.findIndex((entry) => entry.id === entryId);
-
-          if (entryToRemoveIndex !== -1) {
-            this.mediaListEntries.splice(entryToRemoveIndex, 1);
+          const entries = this.ranking!.mediaListDTO.entries;
+          const index = entries.findIndex((entry) => entry.id === entryId);
+          if (index !== -1) {
+            entries.splice(index, 1);
             this.updateRankings();
           }
         },
         error: (err) => console.log(err),
       });
-    }
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
