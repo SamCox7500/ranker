@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MediaListEntry } from '../media-list-entry';
-import { EntryAddRequestDTO } from '../entry-add-request-dto';
-import { EntryMoveRequestDTO } from '../entry-move-request-dto';
-import { MediaList } from '../media-list';
+import { MediaListEntry } from '../core/models/media-list-entry';
+import { EntryAddRequestDTO } from '../core/dtos/entry-add-request-dto';
+import { EntryMoveRequestDTO } from '../core/dtos/entry-move-request-dto';
+import { MediaList } from '../core/models/media-list';
 import { environment } from '../environment';
 
 @Injectable({

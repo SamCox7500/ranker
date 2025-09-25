@@ -1,19 +1,19 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TMDBService } from '../services/tmdb.service';
-import { MediaListService } from '../services/media-list.service';
+import { TMDBService } from '../../services/tmdb.service';
+import { MediaListService } from '../../services/media-list.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MovieSearchResult } from '../movie-search-result';
-import { TVShowSearchResult } from '../tvshow-search-result';
-import { TVShowSearchResultList } from '../tvshow-search-result-list';
-import { MovieSearchResultList } from '../movie-search-result-list';
-import { MediaSearchResult } from '../media-search-result';
-import { MediaSearchResultList } from '../media-search-result-list';
-import { CurrentUserService } from '../services/current-user.service';
-import { User } from '../user';
-import { EntryAddRequestDTO } from '../entry-add-request-dto';
+import { MovieSearchResult } from '../../core/dtos/movie-search-result';
+import { TVShowSearchResult } from '../../core/dtos/tvshow-search-result';
+import { TVShowSearchResultList } from '../../core/dtos/tvshow-search-result-list';
+import { MovieSearchResultList } from '../../core/dtos/movie-search-result-list';
+import { MediaSearchResult } from '../../core/dtos/media-search-result';
+import { MediaSearchResultList } from '../../core/dtos/media-search-result-list';
+import { CurrentUserService } from '../../services/current-user.service';
+import { User } from '../../core/models/user';
+import { EntryAddRequestDTO } from '../../core/dtos/entry-add-request-dto';
 import { Subscription } from 'rxjs';
-import { MediaList } from '../media-list';
+import { MediaList } from '../../core/models/media-list';
 
 @Component({
   selector: 'app-add-media',

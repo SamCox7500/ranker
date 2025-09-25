@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { User } from '../user';
-import { CurrentUserService } from '../services/current-user.service';
-import { UserService } from '../services/user.service';
+import { User } from '../../core/models/user';
+import { CurrentUserService } from '../../services/current-user.service';
+import { UserService } from '../../services/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
-import { LoginService } from '../services/login.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-manage-account',

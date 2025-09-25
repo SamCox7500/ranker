@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../user';
+import { User } from '../core/models/user';
 import { Observable } from 'rxjs';
-import { UserCredentials } from '../user-credentials';
+import { UserCredentialsDTO } from '../core/dtos/user-credentials-dto';
 import { environment } from '../environment';
 
 @Injectable({
@@ -26,8 +26,8 @@ export class UserService {
     return this.http.get<User>(`${this.usersUrl}/${'?username='}/${username}`);
   }
   */
-  public createUser(userCredentials: UserCredentials) {
-    return this.http.post<UserCredentials>(this.usersUrl, userCredentials);
+  public createUser(userCredentials: UserCredentialsDTO) {
+    return this.http.post<UserCredentialsDTO>(this.usersUrl, userCredentials);
   }
   public deleteUser(id: number) {
     return this.http.delete(`${this.usersUrl}/${id}`, { withCredentials: true});

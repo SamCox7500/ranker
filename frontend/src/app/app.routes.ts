@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import { UserListComponent } from './user-list/user-list.component';
-import { UserFormComponent } from './user-form/user-form.component';
-import { HomeComponent } from './home/home.component';
-import { LoginFormComponent } from './login-form/login-form.component';
-import { RegisterComponent } from './register/register.component';
-import { ManageAccountComponent } from './manage-account/manage-account.component';
-import { RankingListComponent } from './ranking-list/ranking-list.component';
-import { LandingComponent } from './landing/landing.component';
-import { AddMediaComponent } from './add-media/add-media.component';
+import { UserListComponent } from './features/user-list/user-list.component';
+import { UserFormComponent } from './features/user-form/user-form.component';
+import { HomeComponent } from './features/home/home.component';
+import { LoginFormComponent } from './features/login-form/login-form.component';
+import { RegisterComponent } from './features/register/register.component';
+import { ManageAccountComponent } from './features/manage-account/manage-account.component';
+import { RankingListComponent } from './features/ranking-list/ranking-list.component';
+import { LandingComponent } from './features/landing/landing.component';
+import { AddMediaComponent } from './features/add-media/add-media.component';
 
 
 export const routes: Routes = [

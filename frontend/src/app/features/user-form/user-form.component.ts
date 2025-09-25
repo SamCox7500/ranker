@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../services/user.service';
-import { User } from '../user';
+import { UserService } from '../../services/user.service';
+import { User } from '../../core/models/user';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular/forms';
-import { UserCredentials } from '../user-credentials';
+import { UserCredentialsDTO } from '../../core/dtos/user-credentials-dto';
 
 
 @Component({

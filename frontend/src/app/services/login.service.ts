@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UserCredentials } from '../user-credentials';
+import { UserCredentialsDTO } from '../core/dtos/user-credentials-dto';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { CurrentUserService } from './current-user.service';
 import { environment } from '../environment';
@@ -21,7 +21,7 @@ export class LoginService {
     this.authenticated = false;
   }
 
-  public login(userCredentials: UserCredentials): Observable<any> {
+  public login(userCredentials: UserCredentialsDTO): Observable<any> {
     return this.http.post(this.loginUrl, userCredentials, { withCredentials: true}).pipe(
       tap(() => {
         this.currentUserService.fetchCurrentUser().subscribe();

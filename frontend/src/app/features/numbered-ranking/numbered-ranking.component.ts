@@ -1,18 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MediaListService } from '../services/media-list.service';
-import { MediaList } from '../media-list';
+import { MediaListService } from '../../services/media-list.service';
+import { MediaList } from '../../core/models/media-list';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop'
-import { MediaListEntry } from '../media-list-entry';
-import { NumberedRanking } from '../numbered-ranking';
-import { User } from '../user';
-import { CurrentUserService } from '../services/current-user.service';
-import { MovieEntry } from '../movie-entry';
-import { TVShowEntry } from '../tvshow-entry';
-import { EntryMoveRequestDTO } from '../entry-move-request-dto';
+import { MediaListEntry } from '../../core/models/media-list-entry';
+import { NumberedRanking } from '../../core/models/numbered-ranking';
+import { User } from '../../core/models/user';
+import { CurrentUserService } from '../../services/current-user.service';
+import { MovieEntry } from '../../core/models/movie-entry';
+import { TVShowEntry } from '../../core/models/tvshow-entry';
+import { EntryMoveRequestDTO } from '../../core/dtos/entry-move-request-dto';
 import { Observable, Subscription, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NumberedRankingService } from '../services/numbered-ranking.service';
+import { NumberedRankingService } from '../../services/numbered-ranking.service';
 
 @Component({
   selector: 'app-numbered-ranking',

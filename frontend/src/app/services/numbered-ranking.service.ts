@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../environment';
-import { NumberedRanking } from '../numbered-ranking';
-import { EntryAddRequestDTO } from '../entry-add-request-dto';
-import { EntryMoveRequestDTO } from '../entry-move-request-dto';
-import { CreateNumberedRankingDTO } from '../create-numbered-ranking-dto';
+import { NumberedRanking } from '../core/models/numbered-ranking';
+import { EntryAddRequestDTO } from '../core/dtos/entry-add-request-dto';
+import { EntryMoveRequestDTO } from '../core/dtos/entry-move-request-dto';
+import { CreateNumberedRankingDTO } from '../core/dtos/create-numbered-ranking-dto';
 
 @Injectable({
   providedIn: 'root'

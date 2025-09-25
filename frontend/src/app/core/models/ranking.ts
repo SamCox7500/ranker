@@ -1,4 +1,3 @@
-import { MediaList } from './media-list';
 import { User } from './user';
 
 export interface Ranking {

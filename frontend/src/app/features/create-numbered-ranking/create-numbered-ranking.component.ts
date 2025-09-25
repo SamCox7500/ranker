@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators} from '@angular/forms';
-import { Ranking } from '../ranking';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RankingService } from '../services/ranking.service';
-import { User } from '../user';
-import { CurrentUserService } from '../services/current-user.service';
-import { CreateNumberedRankingDTO } from '../create-numbered-ranking-dto';
-import { NumberedRankingService } from '../services/numbered-ranking.service';
+import { User } from '../../core/models/user';
+import { CurrentUserService } from '../../services/current-user.service';
+import { CreateNumberedRankingDTO } from '../../core/dtos/create-numbered-ranking-dto';
+import { NumberedRankingService } from '../../services/numbered-ranking.service';
 
 @Component({
   selector: 'app-create-numbered-ranking',

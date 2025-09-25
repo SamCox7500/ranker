@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserCredentials } from '../user-credentials';
+import { UserCredentialsDTO } from '../../core/dtos/user-credentials-dto';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../services/user.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -29,14 +29,15 @@ export class RegisterComponent {
     ]),
   });
 
-  userCredentials: UserCredentials;
+  userCredentials: UserCredentialsDTO = {
+    username: '',
+    password: ''
+  };
   secondpassword: string = '';
   usernameTaken: boolean = false;
   passwordsMatch: boolean = true;
 
-  constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {
-    this.userCredentials = new UserCredentials();
-  }
+  constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {}
 
   onSubmit() {
     this.userCredentials.username = this.registerForm.value.username || '';

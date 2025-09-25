@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MovieDetails } from '../movie-details';
-import { TVShowDetails } from '../tvshow-details';
-import { MovieSearchResult } from '../movie-search-result';
-import { MovieSearchResultList } from '../movie-search-result-list';
-import { TVShowSearchResultList } from '../tvshow-search-result-list';
-import { MediaSearchResult } from '../media-search-result';
-import { MediaSearchResultList } from '../media-search-result-list';
+import { MovieDetails } from '../core/dtos/movie-details';
+import { TVShowDetails } from '../core/dtos/tvshow-details';
+import { MovieSearchResult } from '../core/dtos/movie-search-result';
+import { MovieSearchResultList } from '../core/dtos/movie-search-result-list';
+import { TVShowSearchResultList } from '../core/dtos/tvshow-search-result-list';
+import { MediaSearchResult } from '../core/dtos/media-search-result';
+import { MediaSearchResultList } from '../core/dtos/media-search-result-list';
 import { environment } from '../environment';
 
 @Injectable({
