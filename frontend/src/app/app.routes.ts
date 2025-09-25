@@ -8,6 +8,7 @@ import { ManageAccountComponent } from './features/manage-account/manage-account
 import { RankingListComponent } from './features/ranking-list/ranking-list.component';
 import { LandingComponent } from './features/landing/landing.component';
 import { AddMediaComponent } from './features/add-media/add-media.component';
+import { NumberedRankingComponent } from './features/numbered-ranking/numbered-ranking.component';
 
 
 export const routes: Routes = [
@@ -19,5 +20,6 @@ export const routes: Routes = [
   { path: 'manageuser', component: ManageAccountComponent },
   { path: 'rankings', component: RankingListComponent },
   { path: '', component: LandingComponent},
+  { path: 'numberedrankings/:rankingId', component: NumberedRankingComponent },
   { path: 'add-media/:rankingId/:addMediaRanking/:mediaType', component: AddMediaComponent},
 ];

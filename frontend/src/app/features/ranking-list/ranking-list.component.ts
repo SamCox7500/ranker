@@ -37,9 +37,11 @@ export class RankingListComponent {
   goToCreateRanking(): void {
     this.router.navigate(['createranking']);
   }
-  goToMediaList(rankingId: number | null): void {
+  goToRanking(rankingId: number | null, rankingType: string): void {
     if (rankingId) {
-      this.router.navigate(['/medialist', rankingId]);
+      if (rankingType === 'NUMBERED_RANKING') {
+        this.router.navigate(['/numberedrankings', rankingId]);
+      }
     }
   }
   deleteRanking(rankingId: number | null): void {

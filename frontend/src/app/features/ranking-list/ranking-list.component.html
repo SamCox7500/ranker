@@ -14,7 +14,7 @@
 } @else {
   <div class="rankings-container">
     @for (ranking of rankings; track ranking.id) {
-      <div class="card" (click)="goToMediaList(ranking.id)">
+      <div class="card" (click)="goToRanking(ranking.id, ranking.rankingType)">
         <!--<div class="card-header">
           {{ranking.title}}
         </div>-->

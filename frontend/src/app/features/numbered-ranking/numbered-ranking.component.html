@@ -40,13 +40,13 @@
     </div>
 
     <!--Media List-->
-    @if (mediaListEntries.length === 0) {
+    @if (ranking?.mediaListDTO?.entries?.length === 0) {
     <div class="empty-list-container">
         <h3>Your media list is empty</h3>
     </div>
     } @else {
-    <div class="media-list" cdkDropList [cdkDropListData]="mediaListEntries" (cdkDropListDropped)="drop($event)">
-        @for(mediaListEntry of mediaListEntries; track mediaListEntry.ranking) {
+    <div class="media-list" cdkDropList [cdkDropListData]="ranking?.mediaListDTO?.entries ?? []" (cdkDropListDropped)="drop($event)">
+        @for(mediaListEntry of ranking?.mediaListDTO?.entries ?? []; track mediaListEntry.ranking) {
         <div class="media-item" [cdkDragDisabled]="!isEditMode" cdkDrag>
             <div class="ranking-number">#{{ mediaListEntry.ranking }}</div>
             @if (mediaListEntry.poster_path) {
