@@ -6,6 +6,7 @@ import { User } from '../../core/models/user';
 import { Ranking } from '../../core/models/ranking';
 import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
+import { NumberedRankingService } from '../../services/numbered-ranking.service';
 
 @Component({
   selector: 'app-ranking-list',
@@ -21,7 +22,7 @@ export class RankingListComponent {
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private route: ActivatedRoute, private router: Router, private rankingService: RankingService, private currentUserService: CurrentUserService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private rankingService: RankingService, private currentUserService: CurrentUserService, private numberedRankingService: NumberedRankingService) { }
 
   ngOnInit(): void {
     const currentUserSub = this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
@@ -44,9 +45,10 @@ export class RankingListComponent {
       }
     }
   }
-  deleteRanking(rankingId: number | null): void {
+  deleteRanking(rankingId: number | null, rankingType: string): void {
     if (rankingId && this.user) {
-      const deleteRankingSub = this.rankingService.deleteRanking(this.user.id, rankingId).subscribe({
+      if (rankingType === 'NUMBERED_RANKING') {
+        const deleteRankingSub = this.numberedRankingService.deleteRanking(this.user.id, rankingId).subscribe({
         next: () => {
           this.rankings = this.rankings.filter(ranking => ranking.id !== rankingId);
           this.refreshRanking();
@@ -54,6 +56,7 @@ export class RankingListComponent {
         error: err => console.log(err)
       });
       this.subscriptions.add(deleteRankingSub);
+      }
     }
   }
   refreshRanking(): void {

@@ -31,7 +31,7 @@
             ...
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" (click)="$event.stopPropagation(); deleteRanking(ranking.id)">Delete Ranking List</a>
+            <a class="dropdown-item" (click)="$event.stopPropagation(); deleteRanking(ranking.id, ranking.rankingType)">Delete Ranking List</a>
           </div>
         </div>
       </div>
