@@ -5,6 +5,7 @@ import com.samcox.ranker.media.InvalidMediaTypeException;
 import com.samcox.ranker.media.MediaList;
 import com.samcox.ranker.ranking.MediaType;
 import com.samcox.ranker.ranking.RankingNotFoundException;
+import com.samcox.ranker.ranking.RankingType;
 import com.samcox.ranker.user.User;
 import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserNotFoundException;
@@ -100,7 +101,7 @@ public class NumberedRankingService {
 
     checkPermissions(userId);
     /*
-    The media type must be a known media type e.g., "FILM", "TV_SHOW"
+    The media type must be a known media type e.g., "MOVIE, "TV_SHOW"
      */
     try {
       MediaType mediaType = MediaType.valueOf(createNumberedRankingDTO.getMediaType());
@@ -119,6 +120,7 @@ public class NumberedRankingService {
     numberedRanking.setPrivate(); //todo not yet implemented
     numberedRanking.setReverseOrder(createNumberedRankingDTO.isReverseOrder());
     numberedRanking.setMediaType(MediaType.valueOf(createNumberedRankingDTO.getMediaType()));
+    numberedRanking.setRankingType(RankingType.NUMBERED_RANKING);
 
     numberedRanking.setMediaList(mediaList);
 
