@@ -14,18 +14,19 @@ import { User } from '../../core/models/user';
 import { EntryAddRequestDTO } from '../../core/dtos/entry-add-request-dto';
 import { Subscription } from 'rxjs';
 import { MediaList } from '../../core/models/media-list';
+import { NumberedRankingService } from '../../services/numbered-ranking.service';
 
 @Component({
-  selector: 'app-add-media',
+  selector: 'app-numbered-ranking-add-media',
   standalone: true,
-  imports: [ReactiveFormsModule],
-  templateUrl: './add-media.component.html',
-  styleUrl: './add-media.component.css'
+  imports: [ ReactiveFormsModule ],
+  templateUrl: './numbered-ranking-add-media.component.html',
+  styleUrl: './numbered-ranking-add-media.component.css'
 })
-export class AddMediaComponent implements OnInit {
-
+export class NumberedRankingAddMediaComponent {
   rankingId: number | null = null;
   mediaType: string = '';
+  rankingType: string = '';
 
   query = new FormControl('');
   mediaResults: MediaSearchResult[] = [];
@@ -39,7 +40,7 @@ export class AddMediaComponent implements OnInit {
 
   private subscriptions : Subscription = new Subscription();
 
-  constructor(private route: ActivatedRoute, private router: Router, private tmdbService: TMDBService, private mediaListService: MediaListService, private currentUserService: CurrentUserService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private tmdbService: TMDBService, private currentUserService: CurrentUserService, private numberedRankingService: NumberedRankingService) { }
 
   ngOnInit(): void {
     this.rankingId = Number(this.route.snapshot.paramMap.get('rankingId'));
@@ -53,12 +54,12 @@ export class AddMediaComponent implements OnInit {
     this.subscriptions.add(currentUserSub);
   }
   onSearch(): void {
-    if (this.mediaType == 'FILM') {
+    if (this.mediaType === 'FILM') {
       const movieSub = this.tmdbService.searchMovies(this.query.value || '').subscribe((mediaSearchResultList: MediaSearchResultList) => {
         this.mediaResults = mediaSearchResultList.results;
       });
       this.subscriptions.add(movieSub);
-    } else if (this.mediaType == 'TV_SHOW') {
+    } else if (this.mediaType === 'TV_SHOW') {
       const tvShowSub = this.tmdbService.searchTVShows(this.query.value || '').subscribe((mediaSearchResultList: MediaSearchResultList) => {
         this.mediaResults = mediaSearchResultList.results;
       });
@@ -74,17 +75,18 @@ export class AddMediaComponent implements OnInit {
   addMediaToRanking(mediaId: number): void {
     if (this.addMediaRanking && this.user && this.rankingId) {
       const entryAddRequest: EntryAddRequestDTO = { tmdbId: mediaId, ranking: this.addMediaRanking };
-      const addMediaSub = this.mediaListService.addEntry(this.user.id, this.rankingId, entryAddRequest).subscribe({
-        next: () => this.goToMediaList(),
-        error: err => console.log('Error trying to add media to ranking'),
+      const addMediaSub = this.numberedRankingService.addEntry(this.user.id, this.rankingId, entryAddRequest).subscribe({
+        next: () => this.goToNumberedRanking(),
+        error: err => console.log('Error trying to add media to numbered ranking'),
+
       });
       this.subscriptions.add(addMediaSub);
     } else {
       console.log('Unable to add new entry to ranking list. Invalid parameters');
     }
   }
-  goToMediaList() {
-    this.router.navigate(['/medialist', this.rankingId]);
+  goToNumberedRanking() {
+    this.router.navigate(['/numberedrankings', this.rankingId]);
   }
   getPosterUrl(posterPath: string): string {
     return `${this.TMDB_IMAGE_BASE_URL}${this.TMDB_IMAGE_SIZE}${posterPath}`;

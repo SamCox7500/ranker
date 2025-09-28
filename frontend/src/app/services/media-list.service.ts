@@ -12,6 +12,8 @@ import { environment } from '../environment';
 })
 export class MediaListService {
 
+  /*
+
   private usersUrl: string = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) { }
@@ -32,4 +34,5 @@ export class MediaListService {
   public deleteEntries(userId: number, rankingId: number, entryIds: number[]): Observable<void> {
     return this.http.delete<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries`, { body: entryIds, withCredentials: true });
   }
+    */
 }
