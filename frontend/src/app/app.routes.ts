@@ -7,7 +7,7 @@ import { RegisterComponent } from './features/register/register.component';
 import { ManageAccountComponent } from './features/manage-account/manage-account.component';
 import { RankingListComponent } from './features/ranking-list/ranking-list.component';
 import { LandingComponent } from './features/landing/landing.component';
-import { AddMediaComponent } from './features/add-media/add-media.component';
+import { NumberedRankingAddMediaComponent } from './features/numbered-ranking-add-media/numbered-ranking-add-media.component';
 import { NumberedRankingComponent } from './features/numbered-ranking/numbered-ranking.component';
 
 
@@ -21,5 +21,5 @@ export const routes: Routes = [
   { path: 'rankings', component: RankingListComponent },
   { path: '', component: LandingComponent},
   { path: 'numberedrankings/:rankingId', component: NumberedRankingComponent },
-  { path: 'add-media/:rankingId/:addMediaRanking/:mediaType', component: AddMediaComponent},
+  { path: 'add-media/:rankingId/:addMediaRanking/:mediaType', component: NumberedRankingAddMediaComponent},
 ];
