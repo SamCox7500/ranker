@@ -35,8 +35,8 @@ export class RankingListComponent {
     });
     this.subscriptions.add(currentUserSub);
   }
-  goToCreateRanking(): void {
-    this.router.navigate(['createranking']);
+  goToCreateNumRanking(): void {
+    this.router.navigate(['createnumranking']);
   }
   goToRanking(rankingId: number | null, rankingType: string): void {
     if (rankingId) {

@@ -9,6 +9,7 @@ import { RankingListComponent } from './features/ranking-list/ranking-list.compo
 import { LandingComponent } from './features/landing/landing.component';
 import { NumberedRankingAddMediaComponent } from './features/numbered-ranking-add-media/numbered-ranking-add-media.component';
 import { NumberedRankingComponent } from './features/numbered-ranking/numbered-ranking.component';
+import { CreateNumberedRankingComponent } from './features/create-numbered-ranking/create-numbered-ranking.component';
 
 
 export const routes: Routes = [
@@ -22,4 +23,5 @@ export const routes: Routes = [
   { path: '', component: LandingComponent},
   { path: 'numberedrankings/:rankingId', component: NumberedRankingComponent },
   { path: 'add-media/:rankingId/:addMediaRanking/:mediaType', component: NumberedRankingAddMediaComponent},
+  { path: 'createnumranking', component: CreateNumberedRankingComponent}
 ];

@@ -2,14 +2,14 @@
   <h2>
     Your Rankings
   </h2>
-  <a class="btn btn-primary btn-lg" (click)="goToCreateRanking()">
+  <a class="btn btn-primary btn-lg" (click)="goToCreateNumRanking()">
     Create New Ranking
   </a>
 </div>
 @if (rankings.length === 0) {
   <div class="no-rankings-container">
       <h3>You have no rankings</h3>
-      <button class="btn btn-primary" (click)="goToCreateRanking()">Create A Ranking</button>
+      <button class="btn btn-primary" (click)="goToCreateNumRanking()">Create A Ranking</button>
   </div>
 } @else {
   <div class="rankings-container">
