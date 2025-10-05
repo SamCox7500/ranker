@@ -1,0 +1,83 @@
+<div class="media-list-container">
+
+    <!--Title and Desc form-->
+
+    <div class="ranking-header">
+        <form [formGroup]="rankingForm">
+            <div class="form-group">
+                <label for="title">Title</label>
+                @if (isEditMode) {
+                <input type="text" class="form-control" id="title" name="title"
+                    placeholder="Example: My top 20 horror films!" formControlName="title">
+                } @else {
+                <h2 class="ranking-title">{{ ranking?.title }}</h2>
+                }
+                @if (title.touched && title.hasError('required')) {
+                <div class="alert alert-danger">Title is required</div>
+                }
+                @if (title.touched && (title.hasError('maxlength') || title.hasError('minlength'))) {
+                <div class="alert alert-danger">Ranking title must be between 1-30 chars</div>
+                }
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                @if (isEditMode) {
+                <input type="text" class="form-control" id="description" name="description"
+                    placeholder="This is a list of my top 20 horror films that I have seen in the last decade"
+                    formControlName="description">
+                } @else {
+                <p class="ranking-description">{{ ranking?.description }}</p>
+                }
+                @if (description.touched && description.hasError('required')) {
+                <div class="alert alert-danger">Ranking description is required.</div>
+                }
+                @if (description.touched && (description.hasError('minlength') || description.hasError('maxlength'))) {
+                <div class="alert alert-danger">Ranking description must be between 1 and 150 chars.</div>
+                }
+            </div>
+        </form>
+    </div>
+
+    <!--Media List-->
+    @if (ranking?.mediaListDTO?.entries?.length === 0) {
+    <div class="empty-list-container">
+        <h3>Your media list is empty</h3>
+    </div>
+    } @else {
+    <div class="media-list" cdkDropList [cdkDropListData]="ranking?.mediaListDTO?.entries ?? []" (cdkDropListDropped)="drop($event)">
+        @for(mediaListEntry of ranking?.mediaListDTO?.entries ?? []; track mediaListEntry.ranking) {
+        <div class="media-item" [cdkDragDisabled]="!isEditMode" cdkDrag>
+            <div class="ranking-number">#{{ mediaListEntry.ranking }}</div>
+            @if (mediaListEntry.poster_path) {
+            <div class="media-poster">
+                <img [src]="getPosterUrl(mediaListEntry.poster_path)"
+                    alt="Poster for {{isMovieEntry(mediaListEntry) ? mediaListEntry.title : mediaListEntry.name}}" />
+            </div>
+            }
+            <div class="media-details">
+                <h5 class="media-title">
+                    {{ isMovieEntry(mediaListEntry) ? mediaListEntry.title : mediaListEntry.name }}
+                </h5>
+                <p class="media-meta">
+                    @if (isMovieEntry(mediaListEntry)) {
+                    Release Date: {{ mediaListEntry.release_date }}
+                    } @else {
+                    Seasons: {{ mediaListEntry.number_of_seasons }} | Episodes: {{ mediaListEntry.number_of_episodes }}
+                    }
+                </p>
+            </div>
+            @if (isEditMode) {
+            <button class="remove-btn" (click)="removeEntry(mediaListEntry.id)">Remove</button>
+            }
+        </div>
+        }
+    </div>
+    }
+    <div class="list-actions">
+        <a class="btn btn-primary btn-lg" (click)="goToAddMedia()">Add Ranking</a>
+        <button class="btn btn-primary" (click)="toggleEditMode()">
+            {{ isEditMode ? 'Lock List' : 'Edit List' }}
+        </button>
+    </div>
+</div>

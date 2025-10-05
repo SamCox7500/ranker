@@ -1,12 +1,10 @@
 package com.samcox.ranker.media;
 
-import com.samcox.ranker.ranking.NumberedRanking;
+import com.samcox.ranker.ranking.MediaType;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Represents a list of {@link MediaListEntry} of a specific {@link MediaType}.
@@ -28,39 +26,11 @@ public class MediaList {
   private Long id;
 
   /**
-   * The type of media that is ranked by the entries in the media list.
-   */
-  @Enumerated(EnumType.STRING)
-  private MediaType mediaType;
-
-  /**
    * The ranked list of media.
    */
   @OneToMany(mappedBy = "mediaList", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("ranking ASC")
   private List<MediaListEntry> entries = new ArrayList<>();
-
-  /**
-   * The overarching data on the media list, such as the title, desc, etc.
-   */
-  @OneToOne(mappedBy = "mediaList", cascade = CascadeType.ALL)
-  private NumberedRanking numberedRanking;
-
-  /**
-   * The type of media that the media list contains
-   * @return the MediaType of the media list.
-   */
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-
-  /**
-   * Sets the media type of the media list
-   * @param mediaType thge media type of the media list
-   */
-  public void setMediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
-  }
 
   /**
    * Returns the list of all media list entries contained within the list
@@ -83,17 +53,21 @@ public class MediaList {
    * Returns the numbered ranking that owns the media list
    * @return the numbered ranking attached to the media list
    */
+  /*
   public NumberedRanking getNumberedRanking() {
     return numberedRanking;
   }
-
+  */
   /**
+   *
    * Sets the numbered ranking of the media list
    * @param numberedRanking the numbered ranking of the media list
    */
+  /*
   public void setNumberedRanking(NumberedRanking numberedRanking) {
     this.numberedRanking = numberedRanking;
   }
+  */
 
   /**
    * Adds a new {@link MediaListEntry} to the media list.
@@ -136,16 +110,12 @@ public class MediaList {
    */
   public void moveEntry(int oldPosition, int newPosition) {
 
-    //entries.sort(Comparator.comparingInt(MediaListEntry::getRanking));
-
     if (oldPosition < 1 || newPosition < 1 || oldPosition > entries.size() || newPosition > entries.size()) {
       throw new IllegalArgumentException("Invalid positions");
     }
 
-    //Stores the removed element that is returned
     MediaListEntry entry = entries.remove(oldPosition - 1);
 
-    //Add the element back to the array list in new position
     entries.add(newPosition - 1, entry);
 
     reorderEntries();
@@ -181,9 +151,7 @@ public class MediaList {
   public String toString() {
     return "MediaList{" +
       "id=" + id +
-      ", mediaType=" + mediaType +
       ", entries=" + entries +
-      ", numberedRanking=" + numberedRanking +
       '}';
   }
 }

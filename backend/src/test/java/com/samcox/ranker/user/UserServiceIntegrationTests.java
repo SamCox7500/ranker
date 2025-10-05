@@ -1,18 +1,14 @@
 package com.samcox.ranker.user;
 
 
-import com.samcox.ranker.ranking.NumberedRanking;
-import com.samcox.ranker.ranking.NumberedRankingRepository;
-import com.samcox.ranker.ranking.Ranking;
-import com.samcox.ranker.ranking.RankingNotFoundException;
-import com.samcox.ranker.user.*;
+import com.samcox.ranker.numberedranking.NumberedRanking;
+import com.samcox.ranker.numberedranking.NumberedRankingRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigurationPackage;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,10 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.nio.file.AccessDeniedException;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -252,16 +246,5 @@ public class UserServiceIntegrationTests {
     Optional<User> deletedUser = userRepository.findById(deleteUserId);
     assertTrue(deletedUser.isEmpty());
 
-  }
-  @Test
-  public void testCheckAuthorized_Success() throws AccessDeniedException {
-    //Checking authenticated user id matches the id to be checked for authorisation
-    //No exception should be thrown
-    userService.checkAuthorized(testUser.getId());
-  }
-  @Test
-  public void testCheckAuthorized_NotAuthorized() throws AccessDeniedException {
-    //Id to be checked does not match authenticated user, therefore exception should be thrown
-    assertThrows(AccessDeniedException.class, () -> userService.checkAuthorized(testUser1.getId()));
   }
 }

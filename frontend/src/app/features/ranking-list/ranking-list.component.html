@@ -1,0 +1,41 @@
+<div class="container-fluid d-flex justify-content-evenly align-items-center bg-dark text-white py-5">
+  <h2>
+    Your Rankings
+  </h2>
+  <a class="btn btn-primary btn-lg" (click)="goToCreateNumRanking()">
+    Create New Ranking
+  </a>
+</div>
+@if (rankings.length === 0) {
+  <div class="no-rankings-container">
+      <h3>You have no rankings</h3>
+      <button class="btn btn-primary" (click)="goToCreateNumRanking()">Create A Ranking</button>
+  </div>
+} @else {
+  <div class="rankings-container">
+    @for (ranking of rankings; track ranking.id) {
+      <div class="card" (click)="goToRanking(ranking.id, ranking.rankingType)">
+        <!--<div class="card-header">
+          {{ranking.title}}
+        </div>-->
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ranking.title}}
+          </h5>
+          <p class="card-text">
+            {{ranking.description}}
+          </p>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" data-bs-display="static" aria-haspopup="true" aria-expanded="false" (click)="$event.stopPropagation()">
+            ...
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" (click)="$event.stopPropagation(); deleteRanking(ranking.id, ranking.rankingType)">Delete Ranking List</a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
+

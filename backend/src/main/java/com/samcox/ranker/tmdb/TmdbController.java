@@ -1,13 +1,9 @@
 package com.samcox.ranker.tmdb;
 
-import com.samcox.ranker.media.FilmDTO;
-import com.samcox.ranker.media.MediaList;
-import com.samcox.ranker.media.MediaListDTO;
+import com.samcox.ranker.media.MovieDTO;
 import com.samcox.ranker.media.TVShowDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
-
-import java.nio.file.AccessDeniedException;
 
 /**
  * REST controller for requests to search for movies and tv shows,
@@ -35,19 +31,19 @@ public class TmdbController {
    * @return the list of films from the resulting query
    */
   @GetMapping("/tmdb/movies/search")
-  public FilmSearchResultListDTO searchMovies(@RequestParam("query") String query) {
-    return tmdbService.searchFilms(query);
+  public MovieSearchResultListDTO searchMovies(@RequestParam("query") String query) {
+    return tmdbService.searchMovies(query);
   }
 
   /**
-   * Returns a FilmDTO of a film in TMDB API
+   * Returns a MovieDTO of a film in TMDB API
    * @param id the TMDB id of the film to be accessed
    * @return film dto with details on the movie
    */
   @GetMapping("/tmdb/movies/{id}")
-  public FilmDTO getMovieDetails(@PathVariable Long id) {
+  public MovieDTO getMovieDetails(@PathVariable Long id) {
     try {
-      return tmdbService.getFilmDetails(id);
+      return tmdbService.getMovieDetails(id);
     } catch (HttpClientErrorException e) {
       throw new MediaNotFoundException("Movie could not be found with id" + id);
     }

@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { RouterLinkActive } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CurrentUserService } from './services/current-user.service';
-import { User } from './user';
+import { User } from './core/models/user';
 import { LoginService } from './services/login.service';
 
 @Component({

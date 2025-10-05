@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MediaListEntry } from '../media-list-entry';
-import { EntryAddRequestDTO } from '../entry-add-request-dto';
-import { EntryMoveRequestDTO } from '../entry-move-request-dto';
-import { MediaList } from '../media-list';
+import { MediaListEntry } from '../core/models/media-list-entry';
+import { EntryAddRequestDTO } from '../core/dtos/entry-add-request-dto';
+import { EntryMoveRequestDTO } from '../core/dtos/entry-move-request-dto';
+import { MediaList } from '../core/models/media-list';
 import { environment } from '../environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MediaListService {
+
+  /*
 
   private usersUrl: string = `${environment.apiUrl}/users`;
 
@@ -23,7 +25,8 @@ export class MediaListService {
     return this.http.post<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries`, addRequest, { withCredentials: true });
   }
   public moveEntry(userId: number, rankingId: number, entryId: number, moveRequest: EntryMoveRequestDTO) {
-    return this.http.put<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries/${entryId}`, moveRequest, { withCredentials: true });
+    return this.http.put<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries/${entryId}`,
+      moveRequest, { withCredentials: true });
   }
   public deleteEntry(userId: number, rankingId: number, entryId: number): Observable<void> {
     return this.http.delete<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries/${entryId}`, { withCredentials: true });
@@ -31,4 +34,5 @@ export class MediaListService {
   public deleteEntries(userId: number, rankingId: number, entryIds: number[]): Observable<void> {
     return this.http.delete<void>(`${this.usersUrl}/${userId}/numberedrankings/${rankingId}/medialist/entries`, { body: entryIds, withCredentials: true });
   }
+    */
 }

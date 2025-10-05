@@ -2,6 +2,7 @@ package com.samcox.ranker.ranking;
 
 import com.samcox.ranker.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.Optional;
  *
  * @see User
  */
+@Repository
 public interface RankingRepository extends JpaRepository<Ranking, Long> {
   /**
    * Deletes all ranking belonging to the user.
@@ -29,4 +31,12 @@ public interface RankingRepository extends JpaRepository<Ranking, Long> {
    * Empty if they have no rankings or the user does not exist in the database.
    */
   Optional<List<Ranking>> findByUser(User user);
+
+  /**
+   * Returns a numbered ranking by id and user.
+   * @param id the id of the user
+   * @param user the user to whom the numbered ranking belongs
+   * @return an optional numbered ranking. Will be empty if no numbered ranking exists with that id and user.
+   */
+  Optional<Ranking> findByIdAndUser(Long id, User user);
 }

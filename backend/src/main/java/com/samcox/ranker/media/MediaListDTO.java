@@ -1,6 +1,6 @@
 package com.samcox.ranker.media;
 
-import com.samcox.ranker.ranking.NumberedRankingDTO;
+import com.samcox.ranker.ranking.MediaType;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
@@ -15,20 +15,22 @@ public class MediaListDTO {
   private MediaType mediaType;
 
   @NotNull
-  private List<MediaListEntryDTO> mediaListEntryDTOList;
+  private List<MediaListEntryDTO> entries;
 
+  /*
   @NotNull
   private NumberedRankingDTO numberedRankingDTO;
+   */
 
   public MediaListDTO() {
 
   }
 
-  public MediaListDTO(Long id, MediaType mediaType, List<MediaListEntryDTO> mediaListEntryDTOList, NumberedRankingDTO numberedRankingDTO) {
+  public MediaListDTO(Long id, MediaType mediaType, List<MediaListEntryDTO> entries) {
     this.id = id;
     this.mediaType = mediaType;
-    this.mediaListEntryDTOList = mediaListEntryDTOList;
-    this.numberedRankingDTO = numberedRankingDTO;
+    this.entries = entries;
+    //this.numberedRankingDTO = numberedRankingDTO;
   }
 
   public Long getId() {
@@ -39,22 +41,14 @@ public class MediaListDTO {
     this.id = id;
   }
 
-  public List<MediaListEntryDTO> getMediaListEntryDTOList() {
-    return mediaListEntryDTOList;
+  public List<MediaListEntryDTO> getEntries() {
+    return entries;
   }
 
-  public void setMediaListEntryDTOList(List<MediaListEntryDTO> mediaListEntryDTOList) {
-    this.mediaListEntryDTOList = mediaListEntryDTOList;
+  public void setEntries(List<MediaListEntryDTO> entries) {
+    this.entries = entries;
   }
-
-  public MediaType getMediaType() {
-    return mediaType;
-  }
-
-  public void setMediaType(MediaType mediaType) {
-    this.mediaType = mediaType;
-  }
-
+  /*
   public NumberedRankingDTO getNumberedRankingDTO() {
     return numberedRankingDTO;
   }
@@ -62,4 +56,5 @@ public class MediaListDTO {
   public void setNumberedRankingDTO(NumberedRankingDTO numberedRankingDTO) {
     this.numberedRankingDTO = numberedRankingDTO;
   }
+   */
 }

@@ -182,7 +182,7 @@ public class UserService {
    * @param userId the id of the user to authorize
    * @throws AccessDeniedException if the current user does not match the given ID
    */
-  public void checkAuthorized(Long userId) throws AccessDeniedException {
+  private void checkAuthorized(Long userId) throws AccessDeniedException {
     if (!authService.getAuthenticatedUser().getId().equals(userId)) {
       throw new AccessDeniedException("User is not authorized");
     }
