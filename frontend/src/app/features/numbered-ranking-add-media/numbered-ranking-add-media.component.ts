@@ -54,7 +54,7 @@ export class NumberedRankingAddMediaComponent {
     this.subscriptions.add(currentUserSub);
   }
   onSearch(): void {
-    if (this.mediaType === 'FILM') {
+    if (this.mediaType === 'MOVIE') {
       const movieSub = this.tmdbService.searchMovies(this.query.value || '').subscribe((mediaSearchResultList: MediaSearchResultList) => {
         this.mediaResults = mediaSearchResultList.results;
       });
