@@ -1,5 +1,6 @@
 package com.samcox.ranker.ranking;
 
+import com.samcox.ranker.sharedranking.SharedRanking;
 import com.samcox.ranker.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -54,14 +55,19 @@ public abstract class Ranking {
   /**
    * The type of ranking. E.g. Numbered Ranking, Tier List.
    */
+  @NotNull(message = "Ranking must have a ranking type")
   @Enumerated(EnumType.STRING)
   private RankingType rankingType;
 
   /**
    * The type of media the ranking contains. E.g. Movies, TV Shows.
    */
+  @NotNull(message = "Ranking must have a media type")
   @Enumerated(EnumType.STRING)
   private MediaType mediaType;
+
+  @OneToOne(mappedBy = "ranking", cascade = CascadeType.ALL, orphanRemoval = true)
+  private SharedRanking sharedRanking;
 
   /**
    * Default constructor as required by JPA.
@@ -194,6 +200,22 @@ public abstract class Ranking {
    */
   public void setMediaType(MediaType mediaType) {
     this.mediaType = mediaType;
+  }
+
+  /**
+   * Returns the shared version of the ranking that is accessible to specified users.
+   * @return the shared version of the ranking
+   */
+  public SharedRanking getSharedRanking() {
+    return sharedRanking;
+  }
+
+  /**
+   * Sets the unique shared ranking for this ranking.
+   * @param sharedRanking the shared ranking to be set
+   */
+  public void setSharedRanking(SharedRanking sharedRanking) {
+    this.sharedRanking = sharedRanking;
   }
   /**
    * Returns the ranking as a string.

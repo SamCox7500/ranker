@@ -22,7 +22,8 @@ public class NumberedRankingDTOMapper {
       numberedRanking.getTitle(),
       numberedRanking.getDescription(),
       numberedRanking.getIsPublic(),
-      numberedRanking.getIsReverseOrder(),
-      numberedRanking.getMediaType().toString());
+      numberedRanking.getMediaType().toString(),
+      numberedRanking.getRankingType().toString(),
+      numberedRanking.getIsReverseOrder());
   }
 }

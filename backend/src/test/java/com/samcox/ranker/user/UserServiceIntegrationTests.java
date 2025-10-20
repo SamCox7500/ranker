@@ -3,6 +3,8 @@ package com.samcox.ranker.user;
 
 import com.samcox.ranker.numberedranking.NumberedRanking;
 import com.samcox.ranker.numberedranking.NumberedRankingRepository;
+import com.samcox.ranker.ranking.MediaType;
+import com.samcox.ranker.ranking.RankingType;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.AfterAll;
@@ -231,6 +233,8 @@ public class UserServiceIntegrationTests {
     numberedRanking.setUser(userWithRankings);
     numberedRanking.setTitle("Numbered ranking for test user");
     numberedRanking.setDescription("This is a desc of a ranking");
+    numberedRanking.setRankingType(RankingType.NUMBERED_RANKING);
+    numberedRanking.setMediaType(MediaType.MOVIE);
     numberedRankingRepository.save(numberedRanking);
 
     long numRankId = numberedRanking.getId();

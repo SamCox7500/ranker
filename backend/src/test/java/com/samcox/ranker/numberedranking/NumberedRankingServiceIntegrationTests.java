@@ -8,6 +8,7 @@ import com.samcox.ranker.media.MediaListService;
 import com.samcox.ranker.numberedranking.*;
 import com.samcox.ranker.ranking.MediaType;
 import com.samcox.ranker.ranking.RankingNotFoundException;
+import com.samcox.ranker.ranking.RankingType;
 import com.samcox.ranker.user.*;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,6 +77,7 @@ public class NumberedRankingServiceIntegrationTests {
     testNumberedRanking.setTitle("This is a test title");
     testNumberedRanking.setDescription("This is a test desc of a numbered ranking");
     testNumberedRanking.setMediaType(MediaType.MOVIE);
+    testNumberedRanking.setRankingType(RankingType.NUMBERED_RANKING);
 
     mediaList = new MediaList();
 

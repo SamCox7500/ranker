@@ -5,6 +5,7 @@ import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.media.*;
 import com.samcox.ranker.numberedranking.*;
 import com.samcox.ranker.ranking.MediaType;
+import com.samcox.ranker.ranking.RankingType;
 import com.samcox.ranker.user.User;
 import com.samcox.ranker.user.UserDTO;
 import com.samcox.ranker.user.UserRepository;
@@ -88,6 +89,7 @@ public class NumberedRankingControllerIntegrationTests {
     testNumberedRanking.setTitle("Valid title");
     testNumberedRanking.setDescription("Valid description");
     testNumberedRanking.setMediaType(MediaType.MOVIE);
+    testNumberedRanking.setRankingType(RankingType.NUMBERED_RANKING);
 
     mediaListEntry = new MediaListEntry();
     mediaListEntry.setRanking(1);
