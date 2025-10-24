@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.samcox.ranker.auth.AuthService;
 import com.samcox.ranker.auth.CustomUserDetailsService;
 import com.samcox.ranker.ranking.RankingRepository;
+import com.samcox.ranker.ranking.RankingService;
+import com.samcox.ranker.sharedranking.SharedRankingRepository;
+import com.samcox.ranker.sharedranking.SharedRankingService;
 import com.samcox.ranker.user.UserController;
 import com.samcox.ranker.user.UserRepository;
 import com.samcox.ranker.user.UserService;
@@ -40,5 +43,9 @@ public class TestConfig {
   @Bean
   public CustomUserDetailsService customUserDetailsService(UserRepository userRepository) {
     return new CustomUserDetailsService(userRepository);
+  }
+  @Bean
+  public SharedRankingService sharedRankingService(SharedRankingRepository sharedRankingRepository, RankingRepository rankingRepository, RankingService rankingService) {
+    return new SharedRankingService(sharedRankingRepository, rankingRepository, rankingService);
   }
 }

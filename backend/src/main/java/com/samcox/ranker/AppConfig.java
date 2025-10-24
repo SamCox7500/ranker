@@ -34,7 +34,10 @@ public class AppConfig {
   public NumberedRankingService numberedRankingService(NumberedRankingRepository rankingRepository, UserService userService, AuthService authService) {
     return new NumberedRankingService(rankingRepository, userService, authService);
   }
-
+  @Bean
+  public RankingService rankingService(RankingRepository rankingRepository, UserService userService, AuthService authService) {
+    return new RankingService(rankingRepository, userService, authService);
+  }
   @Bean
   public AuthService authService(UserRepository userRepository) {
     return new AuthService(userRepository);

@@ -14,7 +14,7 @@ import java.net.URI;
  * <p>Includes searching for movies and tv shows, as well as getting details on specific movies and tv shows by ID</p>
  */
 @Service
-public class TmdbService {
+public class  TmdbService {
 
   /**
    * RestTemplate for http requests to TMDB API

@@ -54,7 +54,7 @@ public class SharedRankingService {
   public void shareRanking(Long rankingId, Long userId) throws AccessDeniedException {
 
     if (isShared(rankingId, userId)) {
-      throw new IllegalArgumentException("Ranking is already shared");
+      throw new RankingAlreadySharedException("Ranking is already shared");
     }
 
     Ranking ranking = rankingService.getRankingByIdAndUser(rankingId, userId);
@@ -77,7 +77,7 @@ public class SharedRankingService {
     Ranking ranking = rankingService.getRankingByIdAndUser(rankingId, userId);
     if (!isShared(rankingId, userId)) {
       //todo response entities
-      throw new IllegalArgumentException("Ranking is not currently shared");
+      throw new RankingNotSharedException("Ranking is not currently shared");
     }
 
     SharedRanking sharedRanking = ranking.getSharedRanking();
@@ -107,7 +107,7 @@ public class SharedRankingService {
    */
   public SharedRanking getSharedRanking(Long rankingId, Long userId) throws AccessDeniedException {
     if (!isShared(rankingId, userId)) {
-      throw new IllegalArgumentException("Ranking is not currently shared");
+      throw new RankingNotSharedException("Ranking is not currently shared");
     }
     Ranking ranking = rankingService.getRankingByIdAndUser(rankingId, userId);
     return ranking.getSharedRanking();
@@ -122,7 +122,7 @@ public class SharedRankingService {
    */
   public Ranking viewSharedRanking(String shareToken) {
     SharedRanking sharedRanking = sharedRankingRepository.findByShareToken(shareToken)
-      .orElseThrow(() -> new IllegalArgumentException("Invalid share token"));
+      .orElseThrow(() -> new InvalidShareTokenException("Invalid share token"));
     return sharedRanking.getRanking();
   }
 }

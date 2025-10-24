@@ -125,7 +125,7 @@ public class SharedRankingServiceIntegrationTests {
   @WithMockUser("testuser")
   public void testShareRanking_RankingAlreadyShared() throws AccessDeniedException {
     sharedRankingService.shareRanking(testNumberedRanking.getId(), testUser.getId());
-    assertThrows(IllegalArgumentException.class, () ->  sharedRankingService.shareRanking(testNumberedRanking.getId(), testUser.getId()));
+    assertThrows(RankingAlreadySharedException.class, () ->  sharedRankingService.shareRanking(testNumberedRanking.getId(), testUser.getId()));
   }
   @Test
   @WithMockUser("testuser")
@@ -143,7 +143,7 @@ public class SharedRankingServiceIntegrationTests {
   @Test
   @WithMockUser("testuser")
   public void testUnshareRanking_RankingIsNotShared() throws AccessDeniedException {
-    assertThrows(IllegalArgumentException.class, () -> sharedRankingService.unshareRanking(testNumberedRanking.getId(), testUser.getId()));
+    assertThrows(RankingNotSharedException.class, () -> sharedRankingService.unshareRanking(testNumberedRanking.getId(), testUser.getId()));
   }
   @Test
   @WithMockUser("testuser1")
@@ -203,7 +203,7 @@ public class SharedRankingServiceIntegrationTests {
   @Test
   @WithMockUser("testuser")
   public void testGetSharedRanking_RankingIsNotShared() {
-    assertThrows(IllegalArgumentException.class, () -> sharedRankingService.getSharedRanking(testNumberedRanking.getId(), testUser.getId()));
+    assertThrows(RankingNotSharedException.class, () -> sharedRankingService.getSharedRanking(testNumberedRanking.getId(), testUser.getId()));
   }
   @Test
   @WithMockUser("testuser")
@@ -253,7 +253,7 @@ public class SharedRankingServiceIntegrationTests {
     @Test
     @WithMockUser("testuser1")
     public void testViewSharedRanking_InvalidShareToken() {
-      assertThrows(IllegalArgumentException.class, () -> sharedRankingService.viewSharedRanking("invalid token"));
+      assertThrows(InvalidShareTokenException.class, () -> sharedRankingService.viewSharedRanking("invalid token"));
     }
   }
 

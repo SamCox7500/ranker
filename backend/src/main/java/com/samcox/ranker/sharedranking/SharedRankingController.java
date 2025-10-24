@@ -1,9 +1,11 @@
 package com.samcox.ranker.sharedranking;
 
+import com.samcox.ranker.media.MediaListEntryService;
 import com.samcox.ranker.media.MediaListService;
 import com.samcox.ranker.numberedranking.NumberedRanking;
 import com.samcox.ranker.numberedranking.NumberedRankingDTO;
 import com.samcox.ranker.numberedranking.NumberedRankingDTOMapper;
+import com.samcox.ranker.numberedranking.NumberedRankingService;
 import com.samcox.ranker.ranking.Ranking;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,18 +25,27 @@ import java.util.Map;
  * @see SharedRankingService
  * @see SharedRankingRepository
  */
-@Validated
 @RestController
 public class SharedRankingController {
 
   /**
    * Service for performing CRUD operations on shared rankings.
    */
-  private SharedRankingService sharedRankingService;
+  private final SharedRankingService sharedRankingService;
   /**
    * Service for performing CRUD operations on media lists.
    */
-  private MediaListService mediaListService;
+  private final MediaListService mediaListService;
+
+  /**
+   * Creates a new shared ranking controller instance.
+   * @param sharedRankingService service used to perform CRUD operations on shared rankings.
+   * @param mediaListService service used to perform CRUD operations on media lists.
+   */
+  public SharedRankingController(SharedRankingService sharedRankingService, MediaListService mediaListService) {
+    this.sharedRankingService = sharedRankingService;
+    this.mediaListService = mediaListService;
+  }
 
   /**
    * Creates a shared ranking from a ranking.
@@ -84,7 +95,7 @@ public class SharedRankingController {
    * @param shareToken unique string used to access the shared ranking
    * @return JSON response containing dto of the ranking that is shared
    */
-  @GetMapping("/sharedranking/{shareToken}")
+  @GetMapping("/sharedrankings/{shareToken}")
   public ResponseEntity<?> viewSharedRanking(@PathVariable String shareToken) {
     Ranking ranking = sharedRankingService.viewSharedRanking(shareToken);
     if (ranking instanceof NumberedRanking numberedRanking) {

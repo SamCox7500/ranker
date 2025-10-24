@@ -44,7 +44,7 @@ public class RankerApplication implements CommandLineRunner {
 
   public static void main(String[] args) {
 		SpringApplication.run(RankerApplication.class, args);
-	}
+  }
 
   @Override
   @Transactional
