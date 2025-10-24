@@ -52,6 +52,11 @@ public class SharedRankingService {
    * @throws AccessDeniedException if the user trying to share the ranking does not own it
    */
   public void shareRanking(Long rankingId, Long userId) throws AccessDeniedException {
+
+    if (isShared(rankingId, userId)) {
+      throw new IllegalArgumentException("Ranking is already shared");
+    }
+
     Ranking ranking = rankingService.getRankingByIdAndUser(rankingId, userId);
 
     SharedRanking sharedRanking = new SharedRanking();
@@ -74,6 +79,9 @@ public class SharedRankingService {
       //todo response entities
       throw new IllegalArgumentException("Ranking is not currently shared");
     }
+
+    SharedRanking sharedRanking = ranking.getSharedRanking();
+    sharedRankingRepository.delete(sharedRanking);
     ranking.setSharedRanking(null);
     rankingRepository.save(ranking);
   }
@@ -87,7 +95,7 @@ public class SharedRankingService {
    */
   public boolean isShared(Long rankingId, Long userId) throws AccessDeniedException {
     Ranking ranking = rankingService.getRankingByIdAndUser(rankingId, userId);
-    return ranking.getSharedRanking() == null;
+    return ranking.getSharedRanking() != null;
   }
 
   /**

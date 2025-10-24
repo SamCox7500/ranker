@@ -8,6 +8,9 @@ import com.samcox.ranker.media.MediaListService;
 import com.samcox.ranker.numberedranking.NumberedRankingRepository;
 import com.samcox.ranker.numberedranking.NumberedRankingService;
 import com.samcox.ranker.ranking.RankingRepository;
+import com.samcox.ranker.ranking.RankingService;
+import com.samcox.ranker.sharedranking.SharedRankingRepository;
+import com.samcox.ranker.sharedranking.SharedRankingService;
 import com.samcox.ranker.tmdb.TmdbService;
 import com.samcox.ranker.user.UserRepository;
 import com.samcox.ranker.user.UserService;
@@ -48,5 +51,10 @@ public class AppConfig {
   @Bean
   public TmdbService tmdbService(RestTemplate restTemplate) {
     return new TmdbService(restTemplate);
+  }
+
+  @Bean
+  public SharedRankingService sharedRankingService(SharedRankingRepository sharedRankingRepository, RankingRepository rankingRepository, RankingService rankingService) {
+    return new SharedRankingService(sharedRankingRepository, rankingRepository, rankingService);
   }
 }

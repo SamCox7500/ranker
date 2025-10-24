@@ -27,7 +27,7 @@ public class SharedRanking {
   /**
    * The ranking that is being shared by the user that owns it.
    */
-  @OneToOne
+  @OneToOne()
   @JoinColumn(name = "ranking_id", nullable = false, unique = true)
   private Ranking ranking;
 
