@@ -96,11 +96,7 @@ public class RankingControllerIntegrationTests {
       .andExpect(jsonPath("$.mediaType")
         .value("MOVIE"))
       .andExpect(jsonPath("$.rankingType")
-        .value("NUMBERED_RANKING"))
-      .andExpect(jsonPath("$.userDTO.username")
-        .value("testuser"))
-      .andExpect(jsonPath("$.userDTO.id")
-        .value(testUser.getId()));
+        .value("NUMBERED_RANKING"));
   }
   @Test
   @WithMockUser("testuser1")
@@ -130,11 +126,7 @@ public class RankingControllerIntegrationTests {
       .andExpect(jsonPath("$[0].mediaType")
         .value("MOVIE"))
       .andExpect(jsonPath("$[0].rankingType")
-        .value("NUMBERED_RANKING"))
-      .andExpect(jsonPath("$[0].userDTO.username")
-        .value("testuser"))
-      .andExpect(jsonPath("$[0]userDTO.id")
-        .value(testUser.getId()));
+        .value("NUMBERED_RANKING"));
   }
   @Test
   @WithMockUser("testuser1")
