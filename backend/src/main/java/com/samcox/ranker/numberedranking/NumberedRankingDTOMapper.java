@@ -18,7 +18,6 @@ public class NumberedRankingDTOMapper {
   public static NumberedRankingDTO toNumberedRankingDTO(NumberedRanking numberedRanking) {
     return new NumberedRankingDTO(
       numberedRanking.getId(),
-      UserDTOMapper.toUserDTO(numberedRanking.getUser()),
       numberedRanking.getTitle(),
       numberedRanking.getDescription(),
       numberedRanking.getIsPublic(),

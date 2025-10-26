@@ -26,7 +26,6 @@ public class NumberedRankingDTO extends RankingDTO {
   /**
    * Creates a numbered ranking DTO.
    * @param id the id of the numbered ranking
-   * @param userDTO dto for the user who owns the numbered ranking
    * @param title the title of the numbered ranking
    * @param desc the description of the numbered ranking
    * @param isPublic if the numbered ranking is open to all or just the owner
@@ -34,8 +33,8 @@ public class NumberedRankingDTO extends RankingDTO {
    * @param mediaType the media type of the numbered ranking
    * @param rankingType the type of ranking e.g. numbered ranking, tier list
    */
-  public NumberedRankingDTO(long id, UserDTO userDTO, String title, String desc, boolean isPublic, String mediaType, String rankingType, boolean isReverseOrder) {
-    super(id, userDTO, title, desc, isPublic, rankingType, mediaType);
+  public NumberedRankingDTO(long id, String title, String desc, boolean isPublic, String mediaType, String rankingType, boolean isReverseOrder) {
+    super(id, title, desc, isPublic, rankingType, mediaType);
     this.isReverseOrder = isReverseOrder;
   }
 

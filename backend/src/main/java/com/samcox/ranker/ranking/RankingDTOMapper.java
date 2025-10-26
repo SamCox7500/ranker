@@ -19,7 +19,6 @@ public class RankingDTOMapper {
   public static RankingDTO toRankingDTO(Ranking ranking) {
     return new RankingDTO(
       ranking.getId(),
-      UserDTOMapper.toUserDTO(ranking.getUser()),
       ranking.getTitle(),
       ranking.getDescription(),
       ranking.getIsPublic(),
