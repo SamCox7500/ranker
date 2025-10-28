@@ -39,9 +39,9 @@ export class RankingListComponent {
     this.router.navigate(['createnumranking']);
   }
   goToRanking(rankingId: number | null, rankingType: string): void {
-    if (rankingId) {
+    if (rankingId && this.user?.id) {
       if (rankingType === 'NUMBERED_RANKING') {
-        this.router.navigate(['/numberedrankings', rankingId]);
+        this.router.navigate(['/users', this.user.id, 'numberedrankings', rankingId]);
       }
     }
   }

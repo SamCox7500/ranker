@@ -27,12 +27,12 @@ export class NumberedRankingAddMediaComponent {
   rankingId: number | null = null;
   mediaType: string = '';
   rankingType: string = '';
+  userId: number | null = null;
 
   query = new FormControl('');
   mediaResults: MediaSearchResult[] = [];
   //existingMediaIds = new Set<number>();
 
-  user: User | null = null;
   addMediaRanking: number | null = null;
 
   readonly TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
@@ -46,12 +46,7 @@ export class NumberedRankingAddMediaComponent {
     this.rankingId = Number(this.route.snapshot.paramMap.get('rankingId'));
     this.mediaType = this.route.snapshot.paramMap.get('mediaType') || '';
     this.addMediaRanking = Number(this.route.snapshot.paramMap.get('addMediaRanking'));
-    const fetchUserSub = this.currentUserService.fetchCurrentUser().subscribe();
-    const currentUserSub = this.currentUserService.getCurrentUser().subscribe((user: User | null) => {
-      this.user = user;
-    });
-    this.subscriptions.add(fetchUserSub);
-    this.subscriptions.add(currentUserSub);
+    this.userId = Number(this.route.snapshot.paramMap.get('userId'));
   }
   onSearch(): void {
     if (this.mediaType === 'MOVIE') {
@@ -73,9 +68,9 @@ export class NumberedRankingAddMediaComponent {
     return (result as TVShowSearchResult).name !== undefined;
   }
   addMediaToRanking(mediaId: number): void {
-    if (this.addMediaRanking && this.user && this.rankingId) {
+    if (this.addMediaRanking && this.userId && this.rankingId) {
       const entryAddRequest: EntryAddRequestDTO = { tmdbId: mediaId, ranking: this.addMediaRanking };
-      const addMediaSub = this.numberedRankingService.addEntry(this.user.id, this.rankingId, entryAddRequest).subscribe({
+      const addMediaSub = this.numberedRankingService.addEntry(this.userId, this.rankingId, entryAddRequest).subscribe({
         next: () => this.goToNumberedRanking(),
         error: err => console.log('Error trying to add media to numbered ranking'),
 
@@ -83,10 +78,12 @@ export class NumberedRankingAddMediaComponent {
       this.subscriptions.add(addMediaSub);
     } else {
       console.log('Unable to add new entry to ranking list. Invalid parameters');
+      console.log('UserId' + this.userId);
+      console.log('RankingId' + this.rankingId);
     }
   }
   goToNumberedRanking() {
-    this.router.navigate(['/numberedrankings', this.rankingId]);
+    this.router.navigate(['/users', this.userId, 'numberedrankings', this.rankingId]);
   }
   getPosterUrl(posterPath: string): string {
     return `${this.TMDB_IMAGE_BASE_URL}${this.TMDB_IMAGE_SIZE}${posterPath}`;

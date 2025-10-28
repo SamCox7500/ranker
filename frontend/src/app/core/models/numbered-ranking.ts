@@ -2,7 +2,7 @@ import { User } from "./user";
 import { MediaList } from "./media-list";
 
 export interface NumberedRanking {
-    id: number | null;
+    id: number;
     //userDTO: User | null;
     title: string;
     description: string;

@@ -6,7 +6,7 @@
         <form [formGroup]="rankingForm">
             <div class="form-group">
                 <label for="title">Title</label>
-                @if (isEditMode) {
+                @if (isEditMode && canEdit) {
                 <input type="text" class="form-control" id="title" name="title"
                     placeholder="Example: My top 20 horror films!" formControlName="title">
                 } @else {
@@ -22,7 +22,7 @@
 
             <div class="form-group">
                 <label for="description">Description</label>
-                @if (isEditMode) {
+                @if (isEditMode && canEdit) {
                 <input type="text" class="form-control" id="description" name="description"
                     placeholder="This is a list of my top 20 horror films that I have seen in the last decade"
                     formControlName="description">
@@ -67,7 +67,7 @@
                     }
                 </p>
             </div>
-            @if (isEditMode) {
+            @if (isEditMode && canEdit) {
             <button class="remove-btn" (click)="removeEntry(mediaListEntry.id)">Remove</button>
             }
         </div>
@@ -75,9 +75,11 @@
     </div>
     }
     <div class="list-actions">
-        <a class="btn btn-primary btn-lg" (click)="goToAddMedia()">Add Ranking</a>
-        <button class="btn btn-primary" (click)="toggleEditMode()">
-            {{ isEditMode ? 'Lock List' : 'Edit List' }}
-        </button>
+        @if (canEdit) {
+            <a class="btn btn-primary btn-lg" (click)="goToAddMedia()">Add Ranking</a>
+            <button class="btn btn-primary" (click)="toggleEditMode()">
+                {{ isEditMode ? 'Lock List' : 'Edit List' }}
+            </button>
+        }   
     </div>
 </div>

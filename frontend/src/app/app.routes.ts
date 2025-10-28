@@ -8,8 +8,9 @@ import { ManageAccountComponent } from './features/manage-account/manage-account
 import { RankingListComponent } from './features/ranking-list/ranking-list.component';
 import { LandingComponent } from './features/landing/landing.component';
 import { NumberedRankingAddMediaComponent } from './features/numbered-ranking-add-media/numbered-ranking-add-media.component';
-import { NumberedRankingComponent } from './features/numbered-ranking/numbered-ranking.component';
 import { CreateNumberedRankingComponent } from './features/create-numbered-ranking/create-numbered-ranking.component';
+import { numberedRankingResolver } from './resolvers/numbered-ranking.resolver';
+import { NumberedRankingComponent } from './features/numbered-ranking/numbered-ranking.component';
 
 
 export const routes: Routes = [
@@ -21,7 +22,16 @@ export const routes: Routes = [
   { path: 'manageuser', component: ManageAccountComponent },
   { path: 'rankings', component: RankingListComponent },
   { path: '', component: LandingComponent},
-  { path: 'numberedrankings/:rankingId', component: NumberedRankingComponent },
-  { path: 'add-media/:rankingId/:addMediaRanking/:mediaType', component: NumberedRankingAddMediaComponent},
-  { path: 'createnumranking', component: CreateNumberedRankingComponent}
+  //{ path: 'users/:userId/numberedrankings/:rankingId', component: NumberedRankingComponent },
+  //{ path: 'add-media/:rankingId/:addMediaRanking/:mediaType', component: NumberedRankingAddMediaComponent},
+  { path: 'users/:userId/numberedrankings/:rankingId/:addMediaRanking/:mediaType', component: NumberedRankingAddMediaComponent},
+  { path: 'createnumranking', component: CreateNumberedRankingComponent},
+  { path: 'users/:userId/numberedrankings/:rankingId', 
+    component: NumberedRankingComponent,
+    resolve: { data: numberedRankingResolver }
+  },
+  { path: 'shared/numberedrankings/:shareToken',
+    component: NumberedRankingComponent,
+    resolve: { data: numberedRankingResolver }
+  },
 ];

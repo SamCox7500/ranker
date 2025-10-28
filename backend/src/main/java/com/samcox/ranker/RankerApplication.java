@@ -7,6 +7,8 @@ import com.samcox.ranker.numberedranking.CreateNumberedRankingDTO;
 import com.samcox.ranker.numberedranking.NumberedRanking;
 import com.samcox.ranker.numberedranking.NumberedRankingDTO;
 import com.samcox.ranker.numberedranking.NumberedRankingService;
+import com.samcox.ranker.ranking.RankingDTOMapper;
+import com.samcox.ranker.sharedranking.SharedRankingService;
 import com.samcox.ranker.tmdb.*;
 import com.samcox.ranker.user.UserCredentials;
 import com.samcox.ranker.user.UserDTO;
@@ -41,6 +43,9 @@ public class RankerApplication implements CommandLineRunner {
 
   @Autowired
   private MediaListService mediaListService;
+
+  @Autowired
+  private SharedRankingService sharedRankingService;
 
   public static void main(String[] args) {
 		SpringApplication.run(RankerApplication.class, args);
@@ -152,7 +157,11 @@ public class RankerApplication implements CommandLineRunner {
 
     //System.out.println(mediaList1.getEntries());
 
+    sharedRankingService.shareRanking(1L, userDTO.getId());
+    String shareToken = sharedRankingService.getSharedRanking(1L, userDTO.getId()).getShareToken();
+    System.out.println(shareToken);
+
     SecurityContextHolder.clearContext();
-     */
+    */
   }
 }
