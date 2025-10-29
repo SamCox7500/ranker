@@ -105,4 +105,10 @@ public class SharedRankingController {
     }
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "No ranking of a valid ranking type exsits for that share token"));
   }
+  @GetMapping("/sharedrankings/{shareToken}/lookup")
+  public ResponseEntity<SharedRankingLookupDTO> lookupSharedRanking(@PathVariable String shareToken) {
+    Ranking ranking = sharedRankingService.viewSharedRanking(shareToken);
+    String rankingType = ranking.getRankingType().toString();
+    return ResponseEntity.ok(new SharedRankingLookupDTO(rankingType, shareToken));
+  }
 }

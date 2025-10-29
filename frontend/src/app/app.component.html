@@ -21,6 +21,10 @@
         <li class="nav-item">
           <a class="nav-link create-ranking" routerLink="createnumranking">Create Ranking</a>
         </li>
+            <div class="search-bar">
+            <input type="text" class="search-input" [formControl]="shareToken" placeholder="Enter a share token to view a shared ranking" (keyup.enter)="(searchByToken(this.shareToken.value || ''))" />
+            <button class="btn btn-secondary search-button" (click)="searchByToken(this.shareToken.value || '')">Search</button>
+        </div>
         } @else {
           <li class="nav-item">
             <a class="nav-link" routerLink="login">View Ranking</a>

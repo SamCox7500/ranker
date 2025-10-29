@@ -7,11 +7,14 @@ import { HttpClient } from '@angular/common/http';
 import { CurrentUserService } from './services/current-user.service';
 import { User } from './core/models/user';
 import { LoginService } from './services/login.service';
+import { SharedRankingService } from './services/shared-ranking.service';
+import { response } from 'express';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, ReactiveFormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -20,7 +23,9 @@ export class AppComponent implements OnInit {
   user: User | null = null;
   authenticated: boolean = false;
 
-  constructor(private loginService: LoginService, private currentUserService: CurrentUserService, private router: Router) {}
+  shareToken = new FormControl('');
+
+  constructor(private loginService: LoginService, private currentUserService: CurrentUserService, private router: Router, private sharedRankingService: SharedRankingService) {}
 
   ngOnInit(): void {
     this.updateAuth();
@@ -44,5 +49,22 @@ export class AppComponent implements OnInit {
   }
   goToLanding() {
     this.router.navigate(['/']);
+  }
+  searchByToken(token: string): void {
+    console.log(token);
+    this.sharedRankingService.lookupSharedRanking(token).subscribe({
+      next: (response) => {
+        if (response.rankingType === 'NUMBERED_RANKING') {
+          this.router.navigate(['/shared/numberedrankings', token]);
+        } else if (response.rankingType === 'TIER_LIST') {
+          //todo
+        } else {
+          alert('Unknown ranking type');
+        }
+      },
+      error: () => {
+        alert('Invalid share token');
+      }
+    });
   }
 }

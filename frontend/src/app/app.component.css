@@ -7,10 +7,26 @@
     border-radius: 5px;
     padding-left: 1rem;
     padding-right: 1rem;
+    margin-right: 200px;
 }
 .navbar-nav .nav-link.create-ranking:hover {
     background-color: #0056b3;
 }
 .navbar-nav .nav-link.dropdown-toggle {
     padding-right: 1rem;
+}
+.search-bar {
+    gap: 10px;
+    margin-left: 50px;
+}
+
+.search-input {
+    border-radius: 5px;
+    border: none;
+    width: 280px;
+    margin-right: 10px;
+}
+
+.search-button {
+    font-size: 15px;
 }

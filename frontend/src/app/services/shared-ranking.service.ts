@@ -23,6 +23,9 @@ export class SharedRankingService {
     return this.http.get<any>(`${this.usersURL}/${userId}/rankings/${rankingId}/shared`, {withCredentials: true});
   }
   public viewSharedRanking(shareToken: string) {
-    return this.http.get<any>(`${environment.apiUrl}/shared/${shareToken}`);
+    return this.http.get<any>(`${environment.apiUrl}/sharedrankings/${shareToken}`, {withCredentials: true});
+  }
+  public lookupSharedRanking(shareToken: string) {
+    return this.http.get<any>(`${environment.apiUrl}/sharedrankings/${shareToken}/lookup`, {withCredentials: true});
   }
 }

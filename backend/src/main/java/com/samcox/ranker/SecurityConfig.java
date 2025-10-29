@@ -34,6 +34,7 @@ public class SecurityConfig {
         .requestMatchers("/login", "/resources/**", "/static/**", "/templates/**", "/authuser").permitAll()
         .requestMatchers("/users", "/users/*").permitAll()
         .requestMatchers("/tmdb/**").permitAll()
+        .requestMatchers("/sharedrankings/**").permitAll()
         .requestMatchers("/testforbidden").authenticated()
         .anyRequest().authenticated()
       )

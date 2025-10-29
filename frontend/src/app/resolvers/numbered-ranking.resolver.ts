@@ -20,7 +20,7 @@ export const numberedRankingResolver: ResolveFn<NumberedRankingResolverData> = (
 
   const userId = Number(route.paramMap.get('userId'));
   const rankingId = Number(route.paramMap.get('rankingId'));
-  const shareToken = route.paramMap.get('token');
+  const shareToken = route.paramMap.get('shareToken');
 
   //If there's a token then it's a shared ranking
   if (shareToken) {
@@ -30,7 +30,7 @@ export const numberedRankingResolver: ResolveFn<NumberedRankingResolverData> = (
         //isOwner: false,
         //canEdit: !!ranking?.permissions?.includes('EDIT'),
         canEdit: false,
-        userId: null,
+        userId: userId,
       })),
       catchError(() => of ({ ranking: null, canEdit: false, userId: null }))
     );
