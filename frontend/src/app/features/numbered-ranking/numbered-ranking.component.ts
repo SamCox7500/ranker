@@ -14,6 +14,7 @@ import { Observable, Subscription, switchMap } from 'rxjs';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NumberedRankingService } from '../../services/numbered-ranking.service';
 import { NumberedRankingResolverData } from '../../resolvers/numbered-ranking.resolver';
+import { SharedRankingService } from '../../services/shared-ranking.service';
 
 @Component({
   selector: 'app-numbered-ranking',
@@ -31,122 +32,148 @@ export class NumberedRankingComponent {
   rankingForm: FormGroup;
   isEditMode: boolean = false;
 
+  shareToken: string | null = null;
+
   private subscriptions = new Subscription();
 
   readonly TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
   readonly TMDB_IMAGE_SIZE = 'w92';
 
 
-  constructor(private route: ActivatedRoute, private router: Router, private fb: FormBuilder, private rankingService: NumberedRankingService) {
+  constructor(private route: ActivatedRoute, private router: Router, private fb: FormBuilder, private rankingService: NumberedRankingService, private sharedRankingService: SharedRankingService) {
     this.rankingForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(30)]],
       description: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(150)]],
     });
   }
 
-   ngOnInit(): void {
-      const data = this.route.snapshot.data['data'] as NumberedRankingResolverData;
-      this.ranking = data.ranking as NumberedRanking;
-      this.canEdit = data.canEdit;
-      this.userId = data.userId;
-  
-      if (this.ranking) {
-        this.rankingForm.patchValue({
-          title: this.ranking.title,
-          description: this.ranking.description,
-        });
-      }
+  ngOnInit(): void {
+    const data = this.route.snapshot.data['data'] as NumberedRankingResolverData;
+    this.ranking = data.ranking as NumberedRanking;
+    this.canEdit = data.canEdit;
+    this.userId = data.userId;
+
+    if (this.ranking) {
+      this.rankingForm.patchValue({
+        title: this.ranking.title,
+        description: this.ranking.description,
+      });
     }
-  
-    toggleEditMode(): void {
-      if (!this.canEdit) return; //Guests should not be able to edit
-  
-      if (this.isEditMode) {
-        if (this.rankingForm.valid && this.ranking && this.userId) {
-          const updatedRanking = {
-            ...this.ranking,
-            title: this.rankingForm.value.title,
-            description: this.rankingForm.value.description
-          };
-  
-          const updatedRankingSub = this.rankingService.updateRanking(this.userId, this.ranking.id, updatedRanking).subscribe({
-            next: () => this.ranking = updatedRanking,
-            error: (err) => console.log(err)
-          });
-          this.subscriptions.add(updatedRankingSub);
-        }
-      } else if (this.ranking) {
-        this.rankingForm.patchValue({
-          title: this.ranking.title, 
-          description: this.ranking.description
+    if (this.canEdit && this.userId) {
+      const sharedRankingSub = this.sharedRankingService.getShareInfo(this.userId, this.ranking.id)
+        .subscribe({
+          next: (res) => this.shareToken = res.sharedToken,
+          error: () => this.shareToken = null,
         });
-      }
-      if (this.rankingForm.valid) {
-        this.isEditMode = !this.isEditMode;
-      }
+        this.subscriptions.add(sharedRankingSub);
     }
-  
-    drop(event: CdkDragDrop<MediaListEntry[]>): void {
-      
-      if (!this.isEditMode || !this.ranking?.mediaListDTO?.entries) return;
-  
-      const entries = this.ranking.mediaListDTO.entries;
-      moveItemInArray(entries, event.previousIndex, event.currentIndex);
-      this.updateRankings();
-  
-      const movedEntry = entries[event.currentIndex];
-      if (movedEntry && this.userId) {
-        const moveRequest: EntryMoveRequestDTO = {
-          entryId: movedEntry.id,
-          newPosition: movedEntry.ranking,
+  }
+
+  toggleEditMode(): void {
+    if (!this.canEdit) return; //Guests should not be able to edit
+
+    if (this.isEditMode) {
+      if (this.rankingForm.valid && this.ranking && this.userId) {
+        const updatedRanking = {
+          ...this.ranking,
+          title: this.rankingForm.value.title,
+          description: this.rankingForm.value.description
         };
-        this.rankingService.moveEntry(this.userId, this.ranking.id, movedEntry.id, moveRequest).subscribe({
-          next: () => console.log('Ranking updated successfully'),
-          error: err => console.log(err)
+
+        const updatedRankingSub = this.rankingService.updateRanking(this.userId, this.ranking.id, updatedRanking).subscribe({
+          next: () => this.ranking = updatedRanking,
+          error: (err) => console.log(err)
         });
+        this.subscriptions.add(updatedRankingSub);
       }
+    } else if (this.ranking) {
+      this.rankingForm.patchValue({
+        title: this.ranking.title,
+        description: this.ranking.description
+      });
     }
-    updateRankings(): void {
-      if (!this.ranking?.mediaListDTO?.entries) return;
-      this.ranking.mediaListDTO.entries.forEach((entry, index) => entry.ranking = index + 1);
+    if (this.rankingForm.valid) {
+      this.isEditMode = !this.isEditMode;
     }
-  
-    removeEntry(entryId: number): void {
-      if (!this.canEdit || !this.ranking || !this.userId) return;
-  
-      this.rankingService.deleteEntry(this.userId, this.ranking.id, entryId).subscribe({
-        next: () => {
-          const entries = this.ranking!.mediaListDTO.entries;
-          const index = entries.findIndex(entry => entry.id === entryId);
-          if (index !== -1) {
-            entries.splice(index, 1);
-            this.updateRankings();
-          }
-        },
+  }
+
+  drop(event: CdkDragDrop<MediaListEntry[]>): void {
+
+    if (!this.isEditMode || !this.ranking?.mediaListDTO?.entries) return;
+
+    const entries = this.ranking.mediaListDTO.entries;
+    moveItemInArray(entries, event.previousIndex, event.currentIndex);
+    this.updateRankings();
+
+    const movedEntry = entries[event.currentIndex];
+    if (movedEntry && this.userId) {
+      const moveRequest: EntryMoveRequestDTO = {
+        entryId: movedEntry.id,
+        newPosition: movedEntry.ranking,
+      };
+      this.rankingService.moveEntry(this.userId, this.ranking.id, movedEntry.id, moveRequest).subscribe({
+        next: () => console.log('Ranking updated successfully'),
         error: err => console.log(err)
       });
     }
-    goToAddMedia(): void {
-      if (this.canEdit && this.ranking && this.userId) {
-        this.router.navigate(['/users', this.userId, 'numberedrankings', this.ranking.id, this.ranking.mediaListDTO.entries.length + 1, this.ranking.mediaType]);
-      }
-    }
-  
-    isMovieEntry(entry: MediaListEntry): entry is MovieEntry {
-      return (entry as MovieEntry).title !== undefined;
-    }
-  
-    isTVShowEntry(entry: MediaListEntry): entry is TVShowEntry {
-      return (entry as TVShowEntry).name !== undefined;
-    }
-  
-    ngOnDestroy(): void {
-      this.subscriptions.unsubscribe();
-    }
-  
-    get title() { return this.rankingForm.controls['title'];}
-    get description() { return this.rankingForm.controls['description'];}
-    getPosterUrl(posterPath: string): string {
-      return `${this.TMDB_IMAGE_BASE_URL}${this.TMDB_IMAGE_SIZE}${posterPath}`;
+  }
+  updateRankings(): void {
+    if (!this.ranking?.mediaListDTO?.entries) return;
+    this.ranking.mediaListDTO.entries.forEach((entry, index) => entry.ranking = index + 1);
+  }
+
+  removeEntry(entryId: number): void {
+    if (!this.canEdit || !this.ranking || !this.userId) return;
+
+    this.rankingService.deleteEntry(this.userId, this.ranking.id, entryId).subscribe({
+      next: () => {
+        const entries = this.ranking!.mediaListDTO.entries;
+        const index = entries.findIndex(entry => entry.id === entryId);
+        if (index !== -1) {
+          entries.splice(index, 1);
+          this.updateRankings();
+        }
+      },
+      error: err => console.log(err)
+    });
+  }
+  goToAddMedia(): void {
+    if (this.canEdit && this.ranking && this.userId) {
+      this.router.navigate(['/users', this.userId, 'numberedrankings', this.ranking.id, this.ranking.mediaListDTO.entries.length + 1, this.ranking.mediaType]);
     }
   }
+
+  isMovieEntry(entry: MediaListEntry): entry is MovieEntry {
+    return (entry as MovieEntry).title !== undefined;
+  }
+
+  isTVShowEntry(entry: MediaListEntry): entry is TVShowEntry {
+    return (entry as TVShowEntry).name !== undefined;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  get title() { return this.rankingForm.controls['title']; }
+  get description() { return this.rankingForm.controls['description']; }
+  getPosterUrl(posterPath: string): string {
+    return `${this.TMDB_IMAGE_BASE_URL}${this.TMDB_IMAGE_SIZE}${posterPath}`;
+  }
+  share() {
+    if (this.userId && this.ranking) {
+      this.sharedRankingService.shareRanking(this.userId, this.ranking.id)
+        .subscribe((res: any) => {
+          this.shareToken = res.sharedToken;
+        })
+    }
+  }
+  unshare() {
+    if (this.userId && this.ranking) {
+      this.sharedRankingService.unshareRanking(this.userId, this.ranking.id)
+        .subscribe(() => {
+          this.shareToken = null;
+        });
+    }
+  }
+}

@@ -52,13 +52,10 @@ public class SharedRankingService {
    * @throws AccessDeniedException if the user trying to share the ranking does not own it
    */
   public void shareRanking(Long rankingId, Long userId) throws AccessDeniedException {
-
     if (isShared(rankingId, userId)) {
       throw new RankingAlreadySharedException("Ranking is already shared");
     }
-
     Ranking ranking = rankingService.getRankingByIdAndUser(rankingId, userId);
-
     SharedRanking sharedRanking = new SharedRanking();
     sharedRanking.setShareToken(UUID.randomUUID().toString());
     sharedRanking.setRanking(ranking);
