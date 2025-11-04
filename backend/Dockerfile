@@ -15,7 +15,8 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 #Use a smaller runtime image to run the Spring Boot app
-FROM openjdk:17-slim
+#FROM openjdk:17-slim
+FROM eclipse-temurin:17-jre-jammy
 
 #Copy the packaged jar from the builder image
 COPY --from=builder /app/target/*.jar app.jar
