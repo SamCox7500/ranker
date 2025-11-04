@@ -39,7 +39,7 @@
                     }
                 </div>
             </form>
-            @if (canEdit) {
+            @if (canEdit && !isEditMode) {
             <div class="d-flex flex-row">
                 @if (shareToken) {
                 <div class="d-flex flex-row">
